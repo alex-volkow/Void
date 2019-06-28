@@ -61,25 +61,25 @@ namespace Void.Reflection
             return clone;
         }
 
-        public object Create(Type type) {
-            return Create(type, null);
-        }
+        //public object Create(Type type) {
+        //    return Create(type, null);
+        //}
 
-        public object Create(Type type, params object[] args) {
-            if (type == null) {
-                throw new ArgumentNullException(nameof(type));
-            }
-            var bindings = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            return Activator.CreateInstance(type, bindings, null, args, null);
-        }
+        //public object Create(Type type, params object[] args) {
+        //    if (type == null) {
+        //        throw new ArgumentNullException(nameof(type));
+        //    }
+        //    var bindings = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        //    return Activator.CreateInstance(type, bindings, null, args, null);
+        //}
 
-        public T Create<T>() {
-            return (T)Create(typeof(T));
-        }
+        //public T Create<T>() {
+        //    return (T)Create(typeof(T));
+        //}
 
-        public T Create<T>(params object[] args) {
-            return (T)Create(typeof(T), args);
-        }
+        //public T Create<T>(params object[] args) {
+        //    return (T)Create(typeof(T), args);
+        //}
 
         public void Replace(IDefinitions definitions) {
             if (definitions != null) {

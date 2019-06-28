@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Void.Box\Void.Box.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Reflection\" />
+  </ItemGroup>
+
 </Project>

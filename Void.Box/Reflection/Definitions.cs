@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Void.Collections
+namespace Void.Reflection
 {
     public class Definitions : IDefinitions, IDictionary<Type, object>
     {
@@ -58,6 +59,26 @@ namespace Void.Collections
                 clone.Set(service.Key, service.Value);
             }
             return clone;
+        }
+
+        public object Create(Type type) {
+            return Create(type, null);
+        }
+
+        public object Create(Type type, params object[] args) {
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
+            var bindings = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            return Activator.CreateInstance(type, bindings, null, args, null);
+        }
+
+        public T Create<T>() {
+            return (T)Create(typeof(T));
+        }
+
+        public T Create<T>(params object[] args) {
+            return (T)Create(typeof(T), args);
         }
 
         public void Replace(IDefinitions definitions) {

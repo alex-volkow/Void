@@ -95,6 +95,14 @@ namespace Void
         }
 
         public override string ToString() {
+            return this.Value.ToString();
+        }
+
+        public string ToString(string format) {
+            return this.Value.ToString(format);
+        }
+
+        public string ToLongString() {
             var units = Enum<ByteUnit>.Values
                 .Select(item => new { Value = item, Factor = item.GetFactor() })
                 .OrderByDescending(item => item.Factor)
@@ -102,25 +110,18 @@ namespace Void
             for (var i = 0; i < units.Length; i++) {
                 var mod = (int)(this[units[i].Value] % units[i].Factor);
                 if (mod > 0) {
-                    return ToString(units[i].Value, true);
+                    return ToLongString(units[i].Value, "N2");
                 }
             }
-            return ToString(ByteUnit.None, true);
+            return ToLongString(ByteUnit.None, "N2");
         }
 
-        public string ToString(ByteUnit unit, int decimals) {
-            return ToString(unit, decimals, true);
+        public string ToLongString(ByteUnit unit) {
+            return $"{this[unit]} {unit.GetInfo().Suffix}";
         }
 
-        public string ToString(ByteUnit unit, bool space = true) {
-            return ToString(unit, 2, space);
-        }
-
-        public string ToString(ByteUnit unit, int decimals, bool space = true) {
-            var separator = space ? " " : string.Empty;
-            var suffix = unit.GetInfo().Suffix;
-            var value = this[unit].ToString($"N{decimals}");
-            return $"{value}{separator}{suffix}";
+        public string ToLongString(ByteUnit unit, string format) {
+            return $"{this[unit].ToString(format)} {unit.GetInfo().Suffix}";
         }
 
         /// <summary>

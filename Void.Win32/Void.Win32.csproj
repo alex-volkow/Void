@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Company />
+    <Product>Void.Framework</Product>
+    <Authors>Void</Authors>
+    <Description>Addition functional for .NET in OS Windows</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Void</RootNamespace>
+    <Authors>Void</Authors>
+    <Company />
+    <Description>The library extends the base framework (IO, Reflection, Collections, Net and etc.)</Description>
+    <Product>Void.Framework</Product>
   </PropertyGroup>
 
 </Project>

@@ -8,16 +8,22 @@ using System.Threading.Tasks;
 
 namespace Void
 {
+    /// <summary>
+    /// Represents a byte count with a unit.
+    /// </summary>
     public struct ByteSize : IEquatable<ByteSize>, IEquatable<decimal>, IEquatable<long>, IEquatable<int>, ICloneable, IComparable<ByteSize>
     {
-        //private static readonly Regex parser = new Regex(@"^[\t ]*(?<VALUE>(\d+([\.,]\d+)?)|([\.,]\d+))[\t ]*(?<UNIT>\p{L}+)?[\t ]*$");
-
-
-
+        /// <summary>
+        /// Get bytes count.
+        /// </summary>
         public decimal Value { get; }
 
 
-
+        /// <summary>
+        /// Get bytes count in specific unit.
+        /// </summary>
+        /// <param name="unit">Bytes unit.</param>
+        /// <returns>Bytes count.</returns>
         public decimal this[ByteUnit unit] {
             get {
                 return this.Value / unit.GetFactor();
@@ -25,11 +31,19 @@ namespace Void
         }
 
 
-
+        /// <summary>
+        /// Initialize a new instance with a count of bytes.
+        /// </summary>
+        /// <param name="value">Bytes count.</param>
         public ByteSize(decimal value) {
             this.Value = Math.Abs(value);
         }
 
+        /// <summary>
+        /// Initialize a new instance with a count of bytes in specific unit.
+        /// </summary>
+        /// <param name="value">Bytes count.</param>
+        /// <param name="unit">Bytes unit.</param>
         public ByteSize(decimal value, ByteUnit unit)
             : this(ToBytes(value, unit)) {
         }
@@ -109,14 +123,32 @@ namespace Void
             return $"{value}{separator}{suffix}";
         }
 
+        /// <summary>
+        /// Convert a count of bytes in specitic unit to bytes.
+        /// </summary>
+        /// <param name="value">Bytes count.</param>
+        /// <param name="unit">Bytes unit.</param>
+        /// <returns>Bytes count.</returns>
         public static decimal ToBytes(decimal value, ByteUnit unit) {
             return value * unit.GetFactor();
         }
 
+        /// <summary>
+        /// Parse a input string to ByteSize.
+        /// </summary>
+        /// <param name="text">Text representation of ByteSize</param>
+        /// <returns>ByteSize instance</returns>
+        /// <exception cref="FormatException">Input string in invalid format.</exception>
         public static ByteSize Parse(string text) {
             return TryParse(text, out ByteSize value) ? value : throw new FormatException();
         }
 
+        /// <summary>
+        /// Try to parse a input string to ByteSize
+        /// </summary>
+        /// <param name="text">Text representation of ByteSize</param>
+        /// <param name="value">Prsing result</param>
+        /// <returns>True if success else False</returns>
         public static bool TryParse(string text, out ByteSize value) {
             value = default(ByteSize);
             if (string.IsNullOrWhiteSpace(text)) {

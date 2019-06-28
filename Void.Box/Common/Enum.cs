@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Void.Common
+namespace Void
 {
     public static class Enums
     {

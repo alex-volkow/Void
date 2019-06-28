@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Void
 {
-    public struct ByteSize : IEquatable<ByteSize>, IEquatable<long>, IEquatable<int>, ICloneable, IComparable<ByteSize>
+    public struct ByteSize : IEquatable<ByteSize>, IEquatable<decimal>, IEquatable<long>, IEquatable<int>, ICloneable, IComparable<ByteSize>
     {
         //private static readonly Regex parser = new Regex(@"^[\t ]*(?<VALUE>(\d+([\.,]\d+)?)|([\.,]\d+))[\t ]*(?<UNIT>\p{L}+)?[\t ]*$");
 
 
 
-        public long Value { get; }
+        public decimal Value { get; }
 
 
 
-        public double this[ByteUnit unit] {
+        public decimal this[ByteUnit unit] {
             get {
                 return this.Value / unit.GetFactor();
             }
@@ -26,16 +26,12 @@ namespace Void
 
 
 
-        public ByteSize(long value) {
+        public ByteSize(decimal value) {
             this.Value = Math.Abs(value);
         }
 
-        public ByteSize(long value, ByteUnit unit)
+        public ByteSize(decimal value, ByteUnit unit)
             : this(ToBytes(value, unit)) {
-        }
-
-        public ByteSize(double value, ByteUnit unit)
-            : this((long)value, unit) {
         }
 
 
@@ -52,6 +48,10 @@ namespace Void
             return other.Value == this.Value;
         }
 
+        public bool Equals(decimal other) {
+            return other == this.Value;
+        }
+
         public bool Equals(long other) {
             return other == this.Value;
         }
@@ -63,6 +63,9 @@ namespace Void
         public override bool Equals(object obj) {
             if (obj is ByteSize otherByteSize) {
                 return Equals(otherByteSize);
+            }
+            if (obj is decimal decimalValue) {
+                return Equals(decimalValue);
             }
             if (obj is long otherLong) {
                 return Equals(otherLong);
@@ -106,8 +109,8 @@ namespace Void
             return $"{value}{separator}{suffix}";
         }
 
-        public static long ToBytes(double value, ByteUnit unit) {
-            return (long)(value * unit.GetFactor());
+        public static decimal ToBytes(decimal value, ByteUnit unit) {
+            return value * unit.GetFactor();
         }
 
         public static ByteSize Parse(string text) {
@@ -128,8 +131,11 @@ namespace Void
             var index = 0;
             while (index < chars.Length) {
                 var symbol = chars[index++];
-                if (Char.IsDigit(symbol) || symbol == '.' || symbol == ',') {
+                if (Char.IsDigit(symbol)) {
                     number.Add(symbol);
+                }
+                if (symbol == '.' || symbol == ',') {
+                    number.Add('.');
                 }
                 if (Char.IsWhiteSpace(symbol) || Char.IsLetter(symbol)) {
                     index--;
@@ -155,7 +161,7 @@ namespace Void
                 if (unit.Count > 0) {
                     var unitValue = ParseUnit(new string(unit.ToArray()));
                     if (unitValue != null) {
-                        value = new ByteSize((double)val, unitValue.Value);
+                        value = new ByteSize(val, unitValue.Value);
                         return true;
                     }
                 }

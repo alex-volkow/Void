@@ -10,10 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Void.Box\Void.Box.csproj" />
+    <PackageReference Include="Void.Box" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

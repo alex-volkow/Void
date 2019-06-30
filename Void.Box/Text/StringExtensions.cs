@@ -55,5 +55,11 @@ namespace Void
                 .Remove(position, source.Length)
                 .Insert(position, target);
         }
+
+        public static string RemoveWhiteSpaces(this string text) {
+            return text != null
+                ? new string(text.Where(e => !char.IsWhiteSpace(e)).ToArray())
+                : default(string);
+        }
     }
 }

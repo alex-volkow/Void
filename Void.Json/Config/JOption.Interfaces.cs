@@ -7,9 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Void.Json
 {
+    /// <summary>
+    /// Represents real or dynamic item of a configuration.
+    /// </summary>
     public partial class JOption : 
         //IList<object>, 
         IReadOnlyList<JOption>, 
@@ -19,6 +23,9 @@ namespace Void.Json
         IEquatable<JToken>,
         ICloneable
     {
+        /// <summary>
+        /// Get full name of the option.
+        /// </summary>
         public string Path => this.path.Value;
 
         //public IList<object> List => this;
@@ -27,6 +34,9 @@ namespace Void.Json
 
         public bool IsReadOnly => true;
 
+        /// <summary>
+        /// True if the option has any value (included null), else False.
+        /// </summary>
         public bool IsExist {
             get {
                 lock (this.locker) {
@@ -35,6 +45,9 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// The option is not exist or has null value.
+        /// </summary>
         public bool IsNull {
             get {
                 lock (this.locker) {
@@ -44,6 +57,9 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// Get count of child options (not recursive).
+        /// </summary>
         public int Count {
             get {
                 lock (this.locker) {
@@ -54,6 +70,9 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// Get option value as dynamic object.
+        /// </summary>
         public dynamic Value {
             get {
                 lock (this.locker) {
@@ -63,6 +82,11 @@ namespace Void.Json
         }
 
 
+        /// <summary>
+        /// Get a child option by name.
+        /// </summary>
+        /// <param name="option">Child option name.</param>
+        /// <returns>Real or dynamic option (never null).</returns>
         public JOption this[string option] {
             get {
                 lock (this.locker) {
@@ -71,6 +95,11 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// Get a child option by index.
+        /// </summary>
+        /// <param name="index">Child option index.</param>
+        /// <returns>Real or dynamic option (never null).</returns>
         public JOption this[int index] {
             get {
                 lock (this.locker) {
@@ -82,7 +111,9 @@ namespace Void.Json
 
 
 
-
+        /// <summary>
+        /// Create a deep clone.
+        /// </summary>
         public virtual object Clone() {
             lock (this.locker) {
                 return new JOption(this.Source);
@@ -126,13 +157,24 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// Get the option value as JToken.
+        /// </summary>
         public JToken ToJson() {
             lock (this.locker) {
                 return GetElement()?.DeepClone();
             }
         }
 
+        /// <summary>
+        /// Cast the option value to type.
+        /// </summary>
+        /// <returns>Instance of the type if value exists or not null else null.</returns>
+        /// <exception cref="ArgumentNullException">Type is null.</exception>
         public object To(Type type) {
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
             lock (this.locker) {
                 var element = GetElement();
                 return element != null && element.Type != JTokenType.Null
@@ -141,20 +183,36 @@ namespace Void.Json
             }
         }
 
+        /// <summary>
+        /// Cast the option value to type.
+        /// </summary>
+        /// <returns>Instance of the type if value exists or not null else null.</returns>
         public T To<T>() {
             return (T)To(typeof(T));
         }
 
+        /// <summary>
+        /// Cast the option value to type.
+        /// </summary>
+        /// <returns>Instance of the type.</returns>
+        /// <exception cref="InvalidDataException">The option has bull value or not exist.</exception>
         public T Required<T>() {
             lock (this.locker) {
                 return Required().To<T>();
             }
         }
 
+        /// <summary>
+        /// Ensure the option is exist and has not null vlaue.
+        /// </summary>
+        /// <returns>Self.</returns>
+        /// <exception cref="InvalidDataException">The option has bull value or not exist.</exception>
         public JOption Required() {
             lock (this.locker) {
                 if (this.IsNull) {
-                    throw new ArgumentNullException(this.Path);
+                    throw new InvalidDataException(
+                        $"Option required: {this.Path}"
+                        );
                 }
                 return this;
             }

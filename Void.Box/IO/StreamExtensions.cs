@@ -35,7 +35,7 @@ namespace Void.IO
                 var hash = engine.ComputeHash(stream);
                 var builder = new StringBuilder();
                 foreach (var value in hash) {
-                    builder.Append(value.ToString("X2"));
+                    builder.Append(value.ToString("x2"));
                 }
                 return builder.ToString();
             }
@@ -46,7 +46,7 @@ namespace Void.IO
                 var hash = engine.ComputeHash(stream);
                 var builder = new StringBuilder();
                 foreach (var value in hash) {
-                    builder.Append(value.ToString("X2"));
+                    builder.Append(value.ToString("x2"));
                 }
                 return builder.ToString();
             }

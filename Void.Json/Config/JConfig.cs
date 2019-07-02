@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Void.Json
 {
+    /// <summary>
+    /// Provides access to JToken as a configuration with dynamic fields and behaviour.
+    /// </summary>
     public sealed class JConfig
     {
         private readonly JOption root;
@@ -25,10 +28,13 @@ namespace Void.Json
 
 
 
-        public JConfig()
+        internal JConfig()
             : this(new JObject()) {
         }
 
+        /// <summary>
+        /// Create a new instance with JToken
+        /// </summary>
         public JConfig(JToken source) 
             : this(new JOption(source)) {
         }
@@ -38,15 +44,25 @@ namespace Void.Json
         }
 
 
-
+        /// <summary>
+        /// Convert to string without formatting.
+        /// </summary>
         public override string ToString() {
             return ToString(Formatting.None);
         }
 
+        /// <summary>
+        /// Convert to string with or without pretty formatting.
+        /// </summary>
+        /// <param name="pretty">Use or not pretty formatting.</param>
         public string ToString(bool pretty) {
             return ToString(pretty ? Formatting.Indented : Formatting.None);
         }
 
+        /// <summary>
+        /// Convert to string using Newtonsoft.Json.Formatting.
+        /// </summary>
+        /// <param name="formatting">Required formatting.</param>
         public string ToString(Formatting formatting) {
             return this.root.ToString(formatting) ?? string.Empty;
         }

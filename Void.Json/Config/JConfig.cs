@@ -18,11 +18,23 @@ namespace Void.Json
     {
         private readonly JOption root;
 
-
+        /// <summary>
+        /// Get count of options (not recursive).
+        /// </summary>
         public int Count => this.root.Count;
 
+        /// <summary>
+        /// Get a option by name.
+        /// </summary>
+        /// <param name="option">Option name.</param>
+        /// <returns>Real or dynamic option (never null).</returns>
         public JOption this[string option] => this.root[option];
 
+        /// <summary>
+        /// Get a option by index.
+        /// </summary>
+        /// <param name="index">Option index.</param>
+        /// <returns>Real or dynamic option (never null).</returns>
         public JOption this[int index] => this.root[index];
 
 

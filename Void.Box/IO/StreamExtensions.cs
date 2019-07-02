@@ -40,5 +40,16 @@ namespace Void.IO
                 return builder.ToString();
             }
         }
+
+        public static string GetSHA512(this Stream stream) {
+            using (var engine = SHA512Managed.Create()) {
+                var hash = engine.ComputeHash(stream);
+                var builder = new StringBuilder();
+                foreach (var value in hash) {
+                    builder.Append(value.ToString("X2"));
+                }
+                return builder.ToString();
+            }
+        }
     }
 }

@@ -28,7 +28,9 @@ namespace Void.Reflection
                 name = $"{path}.{name}";
             }
             using (var stream = assembly.GetManifestResourceStream(name)) {
-                return stream.ToArray();
+                return stream?.ToArray() ?? throw new NotFoundException(
+                    $"Resource is not found: {name}"
+                    );
             }
         }
 

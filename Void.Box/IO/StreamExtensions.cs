@@ -32,7 +32,12 @@ namespace Void.IO
 
         public static string GetSHA256(this Stream stream) {
             using (var engine = SHA256Managed.Create()) {
-                return Convert.ToBase64String(engine.ComputeHash(stream));
+                var hash = engine.ComputeHash(stream);
+                var builder = new StringBuilder();
+                foreach (var value in hash) {
+                    builder.Append(value.ToString("X2"));
+                }
+                return builder.ToString();
             }
         }
     }

@@ -75,16 +75,14 @@ namespace Void
         }
 
         public static bool ReadYesNo(string title) {
-            return Read(title, value => {
-                switch (value.ToLower().Trim()) {
+            while (true) {
+                Terminal.Write(title);
+                switch (Console.ReadLine().Trim().ToLower()) {
                     case "y": return true;
                     case "n": return false;
-                    default:
-                        throw new InvalidOperationException(
-                            $"Available chars: y, n, Y, N"
-                            );
+                    default: continue;
                 }
-            });
+            }
         }
 
         public static string ReadPassword(char mask = '*') {

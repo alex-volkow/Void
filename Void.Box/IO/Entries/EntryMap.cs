@@ -9,6 +9,9 @@ namespace Void.IO
 {
     public class EntryMap<T> : Map<string, T>, IEntryMap<T> where T : class, IEntryInfo
     {
+        IEnumerable<string> IEntryMap<T>.Keys => this.Keys;
+        IEnumerable<T> IEntryMap<T>.Values => this.Values;
+
         public void Add(T entry) {
             Add(entry?.Path, entry);
         }

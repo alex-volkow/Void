@@ -18,37 +18,37 @@ namespace Void
 
 
 
-        public static IEnumerable<Match> SelectMatches(string pattern) {
-            return Regex.Matches(Console.ReadLine(), pattern).Cast<Match>();
-        }
+        //public static IEnumerable<Match> SelectMatches(string pattern) {
+        //    return Regex.Matches(Console.ReadLine(), pattern).Cast<Match>();
+        //}
 
-        public static IEnumerable<T> SelectOptions<T>(IEnumerable<T> options) {
-            return SelectOptions(options, e => e?.ToString());
-        }
+        //public static IEnumerable<T> SelectOptions<T>(IEnumerable<T> options) {
+        //    return SelectOptions(options, e => e?.ToString());
+        //}
 
-        public static IEnumerable<T> SelectOptions<T>(IEnumerable<T> options, Func<T, string> format) {
-            var items = options?.ToArray() ?? new T[] { };
-            if (format == null) {
-                format = e => e?.ToString();
-            }
-            for (var i = 0; i < items.Length; i++) {
-                Console.WriteLine($"{i + 1}. {format(items[i])}");
-            }
-            while (true) {
-                Console.Write(" > ");
-                var indexes = Regex.Split(Console.ReadLine(), @"\s");
-                if (indexes.Length == 0) {
-                    return new T[] { };
-                }
-                if (!indexes.All(e => Regex.IsMatch(e, @"^\d+$"))) {
-                    Console.WriteLine("Only integer numbers available");
-                    continue;
-                }
-                return indexes
-                    .Select(e => items[int.Parse(e) - 1])
-                    .ToArray();
-            }
-        }
+        //public static IEnumerable<T> SelectOptions<T>(IEnumerable<T> options, Func<T, string> format) {
+        //    var items = options?.ToArray() ?? new T[] { };
+        //    if (format == null) {
+        //        format = e => e?.ToString();
+        //    }
+        //    for (var i = 0; i < items.Length; i++) {
+        //        Console.WriteLine($"{i + 1}. {format(items[i])}");
+        //    }
+        //    while (true) {
+        //        Console.Write(" > ");
+        //        var indexes = Regex.Split(Console.ReadLine(), @"\s");
+        //        if (indexes.Length == 0) {
+        //            return new T[] { };
+        //        }
+        //        if (!indexes.All(e => Regex.IsMatch(e, @"^\d+$"))) {
+        //            Console.WriteLine("Only integer numbers available");
+        //            continue;
+        //        }
+        //        return indexes
+        //            .Select(e => items[int.Parse(e) - 1])
+        //            .ToArray();
+        //    }
+        //}
 
         public static string ReadPassword() {
             return ReadPassword(null);

@@ -42,18 +42,33 @@ namespace Void.Reflection
         /// <returns>Content as byte array.</returns>
         /// <exception cref="NotFoundException">Resource is not found.</exception>
         /// <exception cref="ArgumentNullException">Assembly is null</exception>
+        /// <exception cref="ArgumentException">Multiple similar names when the name is relative</exception>
         public static byte[] ReadBytesResource(this Assembly assembly, string name) {
             if (assembly == null) {
                 throw new ArgumentNullException(nameof(assembly));
             }
-            var path = assembly.GetNamespace();
-            if (!name.StartsWith(path)) {
-                name = $"{path}.{name}";
+            //var path = assembly.GetNamespace();
+            //if (!name.StartsWith(path)) {
+            //    name = $"{path}.{name}";
+            //}
+            var resources = assembly.GetManifestResourceNames();
+            var source = resources.FirstOrDefault(e => e == name);
+            if (source == null) {
+                var matches = resources.Where(e => e.EndsWith(name));
+                if (matches.Count() == 0) {
+                    throw new NotFoundException(
+                        $"Resource is not found: {name}"
+                        );
+                }
+                if (matches.Count() > 1) {
+                    throw new ArgumentException(
+                        $"Multiple resources found"
+                        );
+                }
+                source = matches.First();
             }
-            using (var stream = assembly.GetManifestResourceStream(name)) {
-                return stream?.ToArray() ?? throw new NotFoundException(
-                    $"Resource is not found: {name}"
-                    );
+            using (var stream = assembly.GetManifestResourceStream(source)) {
+                return stream.ToArray();
             }
         }
 

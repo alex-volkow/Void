@@ -8,11 +8,7 @@ namespace Void.Text
     public class JaccardDistance : Metric
     {
         public override double Correlate(string source, string target) {
-            return JaccardDistance.Calculate(source, target);
-        }
-
-        public static double Calculate(string source, string target) {
-            if (source.Length == 0 || target.Length == 0) {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) {
                 return default(double);
             }
             var intersect = (double)source.Intersect(target).Count();

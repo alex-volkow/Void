@@ -8,12 +8,18 @@ namespace Void.Text
     public class LevenshteinDistance : Metric
     {
         public override double Correlate(string source, string target) {
-            var distance = LevenshteinDistance.Calculate(source, target);
+            var distance = Calculate(source, target);
             var upbounds = Math.Max(source?.Length ?? 0, target?.Length ?? 0);
             return 1 - distance / (upbounds != 0 ? (double)upbounds : 1.0);
         }
 
-        public static int Calculate(string source, string target) {
+        public int Calculate(string source, string target) {
+            if (source == null) {
+                source = string.Empty;
+            }
+            if (target == null) {
+                target = string.Empty;
+            }
             if (source.Length == 0) {
                 return target.Length;
             }

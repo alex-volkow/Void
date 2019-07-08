@@ -61,5 +61,11 @@ namespace Void
                 ? new string(text.Where(e => !char.IsWhiteSpace(e)).ToArray())
                 : default(string);
         }
+
+        public static string Reverse(this string text) {
+            var chars = text.ToCharArray();
+            Array.Reverse(chars);
+            return new string(chars);
+        }
     }
 }

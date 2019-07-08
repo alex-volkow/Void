@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Void.Text;
 
 namespace Void
 {
@@ -60,6 +61,11 @@ namespace Void
             return text != null
                 ? new string(text.Where(e => !char.IsWhiteSpace(e)).ToArray())
                 : default(string);
+        }
+
+        public static double Correlate<T>(this string source, string other) where T : Metric, new() {
+            var metric = new T();
+            return metric.Correlate(source, other);
         }
 
         public static string Reverse(this string text) {

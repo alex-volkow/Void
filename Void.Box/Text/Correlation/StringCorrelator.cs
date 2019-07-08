@@ -14,7 +14,7 @@ namespace Void.Text
 
         public bool CaseSensitive { get; set; }
 
-        public Condition Condition { get; set; }
+        public AggregationCondition Condition { get; set; }
 
         public ISet<Metric> Metrics { get; }
 
@@ -24,7 +24,7 @@ namespace Void.Text
             this.Metrics = new HashSet<Metric>();
             this.CaseSensitive = false;
             this.IgnoreSpaces = false;
-            this.Condition = Condition.Average;
+            this.Condition = AggregationCondition.Average;
         }
 
 
@@ -51,8 +51,8 @@ namespace Void.Text
                 .Where(e => e != null)
                 .Select(e => e.Score(source, target));
             switch (this.Condition) {
-                case Condition.Maximum: return results.Max();
-                case Condition.Minimum: return results.Min();
+                case AggregationCondition.Maximum: return results.Max();
+                case AggregationCondition.Minimum: return results.Min();
                 default: return results.Average();
             }
         }

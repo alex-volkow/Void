@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Void.Text
 {
-    public enum Condition
+    public enum AggregationCondition
     {
         Average,
         Maximum,

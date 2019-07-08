@@ -24,7 +24,7 @@ namespace Void.Text
 
 
         public override double Correlate(string source, string target) {
-            return NGramDistance.Calculate(source, target, this.Size);
+            return Calculate(source, target, this.Size);
         }
 
         public override bool Equals(object obj) {
@@ -37,7 +37,7 @@ namespace Void.Text
             return (a - b) * (a + b);
         }
 
-        public static double Calculate(string source, string target, int size) {
+        public double Calculate(string source, string target, int size) {
             if (source == null || target == null) {
                 return default(double);
             }

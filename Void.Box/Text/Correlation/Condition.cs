@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Void.Text.Correlation
+namespace Void.Text
 {
     public enum Condition
     {

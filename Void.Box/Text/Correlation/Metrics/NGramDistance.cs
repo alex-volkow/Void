@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Void.Text.Correlation
+namespace Void.Text
 {
     public class NGramDistance : Metric
     {

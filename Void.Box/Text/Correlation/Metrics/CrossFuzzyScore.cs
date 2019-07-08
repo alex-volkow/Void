@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Void.Text.Correlation
+namespace Void.Text
 {
     public class CrossFuzzyScore : FuzzyScore
     {

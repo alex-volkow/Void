@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 //using Fel.Collections;
 
-namespace Void.Text.Correlation
+namespace Void.Text
 {
     public class CosineDistance : Metric
     {

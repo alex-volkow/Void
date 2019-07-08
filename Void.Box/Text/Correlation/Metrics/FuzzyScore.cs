@@ -22,11 +22,11 @@ namespace Void.Text
                 return default(double);
             }
             var bound = Math.Min(source.Length, target.Length);
-            var score = FuzzyScore.Calculate(source, target);
+            var score = Calculate(source, target);
             return score / (bound + (bound - 1) * 2.0);
         }
 
-        public static int Calculate(string source, string target) {
+        public int Calculate(string source, string target) {
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) {
                 return default(int);
             }

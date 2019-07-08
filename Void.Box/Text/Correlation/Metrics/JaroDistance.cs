@@ -5,14 +5,10 @@ using System.Text;
 
 namespace Void.Text
 {
-    public class JaroDistance : Metric
+    public class JaroDistance : JaroWinklerDistance
     {
         public override double Correlate(string source, string target) {
-            return JaroDistance.Calculate(source, target);
-        }
-
-        public static double Calculate(string source, string target) {
-            return JaroWinklerDistance.Calculate(source, target, 0D);
+            return Correlate(source, target, 0D);
         }
     }
 }

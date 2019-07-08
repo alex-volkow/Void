@@ -26,7 +26,23 @@ namespace Void.Text
 
 
         public override double Correlate(string source, string target) {
-            return JaroWinklerDistance.Calculate(source, target, this.Threshold);
+            return Correlate(source, target, this.Threshold);
+        }
+
+        public double Correlate(string source, string target, double threshold) {
+            if (source == null) {
+                source = string.Empty;
+            }
+            if (target == null) {
+                target = string.Empty;
+            }
+            var matches = Matches(source, target);
+            var first = (double)matches.First();
+            if (first == 0) {
+                return 0f;
+            }
+            var j = ((first / source.Length + first / target.Length + (first - matches[1]) / first)) / 3;
+            return j < threshold ? j : j + Math.Min(0.1D, 1D / matches[3]) * matches[2] * (1 - j);
         }
 
         public override bool Equals(object obj) {
@@ -37,16 +53,6 @@ namespace Void.Text
             var a = base.GetHashCode();
             var b = (int)this.Threshold;
             return (a - b) * (a + b);
-        }
-
-        public static double Calculate(string source, string target, double threshold) {
-            var matches = Matches(source, target);
-            var first = (double)matches.First();
-            if (first == 0) {
-                return 0f;
-            }
-            var j = ((first / source.Length + first / target.Length + (first - matches[1]) / first)) / 3;
-            return j < threshold ? j : j + Math.Min(0.1D, 1D / matches[3]) * matches[2] * (1 - j);
         }
 
         private static int[] Matches(string source, string target) {

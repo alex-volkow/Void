@@ -14,18 +14,14 @@ namespace Void.Text
 
 
         public override double Score(string source, string target) {
-            return CosineDistance.Calculate(source, target);
-        }
-
-
-
-        public static double Calculate(string source, string target) {
             var sourceTokens = ExtractTokens(source);
             var targetTokens = ExtractTokens(target);
             var sourceVector = CollectVector(sourceTokens);
             var tergetVector = CollectVector(targetTokens);
             return CorrelateVectors(sourceVector, tergetVector);
         }
+        
+
 
         private static IEnumerable<string> ExtractTokens(string text) {
             return !string.IsNullOrWhiteSpace(text)

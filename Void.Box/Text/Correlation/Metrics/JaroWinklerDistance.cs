@@ -25,7 +25,7 @@ namespace Void.Text
         
 
 
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             return JaroWinklerDistance.Calculate(source, target, this.Threshold);
         }
 

@@ -49,7 +49,7 @@ namespace Void.Text
             //    );
             var results = this.Metrics
                 .Where(e => e != null)
-                .Select(e => e.Score(source, target));
+                .Select(e => e.Correlate(source, target));
             switch (this.Condition) {
                 case AggregationCondition.Maximum: return results.Max();
                 case AggregationCondition.Minimum: return results.Min();
@@ -60,7 +60,7 @@ namespace Void.Text
         private IEnumerable<double> Process(string source, string target) {
             return this.Metrics
                 .Where(e => e != null)
-                .Select(e => e.Score(source, target));
+                .Select(e => e.Correlate(source, target));
         }
     }
 }

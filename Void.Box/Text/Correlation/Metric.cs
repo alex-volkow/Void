@@ -8,7 +8,7 @@ namespace Void.Text
 {
     public abstract class Metric
     {
-        public abstract double Score(string source, string target);
+        public abstract double Correlate(string source, string target);
 
         public virtual TimeSpan GetCost(string source, string target, int iterations = 100) {
             iterations = Math.Abs(iterations);
@@ -20,7 +20,7 @@ namespace Void.Text
             try {
                 for (index = 0; index < iterations; index++) {
                     timer.Restart();
-                    Score(source, target);
+                    Correlate(source, target);
                     lastSum = currentSum;
                     currentSum = checked(currentSum + timer.ElapsedTicks);
                 }

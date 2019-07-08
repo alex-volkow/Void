@@ -13,7 +13,7 @@ namespace Void.Text
 
 
 
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             var sourceTokens = ExtractTokens(source);
             var targetTokens = ExtractTokens(target);
             var sourceVector = CollectVector(sourceTokens);

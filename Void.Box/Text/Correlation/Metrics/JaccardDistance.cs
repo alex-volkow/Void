@@ -7,7 +7,7 @@ namespace Void.Text
 {
     public class JaccardDistance : Metric
     {
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             return JaccardDistance.Calculate(source, target);
         }
 

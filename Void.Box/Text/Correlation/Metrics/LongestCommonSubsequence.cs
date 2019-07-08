@@ -7,7 +7,7 @@ namespace Void.Text
 {
     public class LongestCommonSubsequence : Metric
     {
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             if (source == null || target == null || source.Length == 0 || target.Length == 0) {
                 return default(double);
             }

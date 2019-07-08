@@ -10,10 +10,10 @@ namespace Void.Text
         public CrossFuzzyScore() : base(CultureInfo.CurrentCulture) { }
 
 
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             return Math.Max(
-                base.Score(source, target),
-                base.Score(target, source)
+                base.Correlate(source, target),
+                base.Correlate(target, source)
             );
         }
     }

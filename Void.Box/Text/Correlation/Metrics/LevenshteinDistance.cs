@@ -7,7 +7,7 @@ namespace Void.Text
 {
     public class LevenshteinDistance : Metric
     {
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             var distance = LevenshteinDistance.Calculate(source, target);
             var upbounds = Math.Max(source?.Length ?? 0, target?.Length ?? 0);
             return 1 - distance / (upbounds != 0 ? (double)upbounds : 1.0);

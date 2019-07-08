@@ -17,7 +17,7 @@ namespace Void.Text
 
         
 
-        public override double Score(string source, string target) {
+        public override double Correlate(string source, string target) {
             var bound = Math.Min(source.Length, target.Length);
             var score = FuzzyScore.Calculate(source, target);
             return score / (bound + (bound - 1) * 2.0);

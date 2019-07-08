@@ -6,9 +6,9 @@ namespace Void
 {
     public static class ByteUnitExtensions
     {
-        public static long GetFactor(this ByteUnit unit) {
+        public static decimal GetFactor(this ByteUnit unit) {
             var power = unit.GetInfo().Power;
-            var factor = 1L;
+            var factor = 1M;
             if (power > 0) {
                 for (var i = 0; i < power; i++) {
                     factor = factor * 1024;

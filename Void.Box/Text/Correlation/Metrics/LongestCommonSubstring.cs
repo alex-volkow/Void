@@ -8,16 +8,16 @@ namespace Void.Text
     public class LongestCommonSubstring : Metric
     {
         public override double Correlate(string source, string target) {
-            if (source == null || target == null || source.Length == 0 || target.Length == 0) {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) {
                 return default(double);
             }
-            var substring = LongestCommonSubstring.Calculate(source, target);
+            var substring = Calculate(source, target);
             var lowbounds = (double)Math.Min(source.Length, target.Length);
             return substring.Length / lowbounds;
         }
 
-        public static string Calculate(string source, string target) {
-            if (source == null || target == null || source.Length == 0 || target.Length == 0) {
+        public string Calculate(string source, string target) {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) {
                 return string.Empty;
             }
             var matrix = new int[source.Length, target.Length];

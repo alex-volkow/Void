@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+using System.IO;
 
 namespace Void.Json
 {
@@ -84,12 +85,12 @@ namespace Void.Json
 
         [Fact]
         public void GetMissedValue() {
-            Assert.Throws<ArgumentNullException>(() => (int)config["D1"]["B22"].Required());
+            Assert.Throws<InvalidDataException>(() => (int)config["D1"]["B22"].Required());
         }
 
         [Fact]
         public void EnumerateMissedValue() {
-            Assert.Throws<ArgumentNullException>(() => {
+            Assert.Throws<InvalidDataException>(() => {
                 foreach (var item in config["D1"]["C2"].Required()) {
                     item.ToString();
                 }

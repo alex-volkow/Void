@@ -5,8 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Elements\WebElementExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageReference Include="Void.Box" Version="1.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Elements\WebElementExtensions.cs" />
   </ItemGroup>
 
 </Project>

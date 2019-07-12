@@ -213,13 +213,5 @@ namespace Void.Selenium
             var engine = (IJavaScriptExecutor)element.GetRequiredWebDriver();
             return engine.ExecuteScript(script, element);
         }
-
-        //internal static bool TryRefresh(this IWebElement element) {
-        //    if (element is IDynamicWebElement wrapper) {
-        //        wrapper.Refresh();
-        //        return wrapper.Exists;
-        //    }
-        //    return false;
-        //}
     }
 }

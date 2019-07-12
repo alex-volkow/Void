@@ -16,32 +16,32 @@ namespace Void.Selenium.Tests
         public void FindExistingElement() {
             var pointer = CreateWebPointer();
             pointer.Match();
-            Assert.True(pointer.Matched);
+            Assert.True(pointer.IsMatched);
         }
 
         [Fact]
         public void FindNonExistingElement() {
             var pointer = CreateWebPointer("//body1");
             pointer.Match();
-            Assert.True(!pointer.Matched);
+            Assert.True(!pointer.IsMatched);
         }
 
         [Fact]
         public void FindStaledElement() {
             var pointer = CreateWebPointer();
             pointer.Match();
-            Assert.True(pointer.Matched);
+            Assert.True(pointer.IsMatched);
             this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
-            Assert.True(pointer.Staled);
+            Assert.True(pointer.IsStaled);
         }
 
         [Fact]
         public void AutoUpdateElement() {
             var pointer = CreateWebPointer();
             pointer.Match();
-            Assert.True(pointer.Matched);
+            Assert.True(pointer.IsMatched);
             this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
-            Assert.True(pointer.Staled);
+            Assert.True(pointer.IsStaled);
             Assert.NotNull(pointer.Required());
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Void.Selenium
 {
-    public interface IWebPageElement : IWrapsElement
+    public interface IWebPageElement : IWebPointer
     {
         bool IsOptional { get; }
         bool IsVisible { get; }

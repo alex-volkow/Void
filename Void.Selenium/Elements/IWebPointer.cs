@@ -9,9 +9,8 @@ namespace Void.Selenium
     public interface IWebPointer : IWrapsElement
     {
         ISearchContext Context { get; }
-        bool Matched { get; }
-        bool Staled { get; }
-        By Locator { get; }
+        bool IsMatched { get; }
+        bool IsStaled { get; }
 
         IWebElement Required();
         IWebElement Match();

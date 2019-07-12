@@ -29,12 +29,12 @@ namespace Void.Selenium
         /// <summary>
         /// Check is element found and not stale.
         /// </summary>
-        public bool Matched => this.WrappedElement != null && !this.Staled;
+        public bool IsMatched => this.WrappedElement != null && !this.IsStaled;
 
         /// <summary>
         /// Check status of element pointer. If element is stale, need to match it. 
         /// </summary>
-        public bool Staled {
+        public bool IsStaled {
             get {
                 try {
                     return this.WrappedElement != null
@@ -73,7 +73,7 @@ namespace Void.Selenium
         /// <returns>Match element.</returns>
         /// <exception cref="NotFoundException">Failed to find a matching element.</exception>
         public IWebElement Required() {
-            if (this.Matched) {
+            if (this.IsMatched) {
                 return this.WrappedElement;
             }
             return Match() ?? throw new NotFoundException(

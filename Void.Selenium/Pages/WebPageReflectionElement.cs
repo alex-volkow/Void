@@ -113,16 +113,24 @@ namespace Void.Selenium
                     How = How.XPath,
                 });
             }
+            var result = default(IWebElement);
             if (allCondition != null) {
-                this.WrappedElement = FindsByAll(standardLocators);
-                return this.WrappedElement;
+                result = FindsByAll(standardLocators);
             }
-            if (sequenceCondition != null) {
-                this.WrappedElement = FindsBySequence(standardLocators);
-                return this.WrappedElement;
+            else if (sequenceCondition != null) {
+                result = FindsBySequence(standardLocators);
             }
-            this.WrappedElement = FindsByAny(standardLocators);
-            return this.WrappedElement;
+            else {
+                result = FindsByAny(standardLocators);
+            }
+            if (result == null) {
+                return null;
+            }
+            if (this.IsVisible && !result.IsVisible()) {
+                return null;
+            }
+            this.WrappedElement = result;
+            return result;
         }
 
         private IWebElement FindsByAll(IEnumerable<FindsByAttribute> attributes) {

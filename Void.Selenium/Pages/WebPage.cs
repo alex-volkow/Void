@@ -46,12 +46,12 @@ namespace Void.Selenium
             //}
         }
 
-        public IEnumerable<IWebPageElement> GetElements() {
-            return this.elements.Value;
-        }
-
         public IWebPageMatch Match() {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<IWebPageElement> GetElements() {
+            return this.elements.Value;
         }
 
         private IReadOnlyList<IWebPageElement> ExtractElements() {

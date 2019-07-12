@@ -6,9 +6,9 @@ using Xunit;
 
 namespace Void.Selenium.Tests
 {
-    public class WebPointerTests : WebContext
+    public class FixedWebPointerTests : WebContext
     {
-        public WebPointerTests() {
+        public FixedWebPointerTests() {
             this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
         }
 

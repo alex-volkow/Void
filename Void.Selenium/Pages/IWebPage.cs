@@ -6,6 +6,11 @@ using System.Text;
 
 namespace Void.Selenium
 {
+    public interface IWebPage<out T> : IWebPage where T : class
+    {
+        new T Content { get; }
+    }
+
     public interface IWebPage : IWrapsDriver
     {
         Type Type { get; }

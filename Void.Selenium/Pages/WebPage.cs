@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using OpenQA.Selenium;
@@ -9,6 +10,26 @@ using Void.Reflection;
 
 namespace Void.Selenium
 {
+    public class WebPage<T> : WebPage, IWebPage<T> where T : class
+    {
+        public new T Content => (T)base.Content;
+
+
+        public WebPage(IWebDriver driver) 
+            : base(driver, typeof(T)) {
+        }
+
+
+        public IWebPageElement GetElement(Expression<Func<T, IWebElement>> member) {
+            if (!(member.Body is MemberExpression expression)) {
+                throw new ArgumentException(
+                    $"Invalid member type: {member.Body.GetType()}"
+                    );
+            }
+            return GetElement(expression.Member.Name);
+        }
+    }
+
     public class WebPage : IWebPage
     {
         private readonly Lazy<IReadOnlyList<WebPageReflectionElement>> elements;
@@ -85,6 +106,10 @@ namespace Void.Selenium
 
         public IEnumerable<IWebPageElement> GetElements() {
             return this.elements.Value;
+        }
+
+        public IWebPageElement GetElement(string name) {
+            return this.elements.Value.FirstOrDefault(e => e.Name == name);
         }
 
         protected virtual object CreatePage() {

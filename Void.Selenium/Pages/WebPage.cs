@@ -20,7 +20,7 @@ namespace Void.Selenium
 
         public IWebDriver WrappedDriver { get; }
 
-        public bool IsMatched => throw new NotImplementedException();
+        public bool IsMatched => GetElements().Where(e => !e.IsOptional).All(e => e.IsMatched);
 
 
 

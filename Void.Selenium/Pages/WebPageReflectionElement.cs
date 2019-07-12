@@ -88,6 +88,7 @@ namespace Void.Selenium
         /// 'XPath', 'FindsBy', 'FindsByAll', 'FindsBySequence' and 'Visible' attributes.
         /// </summary>
         public IWebElement Match() {
+            this.WrappedElement = null;
             var allCondition = this.member.GetCustomAttribute<FindsByAllAttribute>();
             var sequenceCondition = this.member.GetCustomAttribute<FindsBySequenceAttribute>();
             if (allCondition != null && sequenceCondition != null) {

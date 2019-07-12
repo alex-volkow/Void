@@ -33,7 +33,7 @@ namespace Void.Selenium
 
 
 
-        public IEnumerable<IWebElement> GetElements() {
+        public IEnumerable<IWebPageElement> GetElements() {
             throw new NotImplementedException();
         }
 

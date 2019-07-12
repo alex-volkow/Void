@@ -13,6 +13,6 @@ namespace Void.Selenium
         object Content { get; }
 
         IWebPageMatch Match();
-        IEnumerable<IWebElement> GetElements();
+        IEnumerable<IWebPageElement> GetElements();
     }
 }

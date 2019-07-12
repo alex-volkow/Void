@@ -45,6 +45,23 @@ namespace Void.Selenium.Tests
             Assert.NotNull(pointer.Required());
         }
 
+        [Fact]
+        public void EqualElements() {
+            var pointer = CreateWebPointer();
+            var first = pointer.Match();
+            var second = pointer.Match();
+            Assert.Equal(first, second);
+        }
+
+        [Fact]
+        public void EqualStaledElements() {
+            var pointer = CreateWebPointer();
+            var first = pointer.Match();
+            this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
+            var second = pointer.Match();
+            Assert.NotEqual(first, second);
+        }
+
         private WebPointer CreateWebPointer(string xpath = "//body") {
             return new WebPointer(this.Driver, By.XPath(xpath));
         }

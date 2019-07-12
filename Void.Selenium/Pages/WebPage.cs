@@ -64,5 +64,9 @@ namespace Void.Selenium
         private IEnumerable<PropertyInfo> ExtractProperties() {
             throw new NotImplementedException();
         }
+
+        private static bool IsElementDescriptor(MemberInfo member) {
+            throw new NotImplementedException();
+        }
     }
 }

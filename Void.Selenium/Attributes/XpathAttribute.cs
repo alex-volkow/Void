@@ -5,7 +5,7 @@ using System.Text;
 namespace Void.Selenium
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
-    public sealed class FindsByXpathAttribute : Attribute, IComparable
+    public sealed class XPathAttribute : Attribute, IComparable
     {
         public string XPath { get; set; }
 
@@ -13,9 +13,9 @@ namespace Void.Selenium
 
 
 
-        public FindsByXpathAttribute() { }
+        public XPathAttribute() { }
 
-        public FindsByXpathAttribute(string xpath) {
+        public XPathAttribute(string xpath) {
             this.XPath = xpath;
         }
 

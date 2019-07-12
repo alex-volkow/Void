@@ -115,6 +115,15 @@ namespace Void.Reflection
             return members;
         }
 
+        public static IReadOnlyList<FieldInfo> GetAllFields(this Type type, BindingFlags flags) {
+            var members = new List<FieldInfo>();
+            members.AddRange(type.GetFields(flags));
+            if (type.BaseType != null) {
+                members.AddRange(type.BaseType.GetAllFields(flags));
+            }
+            return members;
+        }
+
         public static IReadOnlyList<PropertyInfo> GetTopProperties(this Type type) {
             return type.GetTopProperties(
                 BindingFlags.Static |

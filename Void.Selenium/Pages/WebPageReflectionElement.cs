@@ -25,6 +25,11 @@ namespace Void.Selenium
         /// </summary>
         public IWebElement WrappedElement { get; private set; }
 
+        /// <summary>
+        /// Element is found but not visible in UI.
+        /// </summary>
+        public bool IsFoundButNotVisible { get; private set; }
+
 
         /// <summary>
         /// Element can be skipped in matching.
@@ -89,6 +94,7 @@ namespace Void.Selenium
         /// </summary>
         public IWebElement Match() {
             this.WrappedElement = null;
+            this.IsFoundButNotVisible = false;
             var allCondition = this.member.GetCustomAttribute<FindsByAllAttribute>();
             var sequenceCondition = this.member.GetCustomAttribute<FindsBySequenceAttribute>();
             if (allCondition != null && sequenceCondition != null) {
@@ -128,6 +134,7 @@ namespace Void.Selenium
                 return null;
             }
             if (this.IsVisible && !result.IsVisible()) {
+                this.IsFoundButNotVisible = true;
                 return null;
             }
             this.WrappedElement = result;

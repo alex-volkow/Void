@@ -146,6 +146,19 @@ namespace Void.Reflection
             return properties;
         }
 
+        public static IReadOnlyList<FieldInfo> GetTopFields(this Type type, BindingFlags bindings) {
+            var fields = new List<FieldInfo>();
+            while (type != null) {
+                foreach (var field in type.GetFields(bindings)) {
+                    if (!fields.Any(item => item.Name == field.Name)) {
+                        fields.Add(field);
+                    }
+                }
+                type = type.BaseType;
+            }
+            return fields;
+        }
+
         public static IReadOnlyList<Type> GetLineage(this Type type) {
             var lineage = new List<Type>();
             while (type != null) {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using Void.Reflection;
 
 namespace Void.Selenium
 {
@@ -56,17 +58,35 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        private IEnumerable<FieldInfo> ExtractFields() {
-            // except auto-fields
-            throw new NotImplementedException();
+        private IReadOnlyList<WebPageFieldElement> ExtractFields() {
+            var members = this.Type
+                .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => !e.IsInitOnly);
+            return GetElementMembers(members)
+                .Select(e => new WebPageFieldElement(e, this.Content))
+                .ToArray();
         }
 
-        private IEnumerable<PropertyInfo> ExtractProperties() {
-            throw new NotImplementedException();
+        private IReadOnlyList<WebPagePropertyElement> ExtractProperties() {
+            var members = this.Type
+                .GetTopProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => e.CanWrite);
+            return GetElementMembers(members)
+                .Select(e => new WebPagePropertyElement(e, this.Content))
+                .ToArray();
         }
 
-        private static bool IsElementDescriptor(MemberInfo member) {
-            throw new NotImplementedException();
+        private IEnumerable<T> GetElementMembers<T>(IEnumerable<T> members) where T : MemberInfo {
+            foreach (var member in members) {
+                if (member.GetCustomAttribute<XPathAttribute>() != null) {
+                    yield return member;
+                    continue;
+                }
+                if (member.GetCustomAttribute<FindsByAttribute>() != null) {
+                    yield return member;
+                    continue;
+                }
+            }
         }
     }
 }

@@ -55,7 +55,10 @@ namespace Void.Selenium
         }
 
         private IReadOnlyList<IWebPageElement> ExtractElements() {
-            throw new NotImplementedException();
+            var elements = new List<IWebPageElement>();
+            elements.AddRange(ExtractFields());
+            elements.AddRange(ExtractElements());
+            return elements;
         }
 
         private IReadOnlyList<WebPageFieldElement> ExtractFields() {

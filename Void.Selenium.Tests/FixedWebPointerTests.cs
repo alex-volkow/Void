@@ -9,7 +9,7 @@ namespace Void.Selenium.Tests
     public class FixedWebPointerTests : WebContext
     {
         public FixedWebPointerTests() {
-            this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
+            OpenDefaultPage();
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Void.Selenium.Tests
             var pointer = CreateWebPointer();
             pointer.Match();
             Assert.True(pointer.IsMatched);
-            this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
+            OpenDefaultPage();
             Assert.True(pointer.IsStaled);
         }
 
@@ -40,7 +40,7 @@ namespace Void.Selenium.Tests
             var pointer = CreateWebPointer();
             pointer.Match();
             Assert.True(pointer.IsMatched);
-            this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
+            OpenDefaultPage();
             Assert.True(pointer.IsStaled);
             Assert.NotNull(pointer.Required());
         }
@@ -57,7 +57,7 @@ namespace Void.Selenium.Tests
         public void EqualStaledElements() {
             var pointer = CreateWebPointer();
             var first = pointer.Match();
-            this.Driver.Navigate().GoToUrl("http://icanhazip.com/");
+            OpenDefaultPage();
             var second = pointer.Match();
             Assert.NotEqual(first, second);
         }

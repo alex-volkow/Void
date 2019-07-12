@@ -9,32 +9,43 @@ using Void.Reflection;
 
 namespace Void.Selenium
 {
-    public abstract class WebPage : IWebPage
+    public class WebPage : IWebPage
     {
         private readonly Lazy<IReadOnlyList<IWebPageElement>> elements;
 
 
-        public Type Type => this.Content.GetType();
+        public Type Type { get; }
 
         public object Content { get; }
 
         public IWebDriver WrappedDriver { get; }
 
-        public bool IsMatched => GetElements().Where(e => !e.IsOptional).All(e => e.IsMatched);
+        public bool IsMatched {
+            get {
+                if (this.Content is IWebMatcher matcher) {
+                    if (!matcher.IsMatching(this.WrappedDriver)) {
+                        return false;
+                    }
+                }
+                return GetElements()
+                    .Where(e => !e.IsOptional)
+                    .All(e => e.IsMatched);
+            }
+        }
 
 
-
-        public WebPage(IWebDriver driver, object content) {
-            this.Content = content ?? throw new ArgumentNullException(nameof(content));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="type"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public WebPage(IWebDriver driver, Type type) {
+            this.Type = type ?? throw new ArgumentNullException(nameof(type));
             this.WrappedDriver = driver ?? throw new ArgumentNullException(nameof(driver));
             this.elements = new Lazy<IReadOnlyList<IWebPageElement>>(ExtractElements);
-            //FindsByXpathAttribute;
-            //FindsByAttribute;
-            //FindsByAllAttribute;
-            //FindsBySequenceAttribute;
-            //CacheLookupAttribute;
-            //VisibleAttribute;
-            //OptionalAttribute
+            this.Content = CreatePage();
         }
 
 
@@ -52,6 +63,31 @@ namespace Void.Selenium
 
         public IEnumerable<IWebPageElement> GetElements() {
             return this.elements.Value;
+        }
+
+        protected virtual object CreatePage() {
+            if (this.Type.HasDefaultConstructor()) {
+                var page = Activator.CreateInstance(this.Type);
+                var fields = this.Type.GetTopFields(
+                    BindingFlags.Instance | 
+                    BindingFlags.NonPublic | 
+                    BindingFlags.Public
+                    );
+                foreach (var field in fields.Where(e => !e.IsInitOnly)) {
+                    if (field.FieldType.Is<IWebDriver>() ||
+                        field.FieldType == this.WrappedDriver.GetType()) {
+                        field.SetValue(page, this.WrappedDriver);
+                    }
+                }
+                return page;
+            }
+            if (this.Type.HasConstructor(typeof(IWebDriver))) {
+                return Activator.CreateInstance(this.Type, this.WrappedDriver);
+            }
+            throw new InvalidOperationException(
+                $"Type must have default constructor or " +
+                $"constructor with {nameof(IWebDriver)} parameter"
+                );
         }
 
         private IReadOnlyList<IWebPageElement> ExtractElements() {

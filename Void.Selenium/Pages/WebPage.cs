@@ -11,7 +11,7 @@ namespace Void.Selenium
 {
     public class WebPage : IWebPage
     {
-        private readonly Lazy<IReadOnlyList<IWebPageElement>> elements;
+        private readonly Lazy<IReadOnlyList<WebPageReflectionElement>> elements;
 
 
         public Type Type { get; }
@@ -44,21 +44,43 @@ namespace Void.Selenium
         public WebPage(IWebDriver driver, Type type) {
             this.Type = type ?? throw new ArgumentNullException(nameof(type));
             this.WrappedDriver = driver ?? throw new ArgumentNullException(nameof(driver));
-            this.elements = new Lazy<IReadOnlyList<IWebPageElement>>(ExtractElements);
+            this.elements = new Lazy<IReadOnlyList<WebPageReflectionElement>>(ExtractElements);
             this.Content = CreatePage();
         }
 
 
 
         public void Required() {
-            throw new NotImplementedException();
-            //if (!Match().Success) {
-            //    throw new 
-            //}
+            var match = Match();
+            if (!match.Success) {
+                var message = string.Join("; ", match.Errors);
+                throw new NotFoundException(message);
+            }
         }
 
         public IWebPageMatch Match() {
-            throw new NotImplementedException();
+            var match = new WebPageMatch();
+            if (this.Content is IWebMatcher matcher) {
+                if (!matcher.IsMatching(this.WrappedDriver)) {
+                    match.Errors.Add(
+                        $"Condition '{nameof(IWebMatcher.IsMatching)}' " +
+                        $"of '{this.Type.GetNameWithNamespaces()}' is not met"
+                        );
+                }
+            }
+            foreach (var element in this.elements.Value) {
+                if (!element.IsMatched) {
+                    if (element.Match() == null) {
+                        if (element.IsFoundButNotVisible) {
+                            match.Errors.Add($"Element '{element.Name}' found but not visible");
+                        }
+                        else {
+                            match.Errors.Add($"Element '{element.Name}' is not found");
+                        }
+                    }
+                }
+            }
+            return match;
         }
 
         public IEnumerable<IWebPageElement> GetElements() {
@@ -90,8 +112,8 @@ namespace Void.Selenium
                 );
         }
 
-        private IReadOnlyList<IWebPageElement> ExtractElements() {
-            var elements = new List<IWebPageElement>();
+        private IReadOnlyList<WebPageReflectionElement> ExtractElements() {
+            var elements = new List<WebPageReflectionElement>();
             elements.AddRange(ExtractFields());
             elements.AddRange(ExtractElements());
             return elements;
@@ -100,6 +122,7 @@ namespace Void.Selenium
         private IReadOnlyList<WebPageFieldElement> ExtractFields() {
             var members = this.Type
                 .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => e.FieldType == typeof(IWebElement))
                 .Where(e => !e.IsInitOnly);
             return GetElementMembers(members)
                 .Select(e => new WebPageFieldElement(this.WrappedDriver, e, this.Content))
@@ -109,6 +132,7 @@ namespace Void.Selenium
         private IReadOnlyList<WebPagePropertyElement> ExtractProperties() {
             var members = this.Type
                 .GetTopProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => e.PropertyType == typeof(IWebElement))
                 .Where(e => e.CanWrite);
             return GetElementMembers(members)
                 .Select(e => new WebPagePropertyElement(this.WrappedDriver, e, this.Content))

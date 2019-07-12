@@ -9,12 +9,16 @@ using Void.Reflection;
 
 namespace Void.Selenium
 {
-    internal class WebPageReflectionElement : IWebPageElement
+    internal abstract class WebPageReflectionElement : IWebPageElement
     {
         protected readonly MemberInfo member;
-        private readonly object page;
 
 
+
+        public string Name => this.member.Name;
+
+        public object Page { get; }
+        
         /// <summary>
         /// Search container.
         /// </summary>
@@ -23,7 +27,10 @@ namespace Void.Selenium
         /// <summary>
         /// Found element.
         /// </summary>
-        public IWebElement WrappedElement { get; private set; }
+        public IWebElement WrappedElement {
+            get => GetMemberValue();
+            set => SetMemberValue(value);
+        }
 
         /// <summary>
         /// Element is found but not visible in UI.
@@ -67,9 +74,8 @@ namespace Void.Selenium
         public WebPageReflectionElement(ISearchContext context, MemberInfo member, object page) {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.member = member ?? throw new ArgumentNullException(nameof(member));
-            this.page = page ?? throw new ArgumentNullException(nameof(page));
+            this.Page = page ?? throw new ArgumentNullException(nameof(page));
         }
-
 
 
         /// <summary>
@@ -84,7 +90,7 @@ namespace Void.Selenium
             }
             return Match() ?? throw new NotFoundException(
                 $"Element is not found: {this.member.Name} " +
-                $"({this.page.GetType().GetNameWithNamespaces()})"
+                $"({this.Page.GetType().GetNameWithNamespaces()})"
                 );
         }
 
@@ -106,7 +112,7 @@ namespace Void.Selenium
                 message.Append(" attributes on ");
                 message.Append('\'').Append(this.member.Name).Append('\'');
                 message.Append(" member of ");
-                message.Append('\'').Append(this.page.GetType().GetNameWithAssemblies()).Append('\'');
+                message.Append('\'').Append(this.Page.GetType().GetNameWithAssemblies()).Append('\'');
                 message.Append(" class");
                 throw new NotSupportedException(message.ToString());
             }
@@ -140,6 +146,10 @@ namespace Void.Selenium
             this.WrappedElement = result;
             return result;
         }
+
+        protected abstract IWebElement GetMemberValue();
+
+        protected abstract void SetMemberValue(IWebElement element);
 
         private IWebElement FindsByAll(IEnumerable<FindsByAttribute> attributes) {
             var elements = attributes

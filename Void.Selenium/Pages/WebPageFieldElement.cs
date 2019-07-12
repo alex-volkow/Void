@@ -11,5 +11,13 @@ namespace Void.Selenium
         public WebPageFieldElement(ISearchContext context, FieldInfo member, object page) 
             : base(context, member, page) {
         }
+
+        protected override IWebElement GetMemberValue() {
+            return (IWebElement)((FieldInfo)member).GetValue(this.Page);
+        }
+
+        protected override void SetMemberValue(IWebElement element) {
+            ((FieldInfo)member).SetValue(this.Page, element);
+        }
     }
 }

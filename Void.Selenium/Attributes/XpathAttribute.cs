@@ -5,11 +5,13 @@ using System.Text;
 namespace Void.Selenium
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
-    public sealed class XPathAttribute : Attribute, IComparable
+    public sealed class XPathAttribute : Attribute
     {
         public string XPath { get; set; }
 
         public int Priority { get; set; }
+
+        public Type CustomFinderType { get; set; }
 
 
 
@@ -17,12 +19,6 @@ namespace Void.Selenium
 
         public XPathAttribute(string xpath) {
             this.XPath = xpath;
-        }
-
-
-
-        public int CompareTo(object obj) {
-            throw new NotImplementedException();
         }
     }
 }

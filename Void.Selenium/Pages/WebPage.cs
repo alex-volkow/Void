@@ -81,11 +81,11 @@ namespace Void.Selenium
 
         private IEnumerable<T> GetElementMembers<T>(IEnumerable<T> members) where T : MemberInfo {
             foreach (var member in members) {
-                if (member.GetCustomAttribute<XPathAttribute>() != null) {
+                if (member.GetCustomAttributes<XPathAttribute>().Any()) {
                     yield return member;
                     continue;
                 }
-                if (member.GetCustomAttribute<FindsByAttribute>() != null) {
+                if (member.GetCustomAttributes<FindsByAttribute>().Any()) {
                     yield return member;
                     continue;
                 }

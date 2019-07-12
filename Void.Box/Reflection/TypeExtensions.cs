@@ -106,6 +106,9 @@ namespace Void.Reflection
             return type.GetConstructor(Type.EmptyTypes) != null;
         }
 
+        /// <summary>
+        /// Receive all properties for each class in lineage.
+        /// </summary>
         public static IReadOnlyList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags) {
             var members = new List<PropertyInfo>();
             members.AddRange(type.GetProperties(flags));
@@ -115,6 +118,9 @@ namespace Void.Reflection
             return members;
         }
 
+        /// <summary>
+        /// Receive all fields for each class in lineage.
+        /// </summary>
         public static IReadOnlyList<FieldInfo> GetAllFields(this Type type, BindingFlags flags) {
             var members = new List<FieldInfo>();
             members.AddRange(type.GetFields(flags));
@@ -124,6 +130,9 @@ namespace Void.Reflection
             return members;
         }
 
+        /// <summary>
+        /// Receive top properties (static, instance, public and non public) from class hierarchy
+        /// </summary>
         public static IReadOnlyList<PropertyInfo> GetTopProperties(this Type type) {
             return type.GetTopProperties(
                 BindingFlags.Static |
@@ -133,6 +142,9 @@ namespace Void.Reflection
                 );
         }
 
+        /// <summary>
+        /// Receive top properties from class hierarchy.
+        /// </summary>
         public static IReadOnlyList<PropertyInfo> GetTopProperties(this Type type, BindingFlags bindings) {
             var properties = new List<PropertyInfo>();
             while (type != null) {
@@ -146,6 +158,10 @@ namespace Void.Reflection
             return properties;
         }
 
+
+        /// <summary>
+        /// Receive top fields from class hierarchy.
+        /// </summary>
         public static IReadOnlyList<FieldInfo> GetTopFields(this Type type, BindingFlags bindings) {
             var fields = new List<FieldInfo>();
             while (type != null) {

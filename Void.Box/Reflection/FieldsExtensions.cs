@@ -10,7 +10,7 @@ namespace Void.Reflection
         /// <summary>
         /// Check the field belongs auto-property.
         /// </summary>
-        public static bool IsAutoField(this FieldInfo field) {
+        public static bool IsAuto(this FieldInfo field) {
             if (field == null) {
                 throw new ArgumentNullException(
                     nameof(field)

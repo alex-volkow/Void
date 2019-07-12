@@ -24,7 +24,7 @@ namespace Void.Reflection
         /// <summary>
         /// Check the property has auto-field.
         /// </summary>
-        public static bool IsAutoProperty(this PropertyInfo property) {
+        public static bool IsAuto(this PropertyInfo property) {
             return property.GetAutoField() != null;
         }
 

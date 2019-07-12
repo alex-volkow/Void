@@ -25,7 +25,7 @@ namespace Void.Reflection
                 .ToArray();
             Assert.Equal(2, fields.Length);
             var autofield = fields.First(e => e.Name.Contains(nameof(Item.Text)));
-            Assert.True(autofield.IsAutoField());
+            Assert.True(autofield.IsAuto());
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Void.Reflection
                 .ToArray();
             Assert.Equal(2, fields.Length);
             var standardField = fields.First(e => !e.Name.Contains(nameof(Item.Text)));
-            Assert.False(standardField.IsAutoField());
+            Assert.False(standardField.IsAuto());
         }
 
         [Fact]

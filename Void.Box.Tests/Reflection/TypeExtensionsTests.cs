@@ -47,9 +47,28 @@ namespace Void.Reflection
             var fields3 = item3.GetType()
                 .GetAllFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Single(fields1);
+            Assert.Equal(2, fields1.Length);
+            Assert.Equal(5, fields2.Length);
+            Assert.Equal(8, fields3.Length);
+        }
+
+        [Fact]
+        public void GetTopFields() {
+            var item1 = new Item();
+            var item2 = new ChildItem();
+            var item3 = new ChildChildItem();
+            var fields1 = item1.GetType()
+                .GetTopFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .ToArray();
+            var fields2 = item2.GetType()
+                .GetTopFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .ToArray();
+            var fields3 = item3.GetType()
+                .GetTopFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .ToArray();
+            Assert.Equal(2, fields1.Length);
             Assert.Equal(4, fields2.Length);
-            Assert.Equal(7, fields3.Length);
+            Assert.Equal(5, fields3.Length);
         }
 
         [Fact]
@@ -66,9 +85,9 @@ namespace Void.Reflection
             var itemProperties3 = item3.GetType()
                 .GetAllProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Single(itemProperties1);
-            Assert.Equal(3, itemProperties2.Length);
-            Assert.Equal(4, itemProperties3.Length);
+            Assert.Equal(2, itemProperties1.Length);
+            Assert.Equal(5, itemProperties2.Length);
+            Assert.Equal(7, itemProperties3.Length);
         }
 
         [Fact]
@@ -85,15 +104,16 @@ namespace Void.Reflection
             var itemProperties3 = item3.GetType()
                 .GetTopProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Single(itemProperties1);
-            Assert.Equal(2, itemProperties2.Length);
-            Assert.Equal(2, itemProperties3.Length);
+            Assert.Equal(2, itemProperties1.Length);
+            Assert.Equal(3, itemProperties2.Length);
+            Assert.Equal(3, itemProperties3.Length);
         }
 
         private class Item : IItem
         {
             protected string text;
             protected virtual string Value => "1";
+            public string Fixed { get; }
         }
 
         private interface IItem { }

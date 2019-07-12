@@ -7,6 +7,9 @@ namespace Void.Reflection
 {
     public static class FieldsExtensions
     {
+        /// <summary>
+        /// Check the field belongs auto-property.
+        /// </summary>
         public static bool IsAutoField(this FieldInfo field) {
             if (field == null) {
                 throw new ArgumentNullException(
@@ -17,6 +20,10 @@ namespace Void.Reflection
                 && field.Name.EndsWith(">k__BackingField");
         }
 
+        /// <summary>
+        /// Get field auto-property name.
+        /// </summary>
+        /// <returns>Name if field belongs auto-property else null.</returns>
         public static string GetAutoPropertyName(this FieldInfo field) {
             if (field == null) {
                 throw new ArgumentNullException(

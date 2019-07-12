@@ -12,6 +12,7 @@ namespace Void.Selenium
         bool IsMatched { get; }
         object Content { get; }
 
+        void Required();
         IWebPageMatch Match();
         IEnumerable<IWebPageElement> GetElements();
     }

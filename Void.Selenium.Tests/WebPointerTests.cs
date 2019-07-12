@@ -62,8 +62,8 @@ namespace Void.Selenium.Tests
             Assert.NotEqual(first, second);
         }
 
-        private WebPointer CreateWebPointer(string xpath = "//body") {
-            return new WebPointer(this.Driver, By.XPath(xpath));
+        private FixedWebPointer CreateWebPointer(string xpath = "//body") {
+            return new FixedWebPointer(this.Driver, By.XPath(xpath));
         }
     }
 }

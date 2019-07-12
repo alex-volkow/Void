@@ -9,7 +9,7 @@ namespace Void.Selenium
     /// <summary>
     /// Represents pointer to dynamic IWebElement.
     /// </summary>
-    public class WebPointer : IWebPointer
+    public class FixedWebPointer : IWebPointer
     {
         /// <summary>
         /// Searching element mechanism.
@@ -49,7 +49,7 @@ namespace Void.Selenium
 
 
 
-        public WebPointer(ISearchContext context, By locator) {
+        public FixedWebPointer(ISearchContext context, By locator) {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.Locator = locator ?? throw new ArgumentNullException(nameof(locator));
         }

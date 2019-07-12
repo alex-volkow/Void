@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenQA.Selenium;
 
-namespace Void.Selenium.Elements
+namespace Void.Selenium
 {
     /// <summary>
     /// Represents pointer to dynamic IWebElement.

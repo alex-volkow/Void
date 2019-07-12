@@ -11,21 +11,35 @@ namespace Void.Selenium
 {
     internal class WebPageReflectionElement : IWebPageElement
     {
-        private readonly MemberInfo member;
+        protected readonly MemberInfo member;
         private readonly object page;
 
 
-
+        /// <summary>
+        /// Search container.
+        /// </summary>
         public ISearchContext Context { get; }
 
+        /// <summary>
+        /// Found element.
+        /// </summary>
         public IWebElement WrappedElement { get; private set; }
 
+
+        /// <summary>
+        /// Element can be skipped in matching.
+        /// </summary>
         public bool IsOptional => this.member.GetCustomAttribute<OptionalAttribute>() != null;
 
+        /// <summary>
+        /// Element must be visible in UI.
+        /// </summary>
         public bool IsVisible => this.member.GetCustomAttribute<VisibleAttribute>() != null;
 
-
-        public bool IsMatched => throw new NotImplementedException();
+        /// <summary>
+        /// Check is element found and not stale.
+        /// </summary>
+        public bool IsMatched => this.WrappedElement != null && !this.IsStaled;
 
         /// <summary>
         /// Check status of element pointer. If element is stale, need to match it. 
@@ -53,6 +67,26 @@ namespace Void.Selenium
 
 
 
+        /// <summary>
+        /// Provides access to alive element or throw exception.
+        /// If element is found and not stale, returns the element.
+        /// </summary>
+        /// <returns>Match element.</returns>
+        /// <exception cref="NotFoundException">Failed to find a matching element.</exception>
+        public IWebElement Required() {
+            if (this.IsMatched) {
+                return this.WrappedElement;
+            }
+            return Match() ?? throw new NotFoundException(
+                $"Element is not found: {this.member.Name} " +
+                $"({this.page.GetType().GetNameWithNamespaces()})"
+                );
+        }
+
+        /// <summary>
+        /// Try to find a web element using condition builded from 
+        /// 'XPath', 'FindsBy', 'FindsByAll', 'FindsBySequence' and 'Visible' attributes.
+        /// </summary>
         public IWebElement Match() {
             var allCondition = this.member.GetCustomAttribute<FindsByAllAttribute>();
             var sequenceCondition = this.member.GetCustomAttribute<FindsBySequenceAttribute>();
@@ -177,10 +211,6 @@ namespace Void.Selenium
                     $"Unsipported locator: {attribute.How}"
                     );
             }
-        }
-
-        public IWebElement Required() {
-            throw new NotImplementedException();
         }
     }
 }

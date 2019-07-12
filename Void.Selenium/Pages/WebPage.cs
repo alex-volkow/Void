@@ -66,7 +66,7 @@ namespace Void.Selenium
                 .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(e => !e.IsInitOnly);
             return GetElementMembers(members)
-                .Select(e => new WebPageFieldElement(e, this.Content))
+                .Select(e => new WebPageFieldElement(this.WrappedDriver, e, this.Content))
                 .ToArray();
         }
 
@@ -75,7 +75,7 @@ namespace Void.Selenium
                 .GetTopProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(e => e.CanWrite);
             return GetElementMembers(members)
-                .Select(e => new WebPagePropertyElement(e, this.Content))
+                .Select(e => new WebPagePropertyElement(this.WrappedDriver, e, this.Content))
                 .ToArray();
         }
 

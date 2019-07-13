@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Void.Selenium
 {
@@ -14,6 +15,7 @@ namespace Void.Selenium
         bool IsThrowTimeoutException { get; }
         bool IsIgnoreConditionExceptions { get; }
         Func<Exception, bool> ExceptionHandler { get; }
+        CancellationToken CancellationToken { get; }
 
         void Break();
         void Throw<T>() where T : Exception, new();

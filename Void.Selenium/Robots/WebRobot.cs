@@ -255,7 +255,11 @@ namespace Void.Selenium
         }
 
         public IRoboWait Wait() {
-            throw new NotImplementedException();
+            return new RoboWait(this)
+                .WithInterval(this.ConditionCheckingInterval)
+                .WithTimeout(this.ConditionWaitingTimeout)
+                .IgnoreConditionExceptions()
+                .ThrowTimeoutException();
         }
     }
 }

@@ -17,6 +17,10 @@ namespace Void.Selenium
 
         Task UntilAsync(Func<bool> condition);
         Task UntilAsync(Func<IRoboWaitContext, bool> condition);
+        Task UntilAsync(Func<object> condition);
+        Task UntilAsync(Func<IRoboWaitContext, object> condition);
+        Task UntilAsync<T>(Func<T> condition) where T : class;
+        Task UntilAsync<T>(Func<IRoboWaitContext, T> condition) where T : class;
         IRoboWait WithTimeout(TimeSpan value);
         IRoboWait WithInterval(TimeSpan value);
         IRoboWait ThrowTimeoutException();

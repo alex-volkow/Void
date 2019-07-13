@@ -34,7 +34,7 @@ namespace Void.Selenium
         public static TimeSpan DefaultConditionCheckingInterval { get; } = TimeSpan.FromMilliseconds(1000);
 
         /// <summary>
-        /// Default time deviation for waiting (25 %).
+        /// Default time deviation for random waiting (25 %).
         /// </summary>
         public static double DefaultRandomWaitDeviationPercent { get; } = 0.25;
 
@@ -62,16 +62,34 @@ namespace Void.Selenium
 
 
 
+        /// <summary>
+        /// Interval between keys values sending (default 175 ms).
+        /// </summary>
         public TimeSpan KeySendingInterval { get; set; }
 
+        /// <summary>
+        /// Page searching timeout (default 1 min).
+        /// </summary>
         public TimeSpan PageSearchingTimeout { get; set; }
 
+        /// <summary>
+        /// Element searching timeout (default 30 sec).
+        /// </summary>
         public TimeSpan ElementSearchingTimeout { get; set; }
 
+        /// <summary>
+        /// Waiting timeout (default 1 min).
+        /// </summary>
         public TimeSpan ConditionWaitingTimeout { get; set; }
 
+        /// <summary>
+        /// Interval between condition checking while waiting (default 1 sec).
+        /// </summary>
         public TimeSpan ConditionCheckingInterval { get; set; }
 
+        /// <summary>
+        /// Time deviation for random waiting (default 25 %).
+        /// </summary>
         public double RandomWaitDeviationPercent { get; set; }
 
 

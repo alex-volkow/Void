@@ -65,7 +65,7 @@ namespace Void.Selenium
         public WebPage(IWebDriver driver, Type type) {
             this.Type = type ?? throw new ArgumentNullException(nameof(type));
             this.WrappedDriver = driver ?? throw new ArgumentNullException(nameof(driver));
-            this.elements = new Lazy<IReadOnlyList<WebPageReflectionElement>>(ExtractElements);
+            this.elements = new Lazy<IReadOnlyList<WebPageReflectionElement>>(CreateElements);
             this.Content = CreatePage();
         }
 
@@ -137,10 +137,10 @@ namespace Void.Selenium
                 );
         }
 
-        private IReadOnlyList<WebPageReflectionElement> ExtractElements() {
+        private IReadOnlyList<WebPageReflectionElement> CreateElements() {
             var elements = new List<WebPageReflectionElement>();
             elements.AddRange(ExtractFields());
-            elements.AddRange(ExtractElements());
+            elements.AddRange(ExtractProperties());
             return elements;
         }
 
@@ -148,7 +148,8 @@ namespace Void.Selenium
             var members = this.Type
                 .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(e => e.FieldType == typeof(IWebElement))
-                .Where(e => !e.IsInitOnly);
+                .Where(e => !e.IsInitOnly)
+                .Where(e => !e.IsAuto());
             return GetElementMembers(members)
                 .Select(e => new WebPageFieldElement(this.WrappedDriver, e, this.Content))
                 .ToArray();
@@ -158,7 +159,7 @@ namespace Void.Selenium
             var members = this.Type
                 .GetTopProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(e => e.PropertyType == typeof(IWebElement))
-                .Where(e => e.CanWrite);
+                .Where(e => e.CanRead);
             return GetElementMembers(members)
                 .Select(e => new WebPagePropertyElement(this.WrappedDriver, e, this.Content))
                 .ToArray();

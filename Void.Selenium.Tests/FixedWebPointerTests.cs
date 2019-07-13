@@ -63,7 +63,7 @@ namespace Void.Selenium.Tests
         }
 
         private FixedWebPointer CreateWebPointer(string xpath = "//body") {
-            return new FixedWebPointer(this.Driver, By.XPath(xpath));
+            return new FixedWebPointer(GetDriver(), By.XPath(xpath));
         }
     }
 }

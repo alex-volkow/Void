@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using OpenQA.Selenium;
+using Void.Reflection;
 
 namespace Void.Selenium
 {
@@ -13,11 +14,11 @@ namespace Void.Selenium
         }
 
         protected override IWebElement GetMemberValue() {
-            return (IWebElement)((PropertyInfo)member).GetValue(this.Page);
+            return (IWebElement)((PropertyInfo)this.member).GetValue(this.Page);
         }
 
         protected override void SetMemberValue(IWebElement element) {
-            ((PropertyInfo)member).SetValue(this.Page, element);
+            ((PropertyInfo)member).SetForce(this.Page, element);
         }
     }
 }

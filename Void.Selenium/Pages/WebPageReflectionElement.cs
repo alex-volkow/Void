@@ -147,6 +147,25 @@ namespace Void.Selenium
             return result;
         }
 
+        public override string ToString() {
+            return this.Name;
+        }
+
+        public override int GetHashCode() {
+            return HashCode.Create(
+                this.Page.GetType(),
+                this.Name
+                );
+        }
+
+        public override bool Equals(object obj) {
+            if (obj is WebPageReflectionElement other) {
+                return other.Page.GetType() == this.Page.GetType()
+                    && other.Name == this.Name;
+            }
+            return false;
+        }
+
         protected abstract IWebElement GetMemberValue();
 
         protected abstract void SetMemberValue(IWebElement element);

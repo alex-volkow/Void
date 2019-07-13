@@ -14,31 +14,31 @@ namespace Void.Selenium.Tests
 {
     public abstract class WebContext : IDisposable//IAsyncLifetime
     {
-        private readonly TempFile template;
+        private TempFile template;
+        private IWebDriver driver;
 
 
-        protected IWebDriver Driver { get; }
-
-
-
-        public WebContext() {
-            var options = new ChromeOptions();
-            options.AddArgument("headless");
-            this.Driver = new ChromeDriver(GetChromedriver().DirectoryName, options);
-            var template = typeof(WebContext).Assembly.ReadStringResource("Template.html");
-            this.template = new TempFile();
-            File.WriteAllText(this.template.Info.FullName, template); 
+        protected IWebDriver GetDriver() {
+            if (this.driver == null) {
+                var options = new ChromeOptions();
+                options.AddArgument("headless");
+                this.driver = new ChromeDriver(GetChromedriver().DirectoryName, options);
+                var template = typeof(WebContext).Assembly.ReadStringResource("Template.html");
+                this.template = new TempFile(Files.CreateTempFile("template.html"));
+                File.WriteAllText(this.template.Info.FullName, template);
+            }
+            return this.driver;
         }
 
-
         protected void OpenDefaultPage() {
+            var driver = GetDriver();
             var address = new Uri(this.template.Info.FullName);
-            this.Driver.Navigate().GoToUrl(address);
+            driver.Navigate().GoToUrl(address);
         }
 
         public void Dispose() {
-            this.template.Dispose();
-            this.Driver.Dispose();
+            this.template?.Dispose();
+            this.driver?.Dispose();
         }
 
         private FileInfo GetChromedriver() {

@@ -24,7 +24,7 @@ namespace Void.Selenium.Tests
                 options.AddArgument("headless");
                 this.driver = new ChromeDriver(GetChromedriver().DirectoryName, options);
                 var template = typeof(WebContext).Assembly.ReadStringResource("Template.html");
-                this.template = new TempFile(Files.CreateTempFile("template.html"));
+                this.template = new TempFile(Files.CreateTempFile($"{DateTime.Now.GetHashCode():x}.html"));
                 File.WriteAllText(this.template.Info.FullName, template);
             }
             return this.driver;

@@ -220,14 +220,23 @@ namespace Void.Selenium
 
         private IEnumerable<By> GetSequence(IEnumerable<FindsByAttribute> attributes) {
             var groups = attributes.GroupBy(e => e.Priority).OrderBy(e => e.Key);
+            var first = true;
             foreach (var group in groups) {
                 foreach (var attribute in group) {
-                    yield return GetLocator(attribute);
+                    if (first) {
+                        yield return GetLocator(attribute);
+                        first = false;
+                    }
+                    else {
+                        yield return GetLocator(attribute, e => {
+                            return e.StartsWith(".") ? e : $".{e}";
+                        });
+                    }
                 }
             }
         }
 
-        private By GetLocator(FindsByAttribute attribute) {
+        private By GetLocator(FindsByAttribute attribute, Func<string, string> formatter = null) {
             if (attribute.How == How.Custom) {
                 if (attribute.CustomFinderType == null) {
                     throw new ArgumentNullException(
@@ -239,7 +248,10 @@ namespace Void.Selenium
                     new object[] { attribute.Using }
                     );
             }
-            return GetStandardLocator(attribute)(attribute.Using);
+            if (formatter == null) {
+                formatter = e => e;
+            }
+            return GetStandardLocator(attribute)(formatter(attribute.Using));
         }
 
         private Func<string, By> GetStandardLocator(FindsByAttribute attribute) {

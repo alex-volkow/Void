@@ -19,6 +19,7 @@ namespace Void.Selenium.Tests
         [FindsByAll]
         [XPath("//input[@id='username']")]
         [FindsBy(How = How.Name, Using = "username")]
+        [XPath("//input[@id='username' and @name='username']")]
         public IWebElement Username2 { get; }
 
         [FindsBySequence]

@@ -91,7 +91,7 @@ namespace Void.Selenium
             }
             foreach (var element in this.elements.Value) {
                 if (!element.IsMatched) {
-                    if (element.Match() == null) {
+                    if (element.Match() == null && !element.IsOptional) {
                         if (element.IsFoundButNotVisible) {
                             match.Errors.Add($"Element '{element.Name}' found but not visible");
                         }

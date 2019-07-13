@@ -20,6 +20,15 @@ namespace Void.Selenium.Tests
         }
 
         [Fact]
+        public void GetElements() {
+            OpenDefaultPage();
+            var page = new WebPage<TemplatePage>(GetDriver());
+            Assert.NotNull(page.GetElement(nameof(TemplatePage.Body)));
+            Assert.NotNull(page.GetElement(e => e.Password1));
+            Assert.Null(page.GetElement("pew pew"));
+        }
+
+        [Fact]
         public void MatchTemplatePage() {
             OpenDefaultPage();
             var page = new WebPage<TemplatePage>(GetDriver());

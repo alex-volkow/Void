@@ -11,18 +11,13 @@ namespace Void.Selenium
     {
         Task SendKeysAsync(string text);
         Task SendKeysAsync(string text, TimeSpan duration);
-        Task SendKeysJavaScriptAsync(string text);
-        Task SendKeysJavaScriptAsync(string text, TimeSpan duration);
         void SendKeys(string text);
-        void SendKeysJavaScript(string text);
         void Submit();
-        void SubmitJavaScript();
         IRoboElement Click();
-        IRoboElement ClickJavaScript();
         IRoboElement Clear();
-        IRoboElement ClearJavaScript();
         IRoboElement MoveTo();
         IRoboElement MouseOver();
+        IRoboElement WithJavaScript();
         ISelector GetSelector();
     }
 }

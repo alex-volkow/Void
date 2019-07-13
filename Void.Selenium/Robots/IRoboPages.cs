@@ -17,13 +17,13 @@ namespace Void.Selenium
 
         Task<IWebPage> FindAsync(Type type);
         Task<IWebPage> FindAsync(Type type, TimeSpan timeout);
-        Task<IWebPage<T>> FindAsync<T>() where T : class, new();
-        Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class, new();
+        Task<IWebPage<T>> FindAsync<T>() where T : class;
+        Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class;
 
         Task<IWebPage> TryFindAsync(Type type);
         Task<IWebPage> TryFindAsync(Type type, TimeSpan timeout);
-        Task<IWebPage<T>> TryFindAsync<T>() where T : class, new();
-        Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout) where T : class, new();
+        Task<IWebPage<T>> TryFindAsync<T>() where T : class;
+        Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout) where T : class;
 
         Task<IWebPage> FindFistPage(params Type[] types);
         Task<IWebPage> FindFistPage(params IWebPage[] pages);

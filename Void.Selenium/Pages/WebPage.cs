@@ -10,8 +10,16 @@ using Void.Reflection;
 
 namespace Void.Selenium
 {
+    /// <summary>
+    /// Manager for the T page class.
+    /// </summary>
+    /// <typeparam name="T">Contains IWebElement fields and properties. 
+    /// Can implement IWebMatcher interface.</typeparam>
     public class WebPage<T> : WebPage, IWebPage<T> where T : class
     {
+        /// <summary>
+        /// Get content page.
+        /// </summary>
         public new T Content => (T)base.Content;
 
 
@@ -20,6 +28,11 @@ namespace Void.Selenium
         }
 
 
+        /// <summary>
+        /// Get web page element by source page element.
+        /// </summary>
+        /// <returns>Element if found else null.</returns>
+        /// <example>e => e.MyElement</example>
         public IWebPageElement GetElement(Expression<Func<T, IWebElement>> member) {
             if (!(member.Body is MemberExpression expression)) {
                 throw new ArgumentException(
@@ -30,17 +43,32 @@ namespace Void.Selenium
         }
     }
 
+    /// <summary>
+    /// Manager for the page class.
+    /// </summary>
     public class WebPage : IWebPage
     {
         private readonly Lazy<IReadOnlyList<WebPageReflectionElement>> elements;
 
 
+        /// <summary>
+        /// Type of content page.
+        /// </summary>
         public Type Type { get; }
 
+        /// <summary>
+        /// Source page.
+        /// </summary>
         public object Content { get; }
 
+        /// <summary>
+        /// Wrapped web driver.
+        /// </summary>
         public IWebDriver WrappedDriver { get; }
 
+        /// <summary>
+        /// Check the content page is matching current WebDriver state.
+        /// </summary>
         public bool IsMatched {
             get {
                 if (this.Content is IWebMatcher matcher) {
@@ -56,7 +84,8 @@ namespace Void.Selenium
 
 
         /// <summary>
-        /// 
+        /// The type can contains IWebElement fields and properties
+        /// and implements IWebMatcher interface.
         /// </summary>
         /// <param name="driver"></param>
         /// <param name="type"></param>
@@ -70,15 +99,30 @@ namespace Void.Selenium
         }
 
 
-
+        /// <summary>
+        /// Ensures compliance WebDriver state with the page or throw exception.
+        /// </summary>
+        /// <exception cref="NotFoundException">Page is not matching.</exception>
         public void Required() {
             var match = Match();
             if (!match.Success) {
-                var message = string.Join("; ", match.Errors);
-                throw new NotFoundException(message);
+                //var message = string.Join("; ", match.Errors);
+                var message = new StringBuilder();
+                message.Append("Page '").Append(this.Type.GetNameWithNamespaces()).Append("' ");
+                message.Append("is not found:");
+                foreach (var error in match.Errors) {
+                    message.Append(" ");
+                    message.Append(error);
+                    message.Append(";");
+                }
+                throw new NotFoundException(message.ToString());
             }
         }
 
+        /// <summary>
+        /// Build report for matching current WebDriver state.
+        /// </summary>
+        /// <returns>Matching report.</returns>
         public IWebPageMatch Match() {
             var match = new WebPageMatch();
             if (this.Content is IWebMatcher matcher) {
@@ -104,10 +148,17 @@ namespace Void.Selenium
             return match;
         }
 
+        /// <summary>
+        /// Get all available page elements.
+        /// </summary>
         public IEnumerable<IWebPageElement> GetElements() {
             return this.elements.Value;
         }
 
+        /// <summary>
+        /// Get page element by name.
+        /// </summary>
+        /// <returns>Element if found else null.</returns>
         public IWebPageElement GetElement(string name) {
             return this.elements.Value.FirstOrDefault(e => e.Name == name);
         }

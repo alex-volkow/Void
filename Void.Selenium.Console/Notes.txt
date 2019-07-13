@@ -1,0 +1,16 @@
+﻿select driver
+select extensions
+
+open address
+go back
+find matching pages
+show page source
+create snapshot
+create screenshot to clipboard
+view log
+view cookies
+
+base element methods (+ visible option + stale flag)
+
+selector actions
+

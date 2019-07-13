@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Void.Reflection;
 using Xunit;
@@ -16,6 +17,12 @@ namespace Void.Selenium.Tests
             var elements = page.GetElements();
             foreach (var property in page.Type.GetTopProperties()) {
                 Assert.True(elements.Any(e => e.Name == property.Name), $"Not found: {property.Name}");
+            }
+            var fields = page.Type
+                .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => !e.IsInitOnly);
+            foreach (var field in fields) {
+                Assert.True(elements.Any(e => e.Name == field.Name), $"Not found: {field.Name}");
             }
         }
 

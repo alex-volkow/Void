@@ -14,6 +14,11 @@ namespace Void.Selenium
         //Task<IDynamicWebElement> FindElement(ISearchContext context, By locator, TimeSpan timeout);
         //Task<IDynamicWebElement> TryFindElement(ISearchContext context, By locator, TimeSpan timeout);
 
+        IRoboElement FindFirst(By locator);
+        IRoboElement FindFirstByXpath(string xpath);
+        IEnumerable<IRoboElement> FindAll(By locator);
+        IEnumerable<IRoboElement> FindAllByXpath(string xpath);
+
         Task<IWebPointer> FindFirstAsync(By locator);
         Task<IWebPointer> FindFirstAsync(By locator, TimeSpan timeout);
         Task<IWebPointer> FindFirstByXpathAsync(string xpath);

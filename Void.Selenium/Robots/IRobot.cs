@@ -24,8 +24,6 @@ namespace Void.Selenium
         IRoboWait Wait();
         IRoboElement Using(IWebElement element);
         IRoboElement Using(IWebPointer pointer);
-        IRoboElement UsingElement(string xpath);
-        IRoboElement UsingElement(By locator);
         object ExecuteJavaScript(string script);
         Task WaitRandomAsync(Delays delay);
         Task WaitRandomAsync(Delays delay, CancellationToken token);

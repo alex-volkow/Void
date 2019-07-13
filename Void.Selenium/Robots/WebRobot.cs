@@ -146,14 +146,6 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        public IRoboElement UsingElement(string xpath) {
-            throw new NotImplementedException();
-        }
-
-        public IRoboElement UsingElement(By locator) {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Execute script using WebDriver.
         /// </summary>
@@ -254,6 +246,9 @@ namespace Void.Selenium
                 );
         }
 
+        /// <summary>
+        /// Create new wait condition.
+        /// </summary>
         public IRoboWait Wait() {
             return new RoboWait(this)
                 .WithInterval(this.ConditionCheckingInterval)

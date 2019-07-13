@@ -12,11 +12,27 @@ namespace Void.Selenium
             : base(robot) {
         }
 
+        public IEnumerable<IRoboElement> FindAll(By locator) {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IRoboElement> FindAllByXpath(string xpath) {
+            throw new NotImplementedException();
+        }
+
+        public IRoboElement FindFirst(By locator) {
+            throw new NotImplementedException();
+        }
+
         public Task<IWebPointer> FindFirstAsync(By locator) {
             throw new NotImplementedException();
         }
 
         public Task<IWebPointer> FindFirstAsync(By locator, TimeSpan timeout) {
+            throw new NotImplementedException();
+        }
+
+        public IRoboElement FindFirstByXpath(string xpath) {
             throw new NotImplementedException();
         }
 

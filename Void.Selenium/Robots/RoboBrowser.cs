@@ -25,11 +25,11 @@ namespace Void.Selenium
         }
 
         public byte[] GetScreenshot() {
-            throw new NotImplementedException();
+            return ((ITakesScreenshot)this.WrappedDriver).GetScreenshot().AsByteArray;
         }
 
         public bool IsContentLoaded() {
-            throw new NotImplementedException();
+            return this.Robot.ExecuteJavaScript("return document.readyState") is "complete";
         }
 
         public void Scroll(int offset) {
@@ -37,6 +37,14 @@ namespace Void.Selenium
         }
 
         public Task SoftScrollAsync(int offset) {
+            throw new NotImplementedException();
+        }
+
+        public Task WaitContentLoadingAsync() {
+            throw new NotImplementedException();
+        }
+
+        public Task WaitContentLoadingAsync(TimeSpan timeout) {
             throw new NotImplementedException();
         }
     }

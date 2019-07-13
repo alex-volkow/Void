@@ -3,6 +3,7 @@ using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Void.Selenium
@@ -23,16 +24,20 @@ namespace Void.Selenium
         IRoboWait Wait();
         IRoboElement Using(IWebElement element);
         IRoboElement Using(IWebPointer pointer);
-        IRoboElement Using(string xpath);
-        IRoboElement Using(By locator);
+        IRoboElement UsingElement(string xpath);
+        IRoboElement UsingElement(By locator);
         object ExecuteJavaScript(string script);
         Task WaitRandomAsync(Delays delay);
+        Task WaitRandomAsync(Delays delay, CancellationToken token);
         Task WaitRandomAsync(TimeSpan delay);
+        Task WaitRandomAsync(TimeSpan delay, CancellationToken token);
         Task WaitRandomAsync(int milliseconds);
+        Task WaitRandomAsync(int milliseconds, CancellationToken token);
         Task WaitRandomAsync(Delays from, Delays to);
+        Task WaitRandomAsync(Delays from, Delays to, CancellationToken token);
         Task WaitRandomAsync(TimeSpan from, TimeSpan to);
+        Task WaitRandomAsync(TimeSpan from, TimeSpan to, CancellationToken token);
         Task WaitRandomAsync(int fromMs, int toMs);
-        Task WaitContentLoadingAsync();
-        Task WaitContentLoadingAsync(TimeSpan timeout);
+        Task WaitRandomAsync(int fromMs, int toMs, CancellationToken token);
     }
 }

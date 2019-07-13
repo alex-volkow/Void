@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 
@@ -96,28 +97,46 @@ namespace Void.Selenium
         /// <summary>
         /// Cast WebDriver to IJavaScriptExecutor.
         /// </summary>
-        protected IJavaScriptExecutor JavaScript => (IJavaScriptExecutor)this.WrappedDriver;
+        public IJavaScriptExecutor JavaScript => (IJavaScriptExecutor)this.WrappedDriver;
 
 
 
+        /// <summary>
+        /// Crate a new instance with default parameters.
+        /// </summary>
         public WebRobot(IWebDriver driver) {
             this.WrappedDriver = driver ?? throw new ArgumentNullException(nameof(driver));
-        }
-
-
-        /// <summary>
-        /// Check driver's page content is loaded with JavaScript ('document.readyState' is 'complete')
-        /// </summary>
-        public bool IsContentLoaded() {
-            return this.JavaScript.ExecuteScript("return document.readyState") is "complete";
+            this.KeySendingInterval = DefaultKeySendingInterval;
+            this.PageSearchingTimeout = DefaultPageSearchingTimeout;
+            this.ElementSearchingTimeout = DefaultElementSearchingTimeout;
+            this.ConditionWaitingTimeout = DefaultConditionWaitingTimeout;
+            this.ConditionCheckingInterval = DefaultConditionCheckingInterval;
+            this.RandomWaitDeviationPercent = DefaultRandomWaitDeviationPercent;
         }
 
         /// <summary>
-        /// Get screenshot of current driver's page as byte array.
+        /// Create a new instance using parameters from the donor robot.
         /// </summary>
-        public byte[] GetScreenshot() {
-            return ((ITakesScreenshot)this.WrappedDriver).GetScreenshot().AsByteArray;
+        public WebRobot(IRobot robot) {
+            if (robot == null) {
+                throw new ArgumentNullException(nameof(robot));
+            }
+            if (robot.WrappedDriver == null) {
+                throw new ArgumentException(
+                    $"{nameof(IWebDriver)} required",
+                    $"{nameof(robot)}.{nameof(this.WrappedDriver)}"
+                    );
+            }
+            this.WrappedDriver = robot.WrappedDriver;
+            this.KeySendingInterval = robot.KeySendingInterval;
+            this.PageSearchingTimeout = robot.PageSearchingTimeout;
+            this.ElementSearchingTimeout = robot.ElementSearchingTimeout;
+            this.ConditionWaitingTimeout = robot.ConditionWaitingTimeout;
+            this.ConditionCheckingInterval = robot.ConditionCheckingInterval;
+            this.RandomWaitDeviationPercent = robot.RandomWaitDeviationPercent;
         }
+
+
 
         public IRoboElement Using(IWebElement element) {
             throw new NotImplementedException();
@@ -127,48 +146,112 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        public IRoboElement Using(string xpath) {
+        public IRoboElement UsingElement(string xpath) {
             throw new NotImplementedException();
         }
 
-        public IRoboElement Using(By locator) {
+        public IRoboElement UsingElement(By locator) {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Execute script using WebDriver.
+        /// </summary>
+        /// <returns>Script result.</returns>
         public object ExecuteJavaScript(string script) {
-            throw new NotImplementedException();
+            return this.JavaScript.ExecuteScript(script);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
         public Task WaitRandomAsync(Delays delay) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(delay, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
         public Task WaitRandomAsync(TimeSpan delay) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(delay, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
         public Task WaitRandomAsync(int milliseconds) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(milliseconds, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
         public Task WaitRandomAsync(Delays from, Delays to) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(from, to, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
         public Task WaitRandomAsync(TimeSpan from, TimeSpan to) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(from, to, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
         public Task WaitRandomAsync(int fromMs, int toMs) {
-            throw new NotImplementedException();
+            return WaitRandomAsync(fromMs, toMs, CancellationToken.None);
         }
 
-        public Task WaitContentLoadingAsync() {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
+        public Task WaitRandomAsync(Delays delay, CancellationToken token) {
+            return WaitRandomAsync((int)delay, token);
         }
 
-        public Task WaitContentLoadingAsync(TimeSpan timeout) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
+        public Task WaitRandomAsync(TimeSpan delay, CancellationToken token) {
+            var deviation = RandomGenerator.Default.NextDoubleSign() * this.RandomWaitDeviationPercent;
+            var milliseconds = delay.TotalMilliseconds * (1 - deviation);
+            return Task.Delay((int)Math.Abs(milliseconds), token);
+        }
+
+        /// <summary>
+        /// Creates a task that completes after a delay ± % of random deviation.
+        /// </summary>
+        public Task WaitRandomAsync(int milliseconds, CancellationToken token) {
+            return WaitRandomAsync(TimeSpan.FromMilliseconds(milliseconds), token);
+        }
+
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
+        public Task WaitRandomAsync(Delays from, Delays to, CancellationToken token) {
+            return WaitRandomAsync((int)from, (int)to, token);
+        }
+
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
+        public Task WaitRandomAsync(TimeSpan from, TimeSpan to, CancellationToken token) {
+            var min = from.TotalMilliseconds;
+            var additive = Math.Abs(to.TotalMilliseconds - min) * RandomGenerator.Default.NextDouble();
+            return Task.Delay((int)(min + additive), token);
+        }
+
+        /// <summary>
+        /// Creates a task that completes after a delay between range limits.
+        /// </summary>
+        public Task WaitRandomAsync(int fromMs, int toMs, CancellationToken token) {
+            return WaitRandomAsync(
+                TimeSpan.FromMilliseconds(fromMs),
+                TimeSpan.FromMilliseconds(toMs),
+                token
+                );
         }
 
         public IRoboWait Wait() {

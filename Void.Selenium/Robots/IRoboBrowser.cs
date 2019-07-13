@@ -15,5 +15,7 @@ namespace Void.Selenium
         void Scroll(int offset);
         Task SoftScrollAsync(int offset);
         Task BackAsync();
+        Task WaitContentLoadingAsync();
+        Task WaitContentLoadingAsync(TimeSpan timeout);
     }
 }

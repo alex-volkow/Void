@@ -9,29 +9,78 @@ namespace Void.Selenium
     public class WebRobot : IRobot
     {
         /// <summary>
-        /// Wrapped driver
+        /// Default interval between keys values sending (175 ms).
+        /// </summary>
+        public static TimeSpan DefaultKeySendingInterval { get; } = TimeSpan.FromMilliseconds(175);
+
+        /// <summary>
+        /// Default page searching timeout (1 min).
+        /// </summary>
+        public static TimeSpan DefaultPageSearchingTimeout { get; } = TimeSpan.FromSeconds(60);
+
+        /// <summary>
+        /// Default element searching timeout (30 sec).
+        /// </summary>
+        public static TimeSpan DefaultElementSearchingTimeout { get; } = TimeSpan.FromSeconds(30);
+
+        /// <summary>
+        /// Default waiting timeout (1 min).
+        /// </summary>
+        public static TimeSpan DefaultConditionWaitingTimeout { get; } = TimeSpan.FromSeconds(60);
+
+        /// <summary>
+        /// Default interval between condition checking while waiting (1 sec).
+        /// </summary>
+        public static TimeSpan DefaultConditionCheckingInterval { get; } = TimeSpan.FromMilliseconds(1000);
+
+        /// <summary>
+        /// Default time deviation for waiting (25 %).
+        /// </summary>
+        public static double DefaultRandomWaitDeviationPercent { get; } = 0.25;
+
+
+
+        /// <summary>
+        /// Wrapped driver.
         /// </summary>
         public IWebDriver WrappedDriver { get; }
 
+        /// <summary>
+        /// Provides access to Robot's elements.
+        /// </summary>
+        public IRoboElements Elements => new RoboElements(this);
+
+        /// <summary>
+        /// Provides access to Robot's browser.
+        /// </summary>
+        public IRoboBrowser Browser => new RoboBrowser(this);
+
+        /// <summary>
+        /// Provides access to Robot's pages.
+        /// </summary>
+        public IRoboPages Pages => new RoboPages(this);
+
+
+
+        public TimeSpan KeySendingInterval { get; set; }
+
+        public TimeSpan PageSearchingTimeout { get; set; }
+
+        public TimeSpan ElementSearchingTimeout { get; set; }
+
+        public TimeSpan ConditionWaitingTimeout { get; set; }
+
+        public TimeSpan ConditionCheckingInterval { get; set; }
+
+        public double RandomWaitDeviationPercent { get; set; }
+
+
+        /// <summary>
+        /// Cast WebDriver to IJavaScriptExecutor.
+        /// </summary>
         protected IJavaScriptExecutor JavaScript => (IJavaScriptExecutor)this.WrappedDriver;
 
-        public TimeSpan KeySendingInterval => throw new NotImplementedException();
 
-        public TimeSpan PageSearchingTimeout => throw new NotImplementedException();
-
-        public TimeSpan ElementSearchingTimeout => throw new NotImplementedException();
-
-        public TimeSpan ConditionWaitingTimeout => throw new NotImplementedException();
-
-        public TimeSpan ConditionCheckingInterval => throw new NotImplementedException();
-
-        public double RandomWaitDeviationPercent => throw new NotImplementedException();
-
-        public IRoboElements Elements => throw new NotImplementedException();
-
-        public IRoboBrowser Browser => throw new NotImplementedException();
-
-        public IRoboPages Pages => throw new NotImplementedException();
 
         public WebRobot(IWebDriver driver) {
             this.WrappedDriver = driver ?? throw new ArgumentNullException(nameof(driver));

@@ -23,5 +23,6 @@ namespace Void.Selenium
         IRoboElement ClearJavaScript();
         IRoboElement MoveTo();
         IRoboElement MouseOver();
+        ISelector GetSelector();
     }
 }

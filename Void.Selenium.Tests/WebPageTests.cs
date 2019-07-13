@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,15 +16,17 @@ namespace Void.Selenium.Tests
             OpenDefaultPage();
             var page = new WebPage<TemplatePage>(GetDriver());
             var elements = page.GetElements();
-            foreach (var property in page.Type.GetTopProperties()) {
+            foreach (var property in page.Type.GetTopProperties().Where(e => e.PropertyType.Is<IWebElement>())) {
                 Assert.True(elements.Any(e => e.Name == property.Name), $"Not found: {property.Name}");
             }
             var fields = page.Type
                 .GetTopFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(e => e.FieldType.Is<IWebElement>())
                 .Where(e => !e.IsInitOnly);
             foreach (var field in fields) {
                 Assert.True(elements.Any(e => e.Name == field.Name), $"Not found: {field.Name}");
             }
+            Assert.True(page.Content.Driver != null, "Driver is not found");
         }
 
         [Fact]

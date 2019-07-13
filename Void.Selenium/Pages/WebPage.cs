@@ -166,12 +166,26 @@ namespace Void.Selenium
         protected virtual object CreatePage() {
             if (this.Type.HasDefaultConstructor()) {
                 var page = Activator.CreateInstance(this.Type);
+                var properties = this.Type.GetTopProperties(
+                    BindingFlags.Instance |
+                    BindingFlags.NonPublic |
+                    BindingFlags.Public
+                    );
                 var fields = this.Type.GetTopFields(
                     BindingFlags.Instance | 
                     BindingFlags.NonPublic | 
                     BindingFlags.Public
                     );
-                foreach (var field in fields.Where(e => !e.IsInitOnly)) {
+                foreach (var property in properties.Where(e => e.CanRead)) {
+                    if (property.PropertyType.Is<IWebDriver>() ||
+                        property.PropertyType == this.WrappedDriver.GetType()) {
+                        try {
+                            property.SetForce(page, this.WrappedDriver);
+                        }
+                        catch { }
+                    }
+                }
+                foreach (var field in fields.Where(e => !e.IsInitOnly && e.IsAuto())) {
                     if (field.FieldType.Is<IWebDriver>() ||
                         field.FieldType == this.WrappedDriver.GetType()) {
                         field.SetValue(page, this.WrappedDriver);

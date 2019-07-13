@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Void.Selenium.Tests
 {
-    public class TemplatePage
-    {
+    public class TemplatePage : IWebMatcher {
         [XPath("//body")]
         public IWebElement body;
 
@@ -20,7 +19,9 @@ namespace Void.Selenium.Tests
         [XPath("//input[@id='username']")]
         [FindsBy(How = How.Name, Using = "username")]
         [XPath("//input[@id='username' and @name='username']")]
+#pragma warning disable IDE0044 // Add readonly modifier
         private IWebElement username2;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         [FindsBySequence]
         [XPath("//form[@id='root-form']")]
@@ -31,12 +32,16 @@ namespace Void.Selenium.Tests
         [FindsBySequence]
         [XPath("//input[@id='password']")]
         [XPath("//form[@id='root-form']")]
+#pragma warning disable IDE0044 // Add readonly modifier
         private IWebElement password2;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         [FindsBySequence]
         [XPath("//input[@id='password']", Priority = 1)]
         [XPath("//form[@id='root-form']", Priority = 0)]
+#pragma warning disable IDE0044 // Add readonly modifier
         private IWebElement password3;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         [FindsBySequence]
         [XPath("//input[@id='password']", Priority = 1)]
@@ -74,5 +79,14 @@ namespace Void.Selenium.Tests
         [XPath("//input[@id='password']", Priority = 1)]
         [XPath("//form[@id='root-form']", Priority = 0)]
         public IWebElement Password3 { get; }
+
+
+        public IWebDriver Driver { get; }
+
+
+
+        public bool IsMatching(IWebDriver driver) {
+            return driver.PageSource.Contains("id=\"root-form\"");
+        }
     }
 }

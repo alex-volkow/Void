@@ -6,8 +6,12 @@ using System.Text;
 
 namespace Void.Selenium.Tests
 {
-    public class WebElementPage
+    public class TemplatePage
     {
+        [XPath("//body")]
         public IWebElement Body { get; }
+
+        [FindsBy(How = How.Id, Using = "username")]
+        public IWebElement Username { get; }
     }
 }

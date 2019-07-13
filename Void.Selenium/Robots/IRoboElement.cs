@@ -9,10 +9,10 @@ namespace Void.Selenium
 {
     public interface IRoboElement : IWrapsElement
     {
-        Task SendKeysAsync(string text);
-        Task SendKeysAsync(string text, TimeSpan duration);
-        void SendKeys(string text);
-        void Submit();
+        Task<IRoboElement> SendKeysAsync(string text);
+        Task<IRoboElement> SendKeysAsync(string text, TimeSpan duration);
+        IRoboElement SendKeys(string text);
+        IRoboElement Submit();
         IRoboElement Click();
         IRoboElement Clear();
         IRoboElement MoveTo();

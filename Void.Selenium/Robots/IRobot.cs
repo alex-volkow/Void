@@ -20,14 +20,12 @@ namespace Void.Selenium
         IRoboBrowser Browser { get; }
         IRoboPages Pages { get; }
 
+        IRoboWait Wait();
         IRoboElement Using(IWebElement element);
         IRoboElement Using(IWebPointer pointer);
         IRoboElement Using(string xpath);
         IRoboElement Using(By locator);
         object ExecuteJavaScript(string script);
-        Task<bool> WaitAsync(Func<bool> condition);
-        Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout);
-        Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout, TimeSpan interval);
         Task WaitRandomAsync(Delays delay);
         Task WaitRandomAsync(TimeSpan delay);
         Task WaitRandomAsync(int milliseconds);

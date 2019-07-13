@@ -121,18 +121,6 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        public Task<bool> WaitAsync(Func<bool> condition) {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout) {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout, TimeSpan interval) {
-            throw new NotImplementedException();
-        }
-
         public Task WaitRandomAsync(Delays delay) {
             throw new NotImplementedException();
         }
@@ -162,6 +150,10 @@ namespace Void.Selenium
         }
 
         public Task WaitContentLoadingAsync(TimeSpan timeout) {
+            throw new NotImplementedException();
+        }
+
+        public IRoboWait Wait() {
             throw new NotImplementedException();
         }
     }

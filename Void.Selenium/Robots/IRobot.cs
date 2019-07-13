@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Internal;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,32 @@ namespace Void.Selenium
 {
     public interface IRobot : IWrapsDriver
     {
-        bool IsContentLoaded();
+        TimeSpan KeySendingInterval { get; }
+        TimeSpan PageSearchingTimeout { get; }
+        TimeSpan ElementSearchingTimeout { get; }
+        TimeSpan ConditionWaitingTimeout { get; }
+        TimeSpan ConditionCheckingInterval { get; }
+        double RandomWaitDeviationPercent { get; }
+
+        IRoboElements Elements { get; }
+        IRoboBrowser Browser { get; }
+        IRoboPages Pages { get; }
+
+        IRoboElement Using(IWebElement element);
+        IRoboElement Using(IWebPointer pointer);
+        IRoboElement Using(string xpath);
+        IRoboElement Using(By locator);
+        object ExecuteJavaScript(string script);
+        Task<bool> WaitAsync(Func<bool> condition);
+        Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout);
+        Task<bool> WaitAsync(Func<bool> condition, TimeSpan timeout, TimeSpan interval);
+        Task WaitRandomAsync(Delays delay);
+        Task WaitRandomAsync(TimeSpan delay);
+        Task WaitRandomAsync(int milliseconds);
+        Task WaitRandomAsync(Delays from, Delays to);
+        Task WaitRandomAsync(TimeSpan from, TimeSpan to);
+        Task WaitRandomAsync(int fromMs, int toMs);
         Task WaitContentLoadingAsync();
         Task WaitContentLoadingAsync(TimeSpan timeout);
-        byte[] GetScreenshot();
     }
 }

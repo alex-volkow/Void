@@ -72,8 +72,24 @@ namespace Void.Selenium
         /// <exception cref="TaskCanceledException">The task has been canceled.</exception>
         Task BackAsync(TimeSpan timeout, CancellationToken token);
 
+        /// <summary>
+        /// Create task that completes after driver content is loaded
+        /// with robot's page searching timeout.
+        /// </summary>
+        /// <exception cref="TimeoutException">Content has not loaded.</exception>
         Task WaitContentLoadingAsync();
+
+        /// <summary>
+        /// Create task that completes after driver content is loaded.
+        /// </summary>
+        /// <exception cref="TimeoutException">Content has not loaded.</exception>
         Task WaitContentLoadingAsync(TimeSpan timeout);
+
+        /// <summary>
+        /// Create task that completes after driver content is loaded.
+        /// </summary>
+        /// <exception cref="TimeoutException">Content has not loaded.</exception>
+        /// <exception cref="TaskCanceledException">Task has been canceled.</exception>
         Task WaitContentLoadingAsync(TimeSpan timeout, CancellationToken token);
     }
 }

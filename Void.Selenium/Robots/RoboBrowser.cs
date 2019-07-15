@@ -106,15 +106,19 @@ namespace Void.Selenium
         }
 
         public Task WaitContentLoadingAsync() {
-            throw new NotImplementedException();
+            return WaitContentLoadingAsync(this.Robot.PageSearchingTimeout);
         }
 
         public Task WaitContentLoadingAsync(TimeSpan timeout) {
-            throw new NotImplementedException();
+            return WaitContentLoadingAsync(timeout, CancellationToken.None);
         }
 
         public Task WaitContentLoadingAsync(TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+            return this.Robot.Wait()
+                .UsingCancellationToken(token)
+                .ThrowTimeoutException()
+                .WithTimeout(timeout)
+                .UntilAsync(IsContentLoaded);
         }
     }
 }

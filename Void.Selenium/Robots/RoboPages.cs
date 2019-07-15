@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Void.Selenium
@@ -12,17 +13,27 @@ namespace Void.Selenium
         }
 
 
+        #region FindAsync
 
         public Task<IWebPage> FindAsync(Type type) {
-            return FindAsync(type, this.Robot.PageSearchingTimeout);
+            return FindAsync(type, CancellationToken.None);
+        }
+
+        public Task<IWebPage> FindAsync(Type type, CancellationToken token) {
+            return FindAsync(type, this.Robot.PageSearchingTimeout, token);
         }
 
         public Task<IWebPage> FindAsync(Type type, TimeSpan timeout) {
+            return FindAsync(type, timeout, CancellationToken.None);
+        }
+
+        public Task<IWebPage> FindAsync(Type type, TimeSpan timeout, CancellationToken token) {
             if (type == null) {
                 throw new ArgumentNullException(nameof(type));
             }
             var page = (IWebPage)CreateGenericPage(type);
-            var wait = this.Robot.Wait();
+            var wait = this.Robot.Wait()
+                .UsingCancellationToken(token);
             if (timeout != this.Robot.PageSearchingTimeout) {
                 wait.WithTimeout(timeout);
             }
@@ -31,15 +42,25 @@ namespace Void.Selenium
             });
         }
 
-        public async Task<IWebPage<T>> FindAsync<T>() where T : class {
-            var page = await FindAsync(typeof(T));
+        public Task<IWebPage<T>> FindAsync<T>() where T : class {
+            return FindAsync<T>(CancellationToken.None);
+        }
+
+        public async Task<IWebPage<T>> FindAsync<T>(CancellationToken token) where T : class {
+            var page = await FindAsync(typeof(T), token);
             return (IWebPage<T>)page;
         }
 
-        public async Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class {
-            var page = await FindAsync(typeof(T), timeout);
+        public Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class {
+            return FindAsync<T>(timeout, CancellationToken.None);
+        }
+
+        public async Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout, CancellationToken token) where T : class {
+            var page = await FindAsync(typeof(T), timeout, token);
             return (IWebPage<T>)page;
         }
+
+        #endregion
 
         public Task<IWebPage> FindFistPage(params Type[] types) {
             throw new NotImplementedException();
@@ -62,6 +83,22 @@ namespace Void.Selenium
         }
 
         public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> FindFistPage(IEnumerable<Type> types, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> FindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 
@@ -94,6 +131,22 @@ namespace Void.Selenium
             return IsMatchAsync(typeof(T), timeout);
         }
 
+        public Task<bool> IsMatchAsync(Type type, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsMatchAsync(Type type, TimeSpan timeout, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsMatchAsync<T>(CancellationToken token) where T : class {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsMatchAsync<T>(TimeSpan timeout, CancellationToken token) where T : class {
+            throw new NotImplementedException();
+        }
+
         public Task<IWebPage> TryFindAsync(Type type) {
             return TryFindAsync(type, this.Robot.PageSearchingTimeout);
         }
@@ -124,6 +177,22 @@ namespace Void.Selenium
             return (IWebPage<T>)page;
         }
 
+        public Task<IWebPage> TryFindAsync(Type type, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> TryFindAsync(Type type, TimeSpan timeout, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage<T>> TryFindAsync<T>(CancellationToken token) where T : class {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout, CancellationToken token) where T : class {
+            throw new NotImplementedException();
+        }
+
         public Task<IWebPage> TryFindFistPage(params Type[] types) {
             throw new NotImplementedException();
         }
@@ -145,6 +214,22 @@ namespace Void.Selenium
         }
 
         public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 

@@ -64,43 +64,43 @@ namespace Void.Selenium
 
         #region FindFirstPage
 
-        public Task<IWebPage> FindFistPage(params Type[] types) {
+        public Task<IWebPage> FindFistAsync(params Type[] types) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(params IWebPage[] pages) {
+        public Task<IWebPage> FindFistAsync(params IWebPage[] pages) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<Type> types) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<Type> types) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<Type> types, TimeSpan timeout) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<Type> types, CancellationToken token) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, CancellationToken token) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
+        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 
@@ -209,43 +209,43 @@ namespace Void.Selenium
 
         #region TryFindFirst
 
-        public Task<IWebPage> TryFindFistPage(params Type[] types) {
+        public Task<IWebPage> TryFindFistAsync(params Type[] types) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(params IWebPage[] pages) {
+        public Task<IWebPage> TryFindFistAsync(params IWebPage[] pages) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, TimeSpan timeout) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, CancellationToken token) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, CancellationToken token) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 
-        public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
 

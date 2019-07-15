@@ -38,26 +38,26 @@ namespace Void.Selenium
         Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout) where T : class;
         Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout, CancellationToken token) where T : class;
 
-        Task<IWebPage> FindFistPage(params Type[] types);
-        Task<IWebPage> FindFistPage(params IWebPage[] pages);
-        Task<IWebPage> FindFistPage(IEnumerable<Type> types);
-        Task<IWebPage> FindFistPage(IEnumerable<Type> types, CancellationToken token);
-        Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages);
-        Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, CancellationToken token);
-        Task<IWebPage> FindFistPage(IEnumerable<Type> types, TimeSpan timeout);
-        Task<IWebPage> FindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token);
-        Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout);
-        Task<IWebPage> FindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token);
+        Task<IWebPage> FindFistAsync(params Type[] types);
+        Task<IWebPage> FindFistAsync(params IWebPage[] pages);
+        Task<IWebPage> FindFistAsync(IEnumerable<Type> types);
+        Task<IWebPage> FindFistAsync(IEnumerable<Type> types, CancellationToken token);
+        Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages);
+        Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token);
+        Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout);
+        Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token);
+        Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout);
+        Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token);
 
-        Task<IWebPage> TryFindFistPage(params Type[] types);
-        Task<IWebPage> TryFindFistPage(params IWebPage[] pages);
-        Task<IWebPage> TryFindFistPage(IEnumerable<Type> types);
-        Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, CancellationToken token);
-        Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages);
-        Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, CancellationToken token);
-        Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, TimeSpan timeout);
-        Task<IWebPage> TryFindFistPage(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token);
-        Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout);
-        Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token);
+        Task<IWebPage> TryFindFistAsync(params Type[] types);
+        Task<IWebPage> TryFindFistAsync(params IWebPage[] pages);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, CancellationToken token);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout);
+        Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token);
     }
 }

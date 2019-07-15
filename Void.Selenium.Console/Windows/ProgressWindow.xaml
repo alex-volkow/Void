@@ -8,6 +8,7 @@
         WindowStartupLocation="CenterScreen"
         Title="ProgressWindow" Height="250" Width="400" BorderThickness="0"
         WindowStyle="None"
+        ShowInTaskbar="False"
         Background="LightGray">
     <Grid>
         <Grid.RowDefinitions>

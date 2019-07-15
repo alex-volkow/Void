@@ -49,6 +49,12 @@ namespace Void.Selenium.Console
 
 
 
+        public async Task ShowProgress(Action action) {
+            var task = Handle(Task.Run(action));
+            ShowDialog();
+            await task;
+        }
+
         public async Task ShowProgress(Func<Task> action) {
             var task = Handle(action());
             ShowDialog();

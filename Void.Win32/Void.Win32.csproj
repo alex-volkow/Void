@@ -6,11 +6,13 @@
     <Product>Void.Framework</Product>
     <Authors>Void</Authors>
     <Description>Addition functional for .NET in OS Windows</Description>
+    <RootNamespace>Void</RootNamespace>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="4.5.0" />
-    <PackageReference Include="Void.Box" Version="1.0.0" />
+    <PackageReference Include="Void.Box" Version="1.2.1" />
   </ItemGroup>
 
 </Project>

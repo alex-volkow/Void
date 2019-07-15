@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,15 @@ namespace Void.Diagnostics
 {
     public static class ProcessExtensions
     {
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+
+
+        public static void FocusWindow(this Process process) {
+            SetForegroundWindow(process.MainWindowHandle);
+        }
+
         public static IProcessManager Manage(this Process process) {
             return new ProcessManager(process);
         }

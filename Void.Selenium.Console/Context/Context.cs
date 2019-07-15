@@ -1,22 +1,39 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Void.IO;
+using Void.Diagnostics;
 using Void.Reflection;
+using Void.Selenium.Console.Properties;
 
 namespace Void.Selenium.Console
 {
     class Context : ISelectDriverContext
     {
         private readonly MainWindow window;
+        private IWebDriver driver;
+
+
+        public FileInfo Chromedriver { get; private set; }
+
+        public FileInfo Gekodriver { get; private set; }
+
 
 
         public Context(MainWindow window) {
             this.window = window ?? throw new ArgumentNullException(nameof(window));
+            this.window.Closing += Closing;
         }
+
 
 
         public FileInfo GetChromedriver() {
@@ -33,6 +50,30 @@ namespace Void.Selenium.Console
 
         public FileInfo GetTorExecutable() {
             throw new NotImplementedException();
+        }
+
+        public async void StartChrome() {
+            var progress = new ProgressWindow {
+                Header = "Initializing browser",
+                Message = "Loading Google Chrome..."
+            };
+            await progress.ShowProgress(() => {
+                this.driver = new ChromeDriver();
+            });
+            OpenPage<BrowserPage>();
+            Process.GetCurrentProcess().FocusWindow();
+        }
+
+        public async void StartFirefox() {
+            var progress = new ProgressWindow {
+                Header = "Initializing browser",
+                Message = "Loading Firefox..."
+            };
+            await progress.ShowProgress(() => {
+                this.driver = new FirefoxDriver();
+            });
+            OpenPage<BrowserPage>();
+            Process.GetCurrentProcess().FocusWindow();
         }
 
         public void OpenPage<T>() {
@@ -56,6 +97,25 @@ namespace Void.Selenium.Console
                         );
                 }
                 this.window.frame.Content = constructor.Invoke(new object[] { this });
+            }
+        }
+
+        public Task Initialize() {
+            this.Chromedriver = GetChromedriver();
+            this.Gekodriver = GetGekodriver();
+            return Task.CompletedTask;
+        }
+
+        public async void Closing(object sender, CancelEventArgs e) {
+            Settings.Default.MainWindowHeight = this.window.Height;
+            Settings.Default.MainWindowWidth = this.window.Width;
+            Settings.Default.Save();
+            if (this.driver != null) {
+                var progress = new ProgressWindow {
+                    Header = "Closing browser",
+                    Message = "Disposing browser resources..."
+                };
+                await progress.ShowProgress((Action)this.driver.Dispose);
             }
         }
     }

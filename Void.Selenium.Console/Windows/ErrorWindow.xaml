@@ -8,6 +8,7 @@
         WindowStyle="ToolWindow"
         WindowStartupLocation="CenterScreen"
         Title="Error" Height="350" Width="450"
+        ShowInTaskbar="False"
         Background="DarkRed">
     <Grid>
         <Grid.RowDefinitions>

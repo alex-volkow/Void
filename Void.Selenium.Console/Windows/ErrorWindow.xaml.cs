@@ -21,6 +21,12 @@ namespace Void.Selenium.Console
         }
 
 
+        public static void Show(Exception exception) {
+            var window = new ErrorWindow();
+            window.message.Text = exception?.ToString();
+            window.ShowDialog();
+        }
+
         public static void Handle(Action action) {
             try {
                 action();

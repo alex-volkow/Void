@@ -9,8 +9,10 @@ namespace Void.Selenium.Console
 {
     public interface ISelectDriverContext
     {
-        FileInfo GetChromedriver();
-        FileInfo GetGekodriver();
-        FileInfo GetTorExecutable();
+        FileInfo Chromedriver { get; }
+        FileInfo Gekodriver { get; }
+
+        void StartChrome();
+        void StartFirefox();
     }
 }

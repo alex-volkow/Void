@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using Void.Selenium.Console.Properties;
 
 namespace Void.Selenium.Console
 {
@@ -22,11 +24,27 @@ namespace Void.Selenium.Console
 
 
         public MainWindow() {
+            this.Dispatcher.UnhandledException += UnhandledExceptionRaised;
             InitializeComponent();
             this.context = new Context(this);
+            if (Settings.Default.MainWindowHeight > 100 && Settings.Default.MainWindowWidth > 100) {
+                this.Height = Settings.Default.MainWindowHeight;
+                this.Width = Settings.Default.MainWindowWidth;
+            }
         }
 
-        private void WindowLoaded(object sender, RoutedEventArgs e) {
+        private void UnhandledExceptionRaised(object sender, DispatcherUnhandledExceptionEventArgs e) {
+            e.Handled = true;
+            ErrorWindow.Show(e.Exception);
+        }
+
+        private async void WindowLoaded(object sender, RoutedEventArgs e) {
+            //var windows = new ProgressWindow {
+            //    Header = "Initializing",
+            //    Message = "Initializing application..."
+            //};
+            //await windows.ShowProgress(this.context.Initialize);
+            await this.context.Initialize();
             this.context.OpenPage<SelectDriverPage>();
         }
     }

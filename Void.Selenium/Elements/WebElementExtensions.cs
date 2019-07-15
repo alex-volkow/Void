@@ -178,7 +178,7 @@ namespace Void.Selenium
         /// Click on the element with JavaScript.
         /// </summary>
         /// <exception cref="ArgumentNullException">Element is null.</exception>
-        public static void Click(this IWebElement element) {
+        public static void ClickJavaScript(this IWebElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
             }
@@ -189,7 +189,7 @@ namespace Void.Selenium
         /// Perform submit action on the element with JavaScript.
         /// </summary>
         /// <exception cref="ArgumentNullException">Element is null.</exception>
-        public static void Submit(this IWebElement element) {
+        public static void SubmitJavaScript(this IWebElement element) {
             if (element == null) {
                 throw new ArgumentNullException(nameof(element));
             }

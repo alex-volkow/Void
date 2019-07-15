@@ -40,7 +40,7 @@ namespace Void.Selenium
                     $"Element is not found: {locator}"
                     );
             }
-            return new RoboWebPointer(this.Robot, pointer);
+            return new RoboWebPointer(this.Robot, this.Context, pointer);
         }
 
         public IRoboElement FindByXpath(string xpath) {
@@ -55,7 +55,7 @@ namespace Void.Selenium
             }
             var pointer = new FixedWebPointer(this.Context, locator);
             pointer.Match();
-            return new RoboWebPointer(this.Robot, pointer);
+            return new RoboWebPointer(this.Robot, this.Context, pointer);
         }
 
         public IRoboElement TryFindByXpath(string xpath) {
@@ -64,7 +64,7 @@ namespace Void.Selenium
 
         public IEnumerable<IRoboElement> FindAll(By locator) {
             return this.Context.FindElements(locator)
-                .Select(e => new RoboFixedElement(this.Robot, e))
+                .Select(e => new RoboFixedElement(this.Robot, this.Context, e))
                 .ToArray();
         }
 
@@ -82,7 +82,7 @@ namespace Void.Selenium
 
         public async Task<IRoboElement> FindAsync(By locator, TimeSpan timeout, CancellationToken token) {
             var element = await TryFindAsync(locator, timeout, token);
-            if (!element.Exists) {
+            if (!element.IsMatched) {
                 throw new NotFoundException(
                     $"Element is not found: {locator}"
                     );
@@ -118,11 +118,11 @@ namespace Void.Selenium
                 .WithTimeout(timeout)
                 .UntilAsync(() => {
                     if (pointer.Match() != null) {
-                        return (IRoboElement)new RoboWebPointer(this.Robot, pointer);
+                        return (IRoboElement)new RoboWebPointer(this.Robot, this.Context, pointer);
                     }
                     return null;
                 });
-            return element ?? new RoboWebPointer(this.Robot, pointer);
+            return element ?? new RoboWebPointer(this.Robot, this.Context, pointer);
         }
 
         public Task<IRoboElement> TryFindByXpathAsync(string xpath) {

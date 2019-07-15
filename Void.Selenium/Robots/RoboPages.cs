@@ -59,43 +59,44 @@ namespace Void.Selenium
         #region FindFirst
 
         public Task<IWebPage> FindFistAsync(params Type[] types) {
-            throw new NotImplementedException();
+            return FindFistAsync((IEnumerable<Type>)types);
         }
 
         public Task<IWebPage> FindFistAsync(params IWebPage[] pages) {
-            throw new NotImplementedException();
+            return FindFistAsync((IEnumerable<IWebPage>)pages);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<Type> types) {
-            throw new NotImplementedException();
+            return FindFistAsync(types, CancellationToken.None);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages) {
-            throw new NotImplementedException();
+            return FindFistAsync(pages, CancellationToken.None);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout) {
-            throw new NotImplementedException();
+            return FindFistAsync(types, timeout, CancellationToken.None);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout) {
-            throw new NotImplementedException();
+            return FindFistAsync(pages, timeout, CancellationToken.None);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, CancellationToken token) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token) {
-            throw new NotImplementedException();
+            return FindFistAsync(types, this.Robot.PageSearchingTimeout, token);
         }
 
         public Task<IWebPage> FindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+            return FindFistAsync(CreateGenericPages(types), timeout, token);
         }
 
-        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+        public Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token) {
+            return FindFistAsync(pages, this.Robot.PageSearchingTimeout, token);
+        }
+
+        public async Task<IWebPage> FindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
+            var result = await TryFindFistAsync(pages, timeout, token);
+            return result ?? throw new NotFoundException($"No page found");
         }
 
 #endregion
@@ -270,6 +271,9 @@ namespace Void.Selenium
         }
 
         private IEnumerable<WebPage> CreateGenericPages(IEnumerable<Type> types) {
+            if (types == null) {
+                throw new ArgumentNullException(nameof(types));
+            }
             return types.Select(e => CreateGenericPage(e)).ToArray();
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Void.Reflection;
 
 namespace Void.Selenium
 {
@@ -27,19 +28,11 @@ namespace Void.Selenium
             return FindAsync(type, timeout, CancellationToken.None);
         }
 
-        public Task<IWebPage> FindAsync(Type type, TimeSpan timeout, CancellationToken token) {
-            if (type == null) {
-                throw new ArgumentNullException(nameof(type));
-            }
-            var page = (IWebPage)CreateGenericPage(type);
-            var wait = this.Robot.Wait()
-                .UsingCancellationToken(token);
-            if (timeout != this.Robot.PageSearchingTimeout) {
-                wait.WithTimeout(timeout);
-            }
-            return wait.UntilAsync(() => {
-                return page.Match().Success ? page : null;
-            });
+        public async Task<IWebPage> FindAsync(Type type, TimeSpan timeout, CancellationToken token) {
+            var result = await TryFindAsync(type, timeout, token);
+            return result ?? throw new NotFoundException(
+                $"Page is not found: {type.GetNameWithNamespaces()}"
+                );
         }
 
         public Task<IWebPage<T>> FindAsync<T>() where T : class {

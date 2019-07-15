@@ -10,6 +10,11 @@
         Loaded="WindowLoaded"
         Background="LightGray">
     <Grid>
-        <Frame Name="frame" NavigationUIVisibility="Hidden"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Frame Grid.Row="0" Name="frame" NavigationUIVisibility="Hidden" Padding="0"/>
+        <Label Grid.Row="1" Content="" FontSize="12" Name="status" Background="DarkGray"/>
     </Grid>
 </Window>

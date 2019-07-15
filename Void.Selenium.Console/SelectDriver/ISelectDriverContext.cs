@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Void.Selenium.Console
 {
-    public interface ISelectDriverContext
+    public interface ISelectDriverContext : IStatusContext
     {
         FileInfo Chromedriver { get; }
         FileInfo Gekodriver { get; }

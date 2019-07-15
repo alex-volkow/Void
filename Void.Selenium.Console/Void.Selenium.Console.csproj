@@ -71,6 +71,7 @@
       <DependentUpon>BrowserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Context\Context.cs" />
+    <Compile Include="Context\IStatusContext.cs" />
     <Compile Include="Windows\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>

@@ -27,6 +27,10 @@ namespace Void.Selenium.Console
 
         public FileInfo Gekodriver { get; private set; }
 
+        public string Status {
+            get => (string)this.window.status.Content;
+            set => this.window.status.Content = value;
+        }
 
 
         public Context(MainWindow window) {
@@ -53,25 +57,37 @@ namespace Void.Selenium.Console
         }
 
         public async void StartChrome() {
-            var progress = new ProgressWindow {
-                Header = "Initializing browser",
-                Message = "Loading Google Chrome..."
-            };
-            await progress.ShowProgress(() => {
-                this.driver = new ChromeDriver();
-            });
+            //var progress = new ProgressWindow {
+            //    Header = "Initializing browser",
+            //    Message = "Loading Google Chrome..."
+            //};
+            //await progress.ShowProgress(() => {
+            //    this.driver = new ChromeDriver();
+            //});
+            //OpenPage<BrowserPage>();
+            //Process.GetCurrentProcess().FocusWindow();
+            this.Status = "Initializing driver";
+            this.window.frame.IsEnabled = false;
+            await Task.Run(() => this.driver = new ChromeDriver());
+            this.Status = "Driver initialized";
+            this.window.frame.IsEnabled = true;
             OpenPage<BrowserPage>();
             Process.GetCurrentProcess().FocusWindow();
         }
 
         public async void StartFirefox() {
-            var progress = new ProgressWindow {
-                Header = "Initializing browser",
-                Message = "Loading Firefox..."
-            };
-            await progress.ShowProgress(() => {
-                this.driver = new FirefoxDriver();
-            });
+            //var progress = new ProgressWindow {
+            //    Header = "Initializing browser",
+            //    Message = "Loading Firefox..."
+            //};
+            //await progress.ShowProgress(() => {
+            //    this.driver = new FirefoxDriver();
+            //});
+            this.Status = "Initializing driver";
+            this.window.frame.IsEnabled = false;
+            await Task.Run(() => this.driver = new FirefoxDriver());
+            this.Status = "Driver initialized";
+            this.window.frame.IsEnabled = true;
             OpenPage<BrowserPage>();
             Process.GetCurrentProcess().FocusWindow();
         }

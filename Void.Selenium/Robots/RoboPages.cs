@@ -101,7 +101,7 @@ namespace Void.Selenium
 
 #endregion
 
-        #region IsMatch
+        #region Match
 
         public bool IsMatch(Type type) {
             return CreateGenericPage(type).Match().Success;

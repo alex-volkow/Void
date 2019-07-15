@@ -95,19 +95,33 @@ namespace Void.Selenium
         }
 
         public Task<IWebPage> TryFindAsync(Type type) {
-            throw new NotImplementedException();
+            return TryFindAsync(type, this.Robot.PageSearchingTimeout);
         }
 
         public Task<IWebPage> TryFindAsync(Type type, TimeSpan timeout) {
-            throw new NotImplementedException();
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
+            var page = (IWebPage)CreateGenericPage(type);
+            var wait = this.Robot.Wait()
+                .UsingExceptionHandler(e => true)
+                .IgnoreConditionExceptions()
+                .NotThrowTimeoutException();
+            if (timeout != this.Robot.PageSearchingTimeout) {
+                wait.WithTimeout(timeout);
+            }
+            return wait.UntilAsync(() => {
+                return page.Match().Success ? page : null;
+            });
         }
 
         public Task<IWebPage<T>> TryFindAsync<T>() where T : class {
-            throw new NotImplementedException();
+            return TryFindAsync<T>(this.Robot.PageSearchingTimeout);
         }
 
-        public Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout) where T : class {
-            throw new NotImplementedException();
+        public async Task<IWebPage<T>> TryFindAsync<T>(TimeSpan timeout) where T : class {
+            var page = await TryFindAsync(typeof(T), timeout);
+            return (IWebPage<T>)page;
         }
 
         public Task<IWebPage> TryFindFistPage(params Type[] types) {

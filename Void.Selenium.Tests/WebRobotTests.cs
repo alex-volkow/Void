@@ -26,6 +26,7 @@ namespace Void.Selenium.Tests
             OpenDefaultPage();
             Assert.True(await GetRobot().Pages.IsMatchAsync<TemplatePage>());
         }
+
         [Fact]
         public async Task TryFindPageAsync() {
             var page = await GetRobot().Pages.TryFindAsync<TemplatePage>();

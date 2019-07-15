@@ -9,15 +9,14 @@ namespace Void.Selenium
 {
     public interface IRoboElement : IWrapsElement
     {
-        Task<IRoboElement> SendKeysAsync(string text);
-        Task<IRoboElement> SendKeysAsync(string text, TimeSpan duration);
-        IRoboElement SendKeys(string text);
+        Task<IRoboElement> SetText(string text);
+        Task<IRoboElement> SetText(string text, TimeSpan duration);
+        Task<IRoboElement> AppendText(string text);
+        Task<IRoboElement> AppendText(string text, TimeSpan duration);
         IRoboElement Submit();
         IRoboElement Click();
         IRoboElement Clear();
-        IRoboElement MoveTo();
         IRoboElement MouseOver();
         IRoboElement WithJavaScript();
-        ISelector GetSelector();
     }
 }

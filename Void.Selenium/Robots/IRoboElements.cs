@@ -9,11 +9,9 @@ namespace Void.Selenium
     public interface IRoboElements
     {
         IRoboElements In(ISearchContext context);
-        //Task<IDynamicWebElement> FindElement(ISearchContext context, By locator);
-        //Task<IDynamicWebElement> TryFindElement(ISearchContext context, By locator);
-        //Task<IDynamicWebElement> FindElement(ISearchContext context, By locator, TimeSpan timeout);
-        //Task<IDynamicWebElement> TryFindElement(ISearchContext context, By locator, TimeSpan timeout);
 
+        IRoboElement Find(By locator);
+        IRoboElement FindByXpath(string xpath);
         IRoboElement FindFirst(By locator);
         IRoboElement FindFirstByXpath(string xpath);
         IEnumerable<IRoboElement> FindAll(By locator);

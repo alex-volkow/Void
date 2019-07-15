@@ -12,11 +12,19 @@ namespace Void.Selenium
             : base(robot) {
         }
 
+        public IRoboElement Find(By locator) {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IRoboElement> FindAll(By locator) {
             throw new NotImplementedException();
         }
 
         public IEnumerable<IRoboElement> FindAllByXpath(string xpath) {
+            throw new NotImplementedException();
+        }
+
+        public IRoboElement FindByXpath(string xpath) {
             throw new NotImplementedException();
         }
 

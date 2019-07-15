@@ -14,6 +14,14 @@ namespace Void.Selenium
 
         public IWebElement WrappedElement => throw new NotImplementedException();
 
+        public Task<IRoboElement> AppendText(string text) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IRoboElement> AppendText(string text, TimeSpan duration) {
+            throw new NotImplementedException();
+        }
+
         public IRoboElement Clear() {
             throw new NotImplementedException();
         }
@@ -22,27 +30,15 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        public ISelector GetSelector() {
-            throw new NotImplementedException();
-        }
-
         public IRoboElement MouseOver() {
             throw new NotImplementedException();
         }
 
-        public IRoboElement MoveTo() {
+        public Task<IRoboElement> SetText(string text) {
             throw new NotImplementedException();
         }
 
-        public IRoboElement SendKeys(string text) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IRoboElement> SendKeysAsync(string text) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IRoboElement> SendKeysAsync(string text, TimeSpan duration) {
+        public Task<IRoboElement> SetText(string text, TimeSpan duration) {
             throw new NotImplementedException();
         }
 

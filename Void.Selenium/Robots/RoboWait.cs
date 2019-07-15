@@ -35,14 +35,14 @@ namespace Void.Selenium
             return UntilAsync(context => condition(context));
         }
 
-        public Task UntilAsync(Func<object> condition) {
+        public Task<object> UntilAsync(Func<object> condition) {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
             return UntilAsync(context => condition());
         }
 
-        public async Task UntilAsync(Func<IRoboWaitContext, object> condition) {
+        public async Task<object> UntilAsync(Func<IRoboWaitContext, object> condition) {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
@@ -58,11 +58,11 @@ namespace Void.Selenium
                         if (result != null) {
                             if (result is bool? || result is bool) {
                                 if (object.Equals(result, true)) {
-                                    return;
+                                    return result;
                                 }
                             }
                             else {
-                                return;
+                                return result;
                             }
                         }
                     }
@@ -77,7 +77,7 @@ namespace Void.Selenium
                 }
                 catch (Exception ex) {
                     if (context.ExceptionHandler?.Invoke(ex) ?? false) {
-                        return;
+                        return null;
                     }
                     else {
                         throw;
@@ -90,20 +90,23 @@ namespace Void.Selenium
                     throw timeout;
                 }
             }
+            return null;
         }
 
-        public Task UntilAsync<T>(Func<T> condition) where T : class {
+        public Task<T> UntilAsync<T>(Func<T> condition) where T : class {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
             return UntilAsync(context => (T)condition());
         }
 
-        public Task UntilAsync<T>(Func<IRoboWaitContext, T> condition) where T : class {
+        public async Task<T> UntilAsync<T>(Func<IRoboWaitContext, T> condition) where T : class {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
-            return UntilAsync(context => (T)condition(context));
+            var func = new Func<IRoboWaitContext, object>(condition);
+            var result = await UntilAsync(func);
+            return (T)result;
         }
 
         public IRoboWait IgnoreConditionExceptions() {

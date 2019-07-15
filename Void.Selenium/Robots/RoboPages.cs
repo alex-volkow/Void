@@ -11,20 +11,34 @@ namespace Void.Selenium
             : base(robot) {
         }
 
+
+
         public Task<IWebPage> FindAsync(Type type) {
-            throw new NotImplementedException();
+            return FindAsync(type, this.Robot.PageSearchingTimeout);
         }
 
         public Task<IWebPage> FindAsync(Type type, TimeSpan timeout) {
-            throw new NotImplementedException();
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
+            var page = (IWebPage)CreateGenericPage(type);
+            var wait = this.Robot.Wait();
+            if (timeout != this.Robot.PageSearchingTimeout) {
+                wait.WithTimeout(timeout);
+            }
+            return wait.UntilAsync(() => {
+                return page.Match().Success ? page : null;
+            });
         }
 
-        public Task<IWebPage<T>> FindAsync<T>() where T : class {
-            throw new NotImplementedException();
+        public async Task<IWebPage<T>> FindAsync<T>() where T : class {
+            var page = await FindAsync(typeof(T));
+            return (IWebPage<T>)page;
         }
 
-        public Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class {
-            throw new NotImplementedException();
+        public async Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout) where T : class {
+            var page = await FindAsync(typeof(T), timeout);
+            return (IWebPage<T>)page;
         }
 
         public Task<IWebPage> FindFistPage(params Type[] types) {
@@ -113,6 +127,11 @@ namespace Void.Selenium
 
         public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout) {
             throw new NotImplementedException();
+        }
+
+        private WebPage CreateGenericPage(Type type) {
+            var page = typeof(WebPage<>).MakeGenericType(type);
+            return (WebPage)Activator.CreateInstance(page, this.WrappedDriver);
         }
     }
 }

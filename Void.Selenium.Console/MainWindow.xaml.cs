@@ -15,13 +15,19 @@ using System.Windows.Shapes;
 
 namespace Void.Selenium.Console
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
+        private readonly Context context;
+
+
         public MainWindow() {
             InitializeComponent();
+            this.context = new Context(this);
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e) {
+            this.context.OpenPage<SelectDriverPage>();
         }
     }
 }

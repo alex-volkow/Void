@@ -15,12 +15,13 @@ using System.Windows.Shapes;
 
 namespace Void.Selenium.Console
 {
-    /// <summary>
-    /// Interaction logic for SelectDriverPage.xaml
-    /// </summary>
     public partial class SelectDriverPage : Page
     {
-        public SelectDriverPage() {
+        private readonly ISelectDriverContext context;
+
+
+        public SelectDriverPage(ISelectDriverContext context) {
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             InitializeComponent();
         }
     }

@@ -48,6 +48,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Void.Box, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Void.Box.1.2.1\lib\netstandard2.0\Void.Box.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -115,7 +118,9 @@
       <Name>Void.Selenium</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Continue-icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Firefox-icon.png" />
     <Resource Include="Images\Google-Chrome-icon.png" />

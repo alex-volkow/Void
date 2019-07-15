@@ -65,28 +65,33 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
-        public bool IsMatch(Type Type) {
-            throw new NotImplementedException();
+        public bool IsMatch(Type type) {
+            return CreateGenericPage(type).Match().Success;
         }
 
         public bool IsMatch<T>() where T : class {
-            throw new NotImplementedException();
+            return IsMatch(typeof(T));
         }
 
-        public Task<bool> IsMatchAsync(Type Type) {
-            throw new NotImplementedException();
+        public Task<bool> IsMatchAsync(Type type) {
+            return IsMatchAsync(type, this.Robot.PageSearchingTimeout);
         }
 
-        public Task<bool> IsMatchAsync(Type Type, TimeSpan timeout) {
-            throw new NotImplementedException();
+        public Task<bool> IsMatchAsync(Type type, TimeSpan timeout) {
+            var page = CreateGenericPage(type);
+            var wait = this.Robot.Wait();
+            if (timeout != this.Robot.PageSearchingTimeout) {
+                wait.WithTimeout(timeout);
+            }
+            return wait.UntilAsync(() => page.Match().Success);
         }
 
         public Task<bool> IsMatchAsync<T>() where T : class {
-            throw new NotImplementedException();
+            return IsMatchAsync<T>(this.Robot.PageSearchingTimeout);
         }
 
         public Task<bool> IsMatchAsync<T>(TimeSpan timeout) where T : class {
-            throw new NotImplementedException();
+            return IsMatchAsync(typeof(T), timeout);
         }
 
         public Task<IWebPage> TryFindAsync(Type type) {

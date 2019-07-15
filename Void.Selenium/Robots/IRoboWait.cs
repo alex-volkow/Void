@@ -15,8 +15,8 @@ namespace Void.Selenium
         Func<Exception, bool> ExceptionHandler { get; }
         CancellationToken CancellationToken { get; }
 
-        Task UntilAsync(Func<bool> condition);
-        Task UntilAsync(Func<IRoboWaitContext, bool> condition);
+        Task<bool> UntilAsync(Func<bool> condition);
+        Task<bool> UntilAsync(Func<IRoboWaitContext, bool> condition);
         Task<object> UntilAsync(Func<object> condition);
         Task<object> UntilAsync(Func<IRoboWaitContext, object> condition);
         Task<T> UntilAsync<T>(Func<T> condition) where T : class;

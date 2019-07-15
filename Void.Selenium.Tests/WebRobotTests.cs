@@ -15,6 +15,26 @@ namespace Void.Selenium.Tests
             await page;
         }
 
+        [Fact]
+        public void IsMatch() {
+            OpenDefaultPage();
+            Assert.True(GetRobot().Pages.IsMatch<TemplatePage>());
+        }
+
+        [Fact]
+        public async Task IsMatchAsync() {
+            OpenDefaultPage();
+            Assert.True(await GetRobot().Pages.IsMatchAsync<TemplatePage>());
+        }
+        [Fact]
+        public async Task TryFindPageAsync() {
+            var page = await GetRobot().Pages.TryFindAsync<TemplatePage>();
+            Assert.Null(page);
+            OpenDefaultPage();
+            page = await GetRobot().Pages.TryFindAsync<TemplatePage>();
+            Assert.NotNull(page);
+        }
+
         protected IRobot GetRobot() {
             return new WebRobot(GetDriver());
         }

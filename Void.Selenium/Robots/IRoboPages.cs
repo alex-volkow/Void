@@ -10,8 +10,8 @@ namespace Void.Selenium
         bool IsMatch(Type Type);
         bool IsMatch<T>() where T : class;
 
-        Task<bool> IsMatchAsync(Type Type);
-        Task<bool> IsMatchAsync(Type Type, TimeSpan timeout);
+        Task<bool> IsMatchAsync(Type type);
+        Task<bool> IsMatchAsync(Type type, TimeSpan timeout);
         Task<bool> IsMatchAsync<T>() where T : class;
         Task<bool> IsMatchAsync<T>(TimeSpan timeout) where T : class;
 

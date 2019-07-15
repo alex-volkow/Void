@@ -21,18 +21,20 @@ namespace Void.Selenium
         }
 
 
-        public Task UntilAsync(Func<bool> condition) {
+        public Task<bool> UntilAsync(Func<bool> condition) {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
             return UntilAsync(context => condition());
         }
 
-        public Task UntilAsync(Func<IRoboWaitContext, bool> condition) {
+        public async Task<bool> UntilAsync(Func<IRoboWaitContext, bool> condition) {
             if (condition == null) {
                 throw new ArgumentNullException(nameof(condition));
             }
-            return UntilAsync(context => condition(context));
+            var func = new Func<IRoboWaitContext, object>(context => (object)condition(context));
+            var result = await UntilAsync(func);
+            return result != null ? (bool)result : false;
         }
 
         public Task<object> UntilAsync(Func<object> condition) {

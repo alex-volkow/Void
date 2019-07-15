@@ -16,15 +16,32 @@ namespace Void.Selenium.Tests
         }
 
         [Fact]
+        public async Task FailFindPageAsync() {
+            await Assert.ThrowsAnyAsync<Exception>(() => {
+                return GetRobot().Pages.FindAsync<TemplatePage>();
+            });
+        }
+
+        [Fact]
         public void IsMatch() {
             OpenDefaultPage();
             Assert.True(GetRobot().Pages.IsMatch<TemplatePage>());
         }
 
         [Fact]
+        public void IsNotMatch() {
+            Assert.False(GetRobot().Pages.IsMatch<TemplatePage>());
+        }
+
+        [Fact]
         public async Task IsMatchAsync() {
             OpenDefaultPage();
             Assert.True(await GetRobot().Pages.IsMatchAsync<TemplatePage>());
+        }
+
+        [Fact]
+        public async Task IsNotMatchAsync() {
+            Assert.False(await GetRobot().Pages.IsMatchAsync<TemplatePage>());
         }
 
         [Fact]
@@ -37,7 +54,11 @@ namespace Void.Selenium.Tests
         }
 
         protected IRobot GetRobot() {
-            return new WebRobot(GetDriver());
+            return new WebRobot(GetDriver()) {
+                PageSearchingTimeout = TimeSpan.FromSeconds(1.5),
+                ElementSearchingTimeout = TimeSpan.FromSeconds(1.5),
+                ConditionCheckingInterval = TimeSpan.FromSeconds(0.4)
+            };
         }
     }
 }

@@ -62,6 +62,8 @@ namespace Void.Selenium
 
         #endregion
 
+        #region FindFirstPage
+
         public Task<IWebPage> FindFistPage(params Type[] types) {
             throw new NotImplementedException();
         }
@@ -102,6 +104,10 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
+#endregion
+
+        #region IsMatch
+
         public bool IsMatch(Type type) {
             return CreateGenericPage(type).Match().Success;
         }
@@ -111,41 +117,47 @@ namespace Void.Selenium
         }
 
         public Task<bool> IsMatchAsync(Type type) {
-            return IsMatchAsync(type, this.Robot.PageSearchingTimeout);
+            return IsMatchAsync(type, CancellationToken.None);
+        }
+
+        public Task<bool> IsMatchAsync(Type type, CancellationToken token) {
+            return IsMatchAsync(type, this.Robot.PageSearchingTimeout, token);
         }
 
         public Task<bool> IsMatchAsync(Type type, TimeSpan timeout) {
+            return IsMatchAsync(type, timeout, CancellationToken.None);
+        }
+
+        public Task<bool> IsMatchAsync(Type type, TimeSpan timeout, CancellationToken token) {
             var page = CreateGenericPage(type);
-            var wait = this.Robot.Wait();
-            if (timeout != this.Robot.PageSearchingTimeout) {
-                wait.WithTimeout(timeout);
-            }
+            var wait = this.Robot.Wait()
+                .UsingCancellationToken(token)
+                .WithTimeout(timeout)
+                .UsingExceptionHandler(e => true)
+                .IgnoreConditionExceptions()
+                .NotThrowTimeoutException();
             return wait.UntilAsync(() => page.Match().Success);
         }
 
         public Task<bool> IsMatchAsync<T>() where T : class {
-            return IsMatchAsync<T>(this.Robot.PageSearchingTimeout);
-        }
-
-        public Task<bool> IsMatchAsync<T>(TimeSpan timeout) where T : class {
-            return IsMatchAsync(typeof(T), timeout);
-        }
-
-        public Task<bool> IsMatchAsync(Type type, CancellationToken token) {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsMatchAsync(Type type, TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+            return IsMatchAsync<T>(CancellationToken.None);
         }
 
         public Task<bool> IsMatchAsync<T>(CancellationToken token) where T : class {
-            throw new NotImplementedException();
+            return IsMatchAsync<T>(this.Robot.PageSearchingTimeout, token);
+        }
+
+        public Task<bool> IsMatchAsync<T>(TimeSpan timeout) where T : class {
+            return IsMatchAsync<T>(timeout, CancellationToken.None);
         }
 
         public Task<bool> IsMatchAsync<T>(TimeSpan timeout, CancellationToken token) where T : class {
-            throw new NotImplementedException();
+            return IsMatchAsync(typeof(T), timeout, token);
         }
+
+        #endregion
+
+        #region TryFind
 
         public Task<IWebPage> TryFindAsync(Type type) {
             return TryFindAsync(type, this.Robot.PageSearchingTimeout);
@@ -193,6 +205,10 @@ namespace Void.Selenium
             throw new NotImplementedException();
         }
 
+        #endregion
+
+        #region TryFindFirst
+
         public Task<IWebPage> TryFindFistPage(params Type[] types) {
             throw new NotImplementedException();
         }
@@ -232,6 +248,8 @@ namespace Void.Selenium
         public Task<IWebPage> TryFindFistPage(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         private WebPage CreateGenericPage(Type type) {
             var page = typeof(WebPage<>).MakeGenericType(type);

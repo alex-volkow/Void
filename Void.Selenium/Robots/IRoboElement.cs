@@ -9,6 +9,8 @@ namespace Void.Selenium
 {
     public interface IRoboElement : IWrapsElement
     {
+        bool Exists { get; }
+
         Task<IRoboElement> SetText(string text);
         Task<IRoboElement> SetText(string text, TimeSpan duration);
         Task<IRoboElement> AppendText(string text);

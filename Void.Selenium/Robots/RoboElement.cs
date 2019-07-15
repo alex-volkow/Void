@@ -14,6 +14,8 @@ namespace Void.Selenium
 
         public IWebElement WrappedElement => throw new NotImplementedException();
 
+        public bool Exists => throw new NotImplementedException();
+
         public Task<IRoboElement> AppendText(string text) {
             throw new NotImplementedException();
         }

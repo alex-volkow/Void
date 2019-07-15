@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:Void.Selenium.Console"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800"
-        Loaded="WindowLoaded">
+        Title="Selenium Browser Console" Height="600" Width="800"
+        Loaded="WindowLoaded"
+        Background="LightGray">
     <Grid>
         <Frame Name="frame" NavigationUIVisibility="Hidden"/>
     </Grid>

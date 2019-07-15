@@ -6,20 +6,25 @@
       xmlns:local="clr-namespace:Void.Selenium.Console"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SelectDriverPage">
+      Title="SelectDriverPage"
+      Loaded="PageLoaded">
     <StackPanel Orientation="Vertical">
         <Label Content="Continue the last session" Height="75" FontSize="16"
                HorizontalContentAlignment="Center"
-               VerticalContentAlignment="Center"/>
-        <Button  Height="50" Width="200"  Background="LightBlue" >
+               VerticalContentAlignment="Center"
+               Name="continueLabel"/>
+        <Button  Height="50" Width="200"  Background="LightBlue" Name="continueButton"
+                 FontSize="16" VerticalContentAlignment="Center"
+                 Click="ContinueButton_Click">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Void.Selenium.Console;component/Images/Continue-icon.png" Width="20" Height="20"/>
                 <TextBlock Text="Continue" VerticalAlignment="Center" Margin="10"/>
             </StackPanel>
         </Button>
-        <Label Content="Start new session with specific browser" Height="50" FontSize="16"
+        <Label Content="Start new session with a browser" Height="50" FontSize="16"
                HorizontalContentAlignment="Center"
-               VerticalContentAlignment="Bottom" Margin="20"/>
+               VerticalContentAlignment="Bottom" Margin="20"
+               Name="driversInfo"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -27,13 +32,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0">
+                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0"
+                         Name="chromeButton" Click="ChromeButton_Click">
                     <Image Source="/Void.Selenium.Console;component/Images/Google-Chrome-icon.png" />
                 </Button>
-                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0">
+                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0"
+                         Name="firefoxButton" Click="FirefoxButton_Click">
                     <Image Source="/Void.Selenium.Console;component/Images/Firefox-icon.png" />
                 </Button>
-                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0">
+                <Button  Height="75" Width="75" Background="Transparent" Margin="15" BorderThickness="0"
+                         Name="torButton" Click="TorButton_Click"
+                         Visibility="Collapsed">
                     <Image Source="/Void.Selenium.Console;component/Images/Tor-icon.png" />
                 </Button>
             </StackPanel>

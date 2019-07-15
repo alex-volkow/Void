@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Void.IO;
 using Void.Reflection;
 
 namespace Void.Selenium.Console
@@ -19,11 +20,15 @@ namespace Void.Selenium.Console
 
 
         public FileInfo GetChromedriver() {
-            throw new NotImplementedException();
+            return Files.Application.Directory
+                .GetContent()
+                .FirstOrDefault(e => e.Name.ToLower() == "chromedriver.exe");
         }
 
         public FileInfo GetGekodriver() {
-            throw new NotImplementedException();
+            return Files.Application.Directory
+                .GetContent()
+                .FirstOrDefault(e => e.Name.ToLower() == "geckodriver.exe");
         }
 
         public FileInfo GetTorExecutable() {

@@ -91,6 +91,7 @@ namespace Void.Selenium
         /// </summary>
         /// <exception cref="ArgumentNullException">Type is null.</exception>
         /// <exception cref="NotFoundException">Page is not found.</exception>
+        /// <exception cref="TaskCanceledException">The task has been canceled.</exception>
         Task<IWebPage> FindAsync(Type type, CancellationToken token);
 
         /// <summary>
@@ -107,6 +108,7 @@ namespace Void.Selenium
         /// </summary>
         /// <exception cref="ArgumentNullException">Type is null.</exception>
         /// <exception cref="NotFoundException">Page is not found.</exception>
+        /// <exception cref="TaskCanceledException">The task has been canceled.</exception>
         Task<IWebPage> FindAsync(Type type, TimeSpan timeout, CancellationToken token);
 
         /// <summary>
@@ -121,6 +123,7 @@ namespace Void.Selenium
         /// with the robot's page searching timeout and condition checking interval.
         /// </summary>
         /// <exception cref="NotFoundException">Page is not found.</exception>
+        /// <exception cref="TaskCanceledException">The task has been canceled.</exception>
         Task<IWebPage<T>> FindAsync<T>(CancellationToken token) where T : class;
 
         /// <summary>
@@ -135,6 +138,7 @@ namespace Void.Selenium
         /// with the robot's condition checking interval.
         /// </summary>
         /// <exception cref="NotFoundException">Page is not found.</exception>
+        /// <exception cref="TaskCanceledException">The task has been canceled.</exception>
         Task<IWebPage<T>> FindAsync<T>(TimeSpan timeout, CancellationToken token) where T : class;
 
 

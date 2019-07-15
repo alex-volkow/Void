@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Void.Selenium
         }
 
 
-        #region FindAsync
+        #region Find
 
         public Task<IWebPage> FindAsync(Type type) {
             return FindAsync(type, CancellationToken.None);
@@ -55,7 +56,7 @@ namespace Void.Selenium
 
         #endregion
 
-        #region FindFirstPage
+        #region FindFirst
 
         public Task<IWebPage> FindFistAsync(params Type[] types) {
             throw new NotImplementedException();
@@ -203,50 +204,73 @@ namespace Void.Selenium
         #region TryFindFirst
 
         public Task<IWebPage> TryFindFistAsync(params Type[] types) {
-            throw new NotImplementedException();
+            return TryFindFistAsync((IEnumerable<Type>)types);
         }
 
         public Task<IWebPage> TryFindFistAsync(params IWebPage[] pages) {
-            throw new NotImplementedException();
+            return TryFindFistAsync((IEnumerable<IWebPage>)pages);
         }
 
         public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout) {
-            throw new NotImplementedException();
+            return TryFindFistAsync(CreateGenericPages(types));
         }
 
         public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, CancellationToken token) {
-            throw new NotImplementedException();
+            return TryFindFistAsync(CreateGenericPages(types), this.Robot.PageSearchingTimeout, token);
+        }
+
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages) {
+            return TryFindFistAsync(pages, CancellationToken.None);
         }
 
         public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, CancellationToken token) {
-            throw new NotImplementedException();
+            return TryFindFistAsync(pages, this.Robot.PageSearchingTimeout, token);
+        }
+
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout) {
+            return TryFindFistAsync(types, timeout, CancellationToken.None);
         }
 
         public Task<IWebPage> TryFindFistAsync(IEnumerable<Type> types, TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+            return TryFindFistAsync(CreateGenericPages(types), timeout, token);
+        }
+
+        public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout) {
+            return TryFindFistAsync(pages, timeout, CancellationToken.None);
         }
 
         public Task<IWebPage> TryFindFistAsync(IEnumerable<IWebPage> pages, TimeSpan timeout, CancellationToken token) {
-            throw new NotImplementedException();
+            if (pages == null) {
+                throw new ArgumentNullException(nameof(pages));
+            }
+            return this.Robot.Wait()
+                .WithTimeout(timeout)
+                .UsingExceptionHandler(e => true)
+                .UsingCancellationToken(token)
+                .IgnoreConditionExceptions()
+                .NotThrowTimeoutException()
+                .UntilAsync(() => {
+                    foreach (var page in pages) {
+                        if (page.Match().Success) {
+                            return page;
+                        }
+                    }
+                    return null;
+                });
         }
 
         #endregion
 
         private WebPage CreateGenericPage(Type type) {
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
             var page = typeof(WebPage<>).MakeGenericType(type);
             return (WebPage)Activator.CreateInstance(page, this.WrappedDriver);
+        }
+
+        private IEnumerable<WebPage> CreateGenericPages(IEnumerable<Type> types) {
+            return types.Select(e => CreateGenericPage(e)).ToArray();
         }
     }
 }

@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Void.Box" Version="1.1.8" />
+    <PackageReference Include="Void.Box" Version="1.2.1" />
   </ItemGroup>
 
 </Project>

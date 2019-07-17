@@ -10,30 +10,60 @@ namespace Void.IO
     {
         private static readonly string WINDOWS_SEPARATOR = "\\";
         private static readonly string UNIX_SEPARATOR = "/";
+        private static readonly IReadOnlyList<string> INVALID_CHARS = Path.GetInvalidFileNameChars()
+            .Select(e => e.ToString())
+            .Except(new string[] { "\\", "/", ":" })
+            .ToArray();
+
 
         private readonly string path;
 
 
 
-        public FilePath Parent => new FilePath(Path.GetDirectoryName(this.path));
+        public FilePath Parent {
+            get {
+                var parts = (IEnumerable<string>)this.path
+                    .TrimEnd(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                    .Replace(UNIX_SEPARATOR, $"\n{UNIX_SEPARATOR}\n")
+                    .Replace(WINDOWS_SEPARATOR, $"\n{WINDOWS_SEPARATOR}\n")
+                    .Split('\n');
+                if (parts.Count() == 1) {
+                    return null;
+                }
+                parts = parts.Take(parts.Count() - 1);
+                return new FilePath(string.Join(string.Empty, parts));
+            }
+        }
 
-        public string Name => Path.GetFileName(this.path);
+        public string Name {
+            get {
+                return this.path
+                    .Trim(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                    .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                    .Last();
+            }
+        }
 
-        public bool IsAbsolute => Path.IsPathRooted(this.path);
+        public bool IsAbsolute => !path.StartsWith(WINDOWS_SEPARATOR) && Path.IsPathRooted(this.path);
 
-        public bool IsUnix => this.path.Contains(UNIX_SEPARATOR);
+        public bool IsUnix => !this.path.Contains(WINDOWS_SEPARATOR);
 
-        public bool IsWindows => this.path.Contains(WINDOWS_SEPARATOR);
+        public bool IsWindows => !this.path.Contains(UNIX_SEPARATOR);
 
         private static bool IsWindowsSystem => Path.DirectorySeparatorChar == WINDOWS_SEPARATOR[0];
 
 
 
         public FilePath(string path) {
-            this.path = path?.Trim() ?? throw new ArgumentNullException(nameof(path));
-            if (!Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
-                throw new FormatException("Invalid path format");
+            Path.GetFullPath(path);
+            foreach (var c in INVALID_CHARS) {
+                if (path.Contains(c)) {
+                    throw new ArgumentException(
+                        "Invalid path"
+                        );
+                }
             }
+            this.path = path;
         }
 
 
@@ -84,10 +114,10 @@ namespace Void.IO
             }
             var path = this.path.Replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             if (this.IsAbsolute) {
-                return new FilePath($"{UNIX_SEPARATOR}{path.Remove(":")}");
+                return new FilePath($"{UNIX_SEPARATOR}{path.Remove(":").ToLower()}");
             }
-            if (path.StartsWith(UNIX_SEPARATOR)) {
-                path.RemoveFirst(UNIX_SEPARATOR);
+            else if (path.StartsWith(UNIX_SEPARATOR)) {
+                path = path.RemoveFirst(UNIX_SEPARATOR);
             }
             return new FilePath(path);
         }
@@ -96,10 +126,17 @@ namespace Void.IO
             if (this.IsWindows) {
                 return this;
             }
-            return new FilePath(this.path
-                .Replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR)
-                .RemoveFirst(WINDOWS_SEPARATOR)
-                );
+            var path = this.path.Replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR);
+            if (path.StartsWith(WINDOWS_SEPARATOR)) {
+                path = path.RemoveFirst(WINDOWS_SEPARATOR);
+                var volume = path.Split(WINDOWS_SEPARATOR[0])
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .FirstOrDefault();
+                if (volume.Length == 1) {
+                    path = path.ReplaceFirst(volume, $"{volume.ToUpper()}:");
+                }
+            }
+            return new FilePath(path);
         }
 
         public override string ToString() {
@@ -119,11 +156,20 @@ namespace Void.IO
         }
 
         public bool Equals(string other) {
-            return ToWindows().Equals(other);
+            if (other == null) {
+                return false;
+            }
+            var thisParts = this.path
+                .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                .Where(e => !string.IsNullOrEmpty(e));
+            var otherParts = other
+                .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                .Where(e => !string.IsNullOrEmpty(e));
+            return thisParts.Count() == otherParts.Count() && thisParts.SequenceEqual(otherParts);
         }
 
         public bool Equals(FilePath other) {
-            return Equals(other?.ToWindows());
+            return Equals(other?.ToString());
         }
 
         public override bool Equals(object obj) {

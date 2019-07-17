@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Void.Net
+namespace Void.IO
 {
     public sealed class FilePath : IEquatable<FilePath>, IComparable<FilePath>, IEquatable<string>, IComparable<string>, ICloneable
     {

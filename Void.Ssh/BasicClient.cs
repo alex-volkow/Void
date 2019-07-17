@@ -1,6 +1,7 @@
 ﻿using Renci.SshNet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,20 +28,17 @@ namespace Void.Net
         }
 
 
+        public abstract Task<string> GetSha256(string path);
 
-        public string Execute(string command) {
-            var handler = this.Shell.RunCommand(command);
-            if (handler.ExitStatus != 0) {
-                var error = handler.Error;
-                if (string.IsNullOrWhiteSpace(error)) {
-                    error = handler.Result;
-                }
-                throw new InvalidOperationException(
-                    $"[Code {handler.ExitStatus}] {error}"
-                    );
-            }
-            return handler.Result;
-        }
+        public abstract Task<string> GetSha512(string path);
+
+        public abstract Task OpenOutTcpPort(int port);
+
+        public abstract Task Upload(string path, Stream stream);
+
+        public abstract bool Exists(string path);
+
+        public abstract bool Delete(string path);
 
         public async Task<string> ExecuteAsync(string command) {
             var handler = this.Shell.CreateCommand(command);

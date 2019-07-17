@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Void.Selenium.Tests", "Void
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Void.Selenium.Console", "Void.Selenium.Console\Void.Selenium.Console.csproj", "{1673A4E0-8CC0-4D60-9E3B-C19108A6BAE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Void.Ssh", "Void.Ssh\Void.Ssh.csproj", "{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{1673A4E0-8CC0-4D60-9E3B-C19108A6BAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1673A4E0-8CC0-4D60-9E3B-C19108A6BAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1673A4E0-8CC0-4D60-9E3B-C19108A6BAE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

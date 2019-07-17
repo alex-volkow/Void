@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Void.Reflection
 {
+#pragma warning disable 0649
     public class TypeExtensionsTests
     {
         [Fact]
@@ -139,4 +140,5 @@ namespace Void.Reflection
             protected override string Value => "3";
         }
     }
+#pragma warning restore 0649
 }

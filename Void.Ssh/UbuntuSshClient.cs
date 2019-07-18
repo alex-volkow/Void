@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Renci.SshNet;
@@ -9,9 +10,13 @@ using Void.IO;
 
 namespace Void.Net
 {
-    public class UbuntuSshClient : BasicClient
+    public class UbuntuSshClient : LinuxSshClient
     {
-        public override bool IsAdmin => throw new NotImplementedException();
+        private readonly Lazy<IEnumerable<string>> admins;
+
+
+
+        public override bool IsAdmin => this.admins.Value.Contains(this.Shell.ConnectionInfo.Username);
 
         public override FilePath UserFolder => throw new NotImplementedException();
 
@@ -19,22 +24,27 @@ namespace Void.Net
 
         public UbuntuSshClient(ConnectionInfo seed) 
             : base(seed) {
+            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
         public UbuntuSshClient(string host, string username, string password) 
             : base(host, username, password) {
+            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
         public UbuntuSshClient(string host, string username, params PrivateKeyFile[] keys) 
             : base(host, username, keys) {
+            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
         public UbuntuSshClient(string host, int port, string username, string password) 
             : base(host, port, username, password) {
+            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
         public UbuntuSshClient(string host, int port, string username, params PrivateKeyFile[] keys) 
             : base(host, port, username, keys) {
+            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
 
@@ -81,6 +91,24 @@ namespace Void.Net
 
         public override Task WriteAsync(FilePath path, Stream stream) {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<string> GetAllUsers() {
+            return Execute("awk -F':' '{ print $1}' /etc/passwd")
+                .Split('\n')
+                .Select(e => e.Trim())
+                .Where(e => !string.IsNullOrEmpty(e))
+                .OrderBy(e => e)
+                .ToArray();
+        }
+
+        private IEnumerable<string> GetSudoUsers() {
+            return Execute("grep '^sudo:.*$' /etc/group | cut -d: -f4")
+                .Split('\n')
+                .Select(e => e.Trim())
+                .Where(e => !string.IsNullOrEmpty(e))
+                .OrderBy(e => e)
+                .ToArray();
         }
     }
 }

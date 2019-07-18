@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <!--<TargetFramework>netcoreapp2.2</TargetFramework>-->
     <RootNamespace>Void.Net</RootNamespace>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <StartupObject />
+    <Authors>Void</Authors>
+    <Product>Void.Framework</Product>
+    <Description>Extends standard SshClient and SftpClient of SSH.NET</Description>
+    <Version>0.7.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

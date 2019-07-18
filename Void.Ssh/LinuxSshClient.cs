@@ -6,7 +6,7 @@ using Void.IO;
 
 namespace Void.Net
 {
-    public abstract class LinuxSshClient : BasicClient
+    public abstract class LinuxSshClient : BasicSshClient
     {
         private readonly Lazy<string> userFolder;
 

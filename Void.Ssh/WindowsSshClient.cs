@@ -11,7 +11,7 @@ using Void.IO;
 
 namespace Void.Net
 {
-    public class WindowsSshClient : BasicClient
+    public class WindowsSshClient : BasicSshClient
     {
         private static readonly Regex SHA_PARSER = new Regex(@"\w{32,}");
 

@@ -10,7 +10,7 @@ using Void.IO;
 
 namespace Void.Net
 {
-    public abstract class BasicClient : IDisposable
+    public abstract class BasicSshClient : IDisposable
     {
         private readonly object locker;
 
@@ -26,7 +26,7 @@ namespace Void.Net
 
 
 
-        public BasicClient(ConnectionInfo seed) {
+        public BasicSshClient(ConnectionInfo seed) {
             if (seed == null) {
                 throw new ArgumentNullException(nameof(seed));
             }
@@ -35,21 +35,21 @@ namespace Void.Net
             this.locker = new object();
         }
 
-        public BasicClient(string host, string username, string password) 
+        public BasicSshClient(string host, string username, string password) 
             : this(host, 22, username, password) {
         }
 
-        public BasicClient(string host, int port, string username, string password) {
+        public BasicSshClient(string host, int port, string username, string password) {
             this.Shell = new SshClient(host, port, username, password);
             this.Sftp = new SftpClient(host, port, username, password);
             this.locker = new object();
         }
 
-        public BasicClient(string host, string username, params PrivateKeyFile[] keys)
+        public BasicSshClient(string host, string username, params PrivateKeyFile[] keys)
             : this(host, 22, username, keys) {
         }
 
-        public BasicClient(string host, int port, string username, params PrivateKeyFile[] keys) {
+        public BasicSshClient(string host, int port, string username, params PrivateKeyFile[] keys) {
             this.Shell = new SshClient(host, port, username, keys);
             this.Sftp = new SftpClient(host, port, username, keys);
             this.locker = new object();

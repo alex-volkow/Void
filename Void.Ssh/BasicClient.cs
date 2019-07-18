@@ -135,6 +135,61 @@ namespace Void.Net
 
         public abstract Task<IEnumerable<string>> GetServices();
 
+        //public virtual async Task InstallService(string service, FilePath executable) {
+        //    var services = await GetServices();
+        //    if (services.Any(e => e == service)) {
+        //        throw new InvalidOperationException(
+        //            $"Service is already installed"
+        //            );
+        //    }
+        //    if (this.Session.Exists(installingDirectory)) {
+        //        if (Terminal.ReadYesNo("Remote directory is not empty. Delete it? (y/n) > ")) {
+        //            Terminal.Write($"Removing '{installingDirectory}'...");
+        //            this.Session.Delete(installingDirectory);
+        //            Terminal.WriteLine("\tOK");
+        //        }
+        //    }
+        //    Terminal.Write($"Registering service '");
+        //    Terminal.Write(this.ServiceName, ConsoleColor.White);
+        //    Terminal.Write("'...");
+        //    var executable = Files.Combine(installingDirectory, GetEntryPointFileName());
+        //    var result = this.Session.Execute($@"SC CREATE ""{this.ServiceName}"" start= auto binpath= ""dotnet \""{executable}\"" --service""");
+        //    Terminal.WriteLine("\tOK");
+        //    if (Terminal.ReadYesNo("Start service? (y/n) > ")) {
+        //        await StandupService();
+        //    }
+        //    Terminal.WriteLine();
+        //}
+
+
+        //public virtual async Task UnistallService() {
+        //    Terminal.Write("Checking remote services...");
+        //    if (!GetWindowsServices().Any(e => e == this.ServiceName)) {
+        //        Terminal.WriteLine("\tOK");
+        //        Terminal.WriteLine("Service is not installed", ConsoleColor.Yellow);
+        //        Terminal.WriteLine();
+        //        return;
+        //    }
+        //    Terminal.WriteLine("\tOK");
+        //    Terminal.WriteLine("Service found", ConsoleColor.Green);
+        //    await ShutdownService();
+        //    Terminal.Write("Removing service...");
+        //    var result = this.Session.Execute($@"SC DELETE ""{this.ServiceName}""");
+        //    Terminal.WriteLine("\tOK");
+        //    var installingDirectory = CombineRemote(string.Empty);
+        //    Terminal.Write($"Installation folder: ");
+        //    Terminal.WriteLine(installingDirectory, ConsoleColor.White);
+        //    if (this.Session.Exists(installingDirectory)) {
+        //        Terminal.Write("Removing binaries...");
+        //        this.Session.Delete(installingDirectory);
+        //        Terminal.WriteLine("\tOK");
+        //    }
+        //    else {
+        //        Terminal.WriteLine("No binaries found", ConsoleColor.Yellow);
+        //    }
+        //    Terminal.WriteLine("Done", ConsoleColor.Green);
+        //}
+
         public virtual async Task<bool> IsDifferent(FilePath local, FilePath remote) {
             var localExists = File.Exists(local ?? throw new ArgumentNullException(nameof(local)));
             var remoteExists = Exists(remote ?? throw new ArgumentNullException(nameof(remote)));

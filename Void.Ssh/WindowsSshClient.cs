@@ -17,7 +17,6 @@ namespace Void.Net
 
         private readonly Lazy<FilePath> userFolder;
         private readonly Lazy<bool> isAdmin;
-        private readonly object locker;
 
 
         public override bool IsAdmin => this.isAdmin.Value;
@@ -29,35 +28,30 @@ namespace Void.Net
             : base(seed) {
             this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
-            this.locker = new object();
         }
 
         public WindowsSshClient(string host, string username, string password) 
             : base(host, username, password) {
             this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
-            this.locker = new object();
         }
 
         public WindowsSshClient(string host, string username, params PrivateKeyFile[] keys) 
             : base(host, username, keys) {
             this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
-            this.locker = new object();
         }
 
         public WindowsSshClient(string host, int port, string username, string password) 
             : base(host, port, username, password) {
             this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
-            this.locker = new object();
         }
 
         public WindowsSshClient(string host, int port, string username, params PrivateKeyFile[] keys) 
             : base(host, port, username, keys) {
             this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
-            this.locker = new object();
         }
 
 
@@ -105,29 +99,6 @@ namespace Void.Net
                 .ToArray();
         }
 
-        public override bool Delete(FilePath path) {
-            path = path.ToUnix();
-            if (!Exists(path)) {
-                return false;
-            }
-            foreach (var file in this.Sftp.ListDirectory(path)) {
-                if ((file.Name != ".") && (file.Name != "..")) {
-                    if (file.IsDirectory) {
-                        Delete(file.FullName);
-                    }
-                    else {
-                        this.Sftp.DeleteFile(file.FullName);
-                    }
-                }
-            }
-            this.Sftp.DeleteDirectory(path);
-            return true;
-        }
-
-        public override bool Exists(FilePath path) {
-            return this.Sftp.Exists(path?.ToUnix());
-        }
-
         public override Task<string> GetSha256Async(FilePath path) {
             return GetShaAsync(path, "SHA256");
         }
@@ -150,32 +121,6 @@ namespace Void.Net
                 .Select(e => e.Trim())
                 .Where(e => !string.IsNullOrEmpty(e))
                 .Select(e => new FilePath(e));
-        }
-
-        public override SftpFileStream OpenRead(FilePath path) {
-            return this.Sftp.OpenRead(path?.ToUnix());
-        }
-
-        public override Task WriteAsync(FilePath path, Stream stream) {
-            path = path.ToUnix();
-            var files = path
-                .ToString()
-                .Split('/')
-                .Where(e => !string.IsNullOrEmpty(e))
-                .ToArray();
-            var locator = string.Empty;
-            for (var i = 0; i < (files.Length - 1); i++) {
-                locator += $"/{files[i]}";
-                lock (this.locker) {
-                    if (!Exists(locator)) {
-                        this.Sftp.CreateDirectory(locator);
-                    }
-                }
-            }
-            return Task.Factory.FromAsync(
-                this.Sftp.BeginUploadFile(stream, path), 
-                this.Sftp.EndUploadFile
-                );
         }
 
         private bool CheckAdminRights() {

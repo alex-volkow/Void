@@ -18,8 +18,6 @@ namespace Void.Net
 
         public override bool IsAdmin => this.admins.Value.Contains(this.Shell.ConnectionInfo.Username);
 
-        public override FilePath UserFolder => throw new NotImplementedException();
-
 
 
         public UbuntuSshClient(ConnectionInfo seed) 
@@ -47,16 +45,8 @@ namespace Void.Net
             this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
-
-
-        public override bool Delete(FilePath path) {
-            throw new NotImplementedException();
-        }
-
-        public override bool Exists(FilePath path) {
-            throw new NotImplementedException();
-        }
-
+        
+        
         public override Task<IEnumerable<string>> GetServices() {
             throw new NotImplementedException();
         }
@@ -73,10 +63,6 @@ namespace Void.Net
             throw new NotImplementedException();
         }
 
-        public override SftpFileStream OpenRead(FilePath path) {
-            throw new NotImplementedException();
-        }
-
         public override Task RestartService(string service) {
             throw new NotImplementedException();
         }
@@ -86,10 +72,6 @@ namespace Void.Net
         }
 
         public override Task StopService(string service) {
-            throw new NotImplementedException();
-        }
-
-        public override Task WriteAsync(FilePath path, Stream stream) {
             throw new NotImplementedException();
         }
 

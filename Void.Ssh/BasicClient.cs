@@ -12,6 +12,9 @@ namespace Void.Net
 {
     public abstract class BasicClient : IDisposable
     {
+        private readonly object locker;
+
+
         public abstract bool IsAdmin { get; }
 
         public abstract FilePath UserFolder { get; }
@@ -29,6 +32,7 @@ namespace Void.Net
             }
             this.Shell = new SshClient(seed);
             this.Sftp = new SftpClient(seed);
+            this.locker = new object();
         }
 
         public BasicClient(string host, string username, string password) 
@@ -38,6 +42,7 @@ namespace Void.Net
         public BasicClient(string host, int port, string username, string password) {
             this.Shell = new SshClient(host, port, username, password);
             this.Sftp = new SftpClient(host, port, username, password);
+            this.locker = new object();
         }
 
         public BasicClient(string host, string username, params PrivateKeyFile[] keys)
@@ -47,6 +52,7 @@ namespace Void.Net
         public BasicClient(string host, int port, string username, params PrivateKeyFile[] keys) {
             this.Shell = new SshClient(host, port, username, keys);
             this.Sftp = new SftpClient(host, port, username, keys);
+            this.locker = new object();
         }
 
 
@@ -57,7 +63,27 @@ namespace Void.Net
 
         public abstract Task OpenInTcpPortAsync(int port);
 
-        public abstract Task WriteAsync(FilePath path, Stream stream);
+        public virtual Task WriteAsync(FilePath path, Stream stream) {
+            path = path.ToUnix();
+            var files = path
+                .ToString()
+                .Split('/')
+                .Where(e => !string.IsNullOrEmpty(e))
+                .ToArray();
+            var locator = string.Empty;
+            for (var i = 0; i < (files.Length - 1); i++) {
+                locator += $"/{files[i]}";
+                lock (this.locker) {
+                    if (!Exists(locator)) {
+                        this.Sftp.CreateDirectory(locator);
+                    }
+                }
+            }
+            return Task.Factory.FromAsync(
+                this.Sftp.BeginUploadFile(stream, path),
+                this.Sftp.EndUploadFile
+                );
+        }
 
         public async Task WriteAsync(FilePath path, byte[] content) {
             using (var stream = new MemoryStream(content)) {
@@ -92,7 +118,9 @@ namespace Void.Net
             return encoding.GetString(bytes);
         }
 
-        public abstract SftpFileStream OpenRead(FilePath path);
+        public virtual SftpFileStream OpenRead(FilePath path) {
+            return this.Sftp.OpenRead(path?.ToUnix());
+        }
 
         public virtual IEnumerable<FilePath> GetFiles(FilePath path) {
             if (Exists(path)) {
@@ -123,9 +151,28 @@ namespace Void.Net
             return new FilePath[] { };
         }
 
-        public abstract bool Exists(FilePath path);
+        public virtual bool Exists(FilePath path) {
+            return this.Sftp.Exists(path?.ToUnix());
+        }
 
-        public abstract bool Delete(FilePath path);
+        public virtual bool Delete(FilePath path) {
+            path = path.ToUnix();
+            if (!Exists(path)) {
+                return false;
+            }
+            foreach (var file in this.Sftp.ListDirectory(path)) {
+                if ((file.Name != ".") && (file.Name != "..")) {
+                    if (file.IsDirectory) {
+                        Delete(file.FullName);
+                    }
+                    else {
+                        this.Sftp.DeleteFile(file.FullName);
+                    }
+                }
+            }
+            this.Sftp.DeleteDirectory(path);
+            return true;
+        }
 
         public abstract Task RestartService(string service);
 

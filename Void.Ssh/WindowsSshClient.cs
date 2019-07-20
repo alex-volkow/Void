@@ -104,18 +104,13 @@ namespace Void.Net
                 throw new ArgumentNullException(nameof(service));
             }
             if (string.IsNullOrWhiteSpace(service.Name)) {
-                throw new ArgumentException("Vlaue must not be empty",
+                throw new ArgumentException("Value must not be empty",
                     $"{nameof(service)}.{nameof(IRemoteServiceInfo.Name)}"
                     );
             }
             if (string.IsNullOrWhiteSpace(service.File)) {
-                throw new ArgumentException("Vlaue must not be empty",
+                throw new ArgumentException("Value must not be empty",
                     $"{nameof(service)}.{nameof(IRemoteServiceInfo.File)}"
-                    );
-            }
-            if (!Exists(service.File)) {
-                throw new InvalidDataException(
-                    $"Remote file does not exist"
                     );
             }
             var services = await GetServices();
@@ -140,7 +135,6 @@ namespace Void.Net
                     );
             }
             await StopService(service);
-            Terminal.Write("Removing service...");
             await ExecuteAsync($@"SC DELETE ""{service}""");
         }
 

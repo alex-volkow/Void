@@ -10,7 +10,8 @@
     <Authors>Void</Authors>
     <Product>Void.Framework</Product>
     <Description>Extends standard SshClient and SftpClient of SSH.NET</Description>
-    <Version>0.7.1</Version>
+    <Version>0.8.0</Version>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

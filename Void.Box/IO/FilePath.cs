@@ -114,7 +114,7 @@ namespace Void.IO
             }
             var path = this.path.Replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             if (this.IsAbsolute) {
-                return new FilePath($"{UNIX_SEPARATOR}{path.Remove(":").ToLower()}");
+                return new FilePath($"{UNIX_SEPARATOR}{path.Remove(":")}");
             }
             else if (path.StartsWith(UNIX_SEPARATOR)) {
                 path = path.RemoveFirst(UNIX_SEPARATOR);

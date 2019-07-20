@@ -122,6 +122,14 @@ namespace Void.Net
             return ExecuteAsync($"sudo systemctl stop {service}");
         }
 
+        public override Task InstallService(IRemoteServiceInfo service) {
+            throw new NotImplementedException();
+        }
+
+        public override Task UnistallService(string service) {
+            throw new NotImplementedException();
+        }
+
         private IEnumerable<string> GetAllUsers() {
             return Execute("awk -F':' '{ print $1}' /etc/passwd")
                 .Split('\n')

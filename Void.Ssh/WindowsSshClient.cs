@@ -99,6 +99,51 @@ namespace Void.Net
                 .ToArray();
         }
 
+        public override async Task InstallService(IRemoteServiceInfo service) {
+            if (service == null) {
+                throw new ArgumentNullException(nameof(service));
+            }
+            if (string.IsNullOrWhiteSpace(service.Name)) {
+                throw new ArgumentException("Vlaue must not be empty",
+                    $"{nameof(service)}.{nameof(IRemoteServiceInfo.Name)}"
+                    );
+            }
+            if (string.IsNullOrWhiteSpace(service.File)) {
+                throw new ArgumentException("Vlaue must not be empty",
+                    $"{nameof(service)}.{nameof(IRemoteServiceInfo.File)}"
+                    );
+            }
+            if (!Exists(service.File)) {
+                throw new InvalidDataException(
+                    $"Remote file does not exist"
+                    );
+            }
+            var services = await GetServices();
+            if (services.Any(e => e == service.Name)) {
+                throw new InvalidOperationException(
+                    $"Service is already installed"
+                    );
+            }
+            await ExecuteAsync($@"SC CREATE ""{service.Name}"" start= auto binpath= ""{service.File}""");
+        }
+
+        public override async Task UnistallService(string service) {
+            if (string.IsNullOrWhiteSpace(service)) {
+                throw new ArgumentException("Value must not be empty",
+                    nameof(service)
+                    );
+            }
+            var services = await GetServices();
+            if (!services.Any(e => e == service)) {
+                throw new InvalidOperationException(
+                    $"Service is not installed"
+                    );
+            }
+            await StopService(service);
+            Terminal.Write("Removing service...");
+            await ExecuteAsync($@"SC DELETE ""{service}""");
+        }
+
         public override Task<string> GetSha256Async(FilePath path) {
             return GetShaAsync(path, "SHA256");
         }

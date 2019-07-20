@@ -211,7 +211,7 @@ namespace Void.Net
                     error = handler.Result;
                 }
                 throw new InvalidOperationException(
-                    $"[Code {handler.ExitStatus}] {error}"
+                    $"[Code {handler.ExitStatus}] {error?.Trim()}"
                     );
             }
             return handler.Result;
@@ -225,7 +225,7 @@ namespace Void.Net
                     error = handler.Result;
                 }
                 throw new InvalidOperationException(
-                    $"[Code {handler.ExitStatus}] {error}"
+                    $"[Code {handler.ExitStatus}] {error?.Trim()}"
                     );
             }
             return handler.Result;

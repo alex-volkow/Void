@@ -33,4 +33,9 @@
     <PackageReference Include="Void.Box" Version="1.3.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Linux\" />
+    <Folder Include="Ubuntu\" />
+  </ItemGroup>
+
 </Project>

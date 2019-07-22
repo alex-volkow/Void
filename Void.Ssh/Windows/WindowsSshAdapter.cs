@@ -21,14 +21,31 @@ namespace Void.Net.Windows
             : base(client) {
         }
 
+        
 
+        public virtual async Task<bool> IsAdminAsync() {
+            await ExecuteAsync("net session >nul 2>&1");
+            var result = (await ExecuteAsync("echo %errorLevel%")).Trim();
+            if (int.TryParse(result, out int code)) {
+                return code == 0;
+            }
+            throw new InvalidOperationException(
+                $"Invalid code: {result}"
+                );
+        }
 
-        public override async Task RestartService(string service) {
+        public virtual async Task<FilePath> GetUserFolderAsync() {
+            return (await ExecuteAsync("echo %userprofile%"))
+                .Remove("\r")
+                .Remove("\n");
+        }
+
+        public virtual async Task RestartService(string service) {
             await StopService(service);
             await StartService(service);
         }
 
-        public override async Task StartService(string service) {
+        public virtual async Task StartService(string service) {
             if (service == null) {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -42,7 +59,7 @@ namespace Void.Net.Windows
             }
         }
 
-        public override async Task StopService(string service) {
+        public virtual async Task StopService(string service) {
             if (service == null) {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -56,7 +73,7 @@ namespace Void.Net.Windows
             }
         }
 
-        public override async Task<IEnumerable<string>> GetServices() {
+        public virtual async Task<IEnumerable<string>> GetServices() {
             var result = await ExecuteAsync($"sc queryex type= service state= all");
             return Regex
                 .Matches(result, @"SERVICE_NAME:\s*(?<NAME>[^\s\r\n]+)")
@@ -105,11 +122,11 @@ namespace Void.Net.Windows
             await ExecuteAsync($@"SC DELETE ""{service}""");
         }
 
-        public override Task<string> GetSha256Async(FilePath path) {
+        public virtual Task<string> GetSha256Async(FilePath path) {
             return GetShaAsync(path, "SHA256");
         }
 
-        public override Task<string> GetSha512Async(FilePath path) {
+        public virtual Task<string> GetSha512Async(FilePath path) {
             return GetShaAsync(path, "SHA512");
         }
 
@@ -148,23 +165,6 @@ namespace Void.Net.Windows
                     );
             }
             return match.Value;
-        }
-
-        public override async Task<bool> IsAdminAsync() {
-            await ExecuteAsync("net session >nul 2>&1");
-            var result = (await ExecuteAsync("echo %errorLevel%")).Trim();
-            if (int.TryParse(result, out int code)) {
-                return code == 0;
-            }
-            throw new InvalidOperationException(
-                $"Invalid code: {result}"
-                );
-        }
-
-        public override async Task<FilePath> GetUserFolderAsync() {
-            return (await ExecuteAsync("echo %userprofile%"))
-                .Remove("\r")
-                .Remove("\n");
         }
     }
 }

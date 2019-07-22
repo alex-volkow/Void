@@ -8,30 +8,12 @@ using Void.IO;
 
 namespace Void.Net
 {
-    public abstract class SshAdapter : Adapter<SshClient>
+    public class SshAdapter : Adapter<SshClient>
     {
         public SshAdapter(SshClient client) 
             : base(client) {
         }
         
-
-
-        public abstract Task<bool> IsAdminAsync();
-
-        public abstract Task<FilePath> GetUserFolderAsync();
-
-        public abstract Task<string> GetSha256Async(FilePath path);
-
-        public abstract Task<string> GetSha512Async(FilePath path);
-
-        public abstract Task RestartService(string service);
-
-        public abstract Task StartService(string service);
-
-        public abstract Task StopService(string service);
-
-        public abstract Task<IEnumerable<string>> GetServices();
-
         public virtual async Task<string> ExecuteAsync(string command) {
             var handler = this.Client.CreateCommand(command);
             await Task.Factory.FromAsync(handler.BeginExecute(), handler.EndExecute);

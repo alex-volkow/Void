@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Void.IO;
 
-namespace Void.Net.Linux
+namespace Void.Net
 {
-    public class LinuxSshAdapter : SshAdapter
+    public class LinuxAdapter : SshAdapter
     {
-        public LinuxSshAdapter(SshClient client) 
+        public LinuxAdapter(SshClient client) 
             : base(client) {
         }
 

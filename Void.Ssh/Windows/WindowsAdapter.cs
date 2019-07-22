@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 using Renci.SshNet;
 using Void.IO;
 
-namespace Void.Net.Windows
+namespace Void.Net
 {
-    class WindowsSshAdapter : SshAdapter
+    public class WindowsAdapter : SshAdapter
     {
         private static readonly Regex SHA_PARSER = new Regex(@"\w{32,}");
 
 
 
-        public WindowsSshAdapter(SshClient client) 
+        public WindowsAdapter(SshClient client) 
             : base(client) {
         }
 

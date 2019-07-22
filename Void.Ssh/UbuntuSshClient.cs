@@ -30,26 +30,6 @@ namespace Void.Net
             this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
         }
 
-        public UbuntuSshClient(string host, string username, string password) 
-            : base(host, username, password) {
-            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
-        }
-
-        public UbuntuSshClient(string host, string username, params PrivateKeyFile[] keys) 
-            : base(host, username, keys) {
-            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
-        }
-
-        public UbuntuSshClient(string host, int port, string username, string password) 
-            : base(host, port, username, password) {
-            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
-        }
-
-        public UbuntuSshClient(string host, int port, string username, params PrivateKeyFile[] keys) 
-            : base(host, port, username, keys) {
-            this.admins = new Lazy<IEnumerable<string>>(GetSudoUsers);
-        }
-
 
         //public string CreateService(string name, string executable, string user, string description) {
         //    // https://askubuntu.com/questions/465877/how-to-move-one-file-to-a-folder-using-terminal

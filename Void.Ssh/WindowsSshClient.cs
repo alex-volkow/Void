@@ -30,30 +30,6 @@ namespace Void.Net
             this.isAdmin = new Lazy<bool>(CheckAdminRights);
         }
 
-        public WindowsSshClient(string host, string username, string password) 
-            : base(host, username, password) {
-            this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
-            this.isAdmin = new Lazy<bool>(CheckAdminRights);
-        }
-
-        public WindowsSshClient(string host, string username, params PrivateKeyFile[] keys) 
-            : base(host, username, keys) {
-            this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
-            this.isAdmin = new Lazy<bool>(CheckAdminRights);
-        }
-
-        public WindowsSshClient(string host, int port, string username, string password) 
-            : base(host, port, username, password) {
-            this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
-            this.isAdmin = new Lazy<bool>(CheckAdminRights);
-        }
-
-        public WindowsSshClient(string host, int port, string username, params PrivateKeyFile[] keys) 
-            : base(host, port, username, keys) {
-            this.userFolder = new Lazy<FilePath>(GetRemoteUserDirectory);
-            this.isAdmin = new Lazy<bool>(CheckAdminRights);
-        }
-
 
 
         public override async Task RestartService(string service) {

@@ -15,10 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Artefacts\BaseManager.cs" />
+    <Compile Remove="Artefacts\ISession.cs" />
+    <Compile Remove="Artefacts\Session.cs" />
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Artefacts\BaseManager.cs" />
+    <None Include="Artefacts\ISession.cs" />
+    <None Include="Artefacts\Session.cs" />
     <None Include="Program.cs" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using Renci.SshNet;
+using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,34 @@ namespace Void.Net
 {
     public abstract class BasicSshClient : IDisposable
     {
+        public static TimeSpan DefaultConnectionInterval { get; } = TimeSpan.FromSeconds(5);
+
+
+        private readonly List<BaseClient> reconnecting;
         private readonly object locker;
+        private TimeSpan connectionInterval;
+        private bool autoconnect;
 
 
         public abstract bool IsAdmin { get; }
 
         public abstract FilePath UserFolder { get; }
+        
+        public bool IsAutoConnect {
+            get {
+                lock (this.locker) {
+                    return this.autoconnect;
+                }
+            }
+        }
+
+        public TimeSpan ConnectionInterval {
+            get {
+                lock (this.locker) {
+                    return this.connectionInterval;
+                }
+            }
+        }
 
 
         protected SshClient Shell { get; }
@@ -32,26 +55,7 @@ namespace Void.Net
             }
             this.Shell = new SshClient(seed);
             this.Sftp = new SftpClient(seed);
-            this.locker = new object();
-        }
-
-        public BasicSshClient(string host, string username, string password) 
-            : this(host, 22, username, password) {
-        }
-
-        public BasicSshClient(string host, int port, string username, string password) {
-            this.Shell = new SshClient(host, port, username, password);
-            this.Sftp = new SftpClient(host, port, username, password);
-            this.locker = new object();
-        }
-
-        public BasicSshClient(string host, string username, params PrivateKeyFile[] keys)
-            : this(host, 22, username, keys) {
-        }
-
-        public BasicSshClient(string host, int port, string username, params PrivateKeyFile[] keys) {
-            this.Shell = new SshClient(host, port, username, keys);
-            this.Sftp = new SftpClient(host, port, username, keys);
+            this.reconnecting = new List<BaseClient>();
             this.locker = new object();
         }
 
@@ -244,13 +248,84 @@ namespace Void.Net
                 this.Shell.Dispose,
                 this.Sftp.Dispose
             };
+            Disconnect();
             methods.AsParallel().ForAll(e => e.Invoke());
+        }
+
+        public void AutoConnect() {
+            AutoConnect(DefaultConnectionInterval);
+        }
+
+        public void AutoConnect(TimeSpan interval) {
+            lock (this.locker) {
+                this.connectionInterval = interval.Duration();
+                if (!this.IsAutoConnect) {
+                    this.autoconnect = true;
+                    this.Shell.ErrorOccurred += HandleError;
+                    this.Sftp.ErrorOccurred += HandleError;
+                }
+            }
+            TryConnect(this.Shell);
+            TryConnect(this.Sftp);
+        }
+
+        public void Disconnect() {
+            lock (this.locker) {
+                if (this.autoconnect) {
+                    this.autoconnect = false;
+                    this.Shell.ErrorOccurred -= HandleError;
+                    this.Sftp.ErrorOccurred -= HandleError;
+                }
+            }
+            if (this.Shell.IsConnected) {
+                this.Shell.Disconnect();
+            }
+            if (this.Sftp.IsConnected) {
+                this.Sftp.Disconnect();
+            }
         }
 
         public override string ToString() {
             return this.Shell.ConnectionInfo.Port != 22
                 ? $"{this.Shell.ConnectionInfo.Host}:{this.Shell.ConnectionInfo.Port}"
                 : this.Shell.ConnectionInfo.Host;
+        }
+
+        protected virtual void Reconnect(BaseClient client) {
+            client.Connect();
+        }
+
+        private void HandleError(object sender, ExceptionEventArgs e) {
+            TryConnect((BaseClient)sender); //SshAuthenticationException
+        }
+
+        private async void TryConnect(BaseClient client) {
+            lock (this.locker) {
+                if (this.reconnecting.Contains(client)) {
+                    return;
+                }
+                this.reconnecting.Add(client);
+            }
+            try {
+                while (!client.IsConnected && this.IsAutoConnect) {
+                    try {
+                        Reconnect(client);
+                    }
+                    catch (Exception ex) {
+                        if (ex is ObjectDisposedException) {
+                            Disconnect();
+                            return;
+                        }
+                        await Task.Delay(this.ConnectionInterval);
+                    }
+                }
+            }
+            catch { }
+            finally {
+                lock (this.locker) {
+                    this.reconnecting.Remove(client);
+                }
+            }
         }
     }
 }

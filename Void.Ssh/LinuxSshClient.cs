@@ -23,26 +23,6 @@ namespace Void.Net
             this.userFolder = new Lazy<string>(GetUserFolder);
         }
 
-        public LinuxSshClient(string host, string username, string password) 
-            : base(host, username, password) {
-            this.userFolder = new Lazy<string>(GetUserFolder);
-        }
-
-        public LinuxSshClient(string host, string username, params PrivateKeyFile[] keys) 
-            : base(host, username, keys) {
-            this.userFolder = new Lazy<string>(GetUserFolder);
-        }
-
-        public LinuxSshClient(string host, int port, string username, string password) 
-            : base(host, port, username, password) {
-            this.userFolder = new Lazy<string>(GetUserFolder);
-        }
-
-        public LinuxSshClient(string host, int port, string username, params PrivateKeyFile[] keys) 
-            : base(host, port, username, keys) {
-            this.userFolder = new Lazy<string>(GetUserFolder);
-        }
-
 
 
         public override Task<string> GetSha256Async(FilePath path) {

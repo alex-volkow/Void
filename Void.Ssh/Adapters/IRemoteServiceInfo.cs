@@ -7,6 +7,6 @@ namespace Void.Net
     public interface IRemoteServiceInfo
     {
         string Name { get; }
-        string File { get; }
+        string Path { get; }
     }
 }

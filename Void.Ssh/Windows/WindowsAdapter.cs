@@ -92,9 +92,9 @@ namespace Void.Net
                     $"{nameof(service)}.{nameof(IRemoteServiceInfo.Name)}"
                     );
             }
-            if (string.IsNullOrWhiteSpace(service.File)) {
+            if (string.IsNullOrWhiteSpace(service.Path)) {
                 throw new ArgumentException("Value must not be empty",
-                    $"{nameof(service)}.{nameof(IRemoteServiceInfo.File)}"
+                    $"{nameof(service)}.{nameof(IRemoteServiceInfo.Path)}"
                     );
             }
             var services = await GetServicesAsync();
@@ -103,7 +103,7 @@ namespace Void.Net
                     $"Service is already installed"
                     );
             }
-            await ExecuteAsync($@"SC CREATE ""{service.Name}"" start= auto binpath= ""{service.File}""");
+            await ExecuteAsync($@"SC CREATE ""{service.Name}"" start= auto binpath= ""{service.Path}""");
         }
 
         public virtual async Task UnistallServiceAsync(string service) {

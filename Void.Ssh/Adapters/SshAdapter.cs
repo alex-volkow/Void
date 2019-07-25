@@ -1,6 +1,7 @@
 ﻿using Renci.SshNet;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,17 @@ namespace Void.Net
                     );
             }
             return handler.Result;
+        }
+
+        protected override void Reconnect() {
+            base.Reconnect();
+            var ports = this.Client.ForwardedPorts.ToArray();
+            foreach (var port in ports) {
+                port.Stop();
+                this.Client.RemoveForwardedPort(port);
+                this.Client.AddForwardedPort(port);
+                port.Start();
+            }
         }
     }
 }

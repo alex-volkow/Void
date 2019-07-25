@@ -40,12 +40,12 @@ namespace Void.Net
                 .Remove("\n");
         }
 
-        public virtual async Task RestartService(string service) {
-            await StopService(service);
-            await StartService(service);
+        public virtual async Task RestartServiceAsync(string service) {
+            await StopServiceAsync(service);
+            await StartServiceAsync(service);
         }
 
-        public virtual async Task StartService(string service) {
+        public virtual async Task StartServiceAsync(string service) {
             if (service == null) {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -59,7 +59,7 @@ namespace Void.Net
             }
         }
 
-        public virtual async Task StopService(string service) {
+        public virtual async Task StopServiceAsync(string service) {
             if (service == null) {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -73,7 +73,7 @@ namespace Void.Net
             }
         }
 
-        public virtual async Task<IEnumerable<string>> GetServices() {
+        public virtual async Task<IEnumerable<string>> GetServicesAsync() {
             var result = await ExecuteAsync($"sc queryex type= service state= all");
             return Regex
                 .Matches(result, @"SERVICE_NAME:\s*(?<NAME>[^\s\r\n]+)")
@@ -83,7 +83,7 @@ namespace Void.Net
                 .ToArray();
         }
 
-        public virtual async Task InstallService(IRemoteServiceInfo service) {
+        public virtual async Task InstallServiceAsync(IRemoteServiceInfo service) {
             if (service == null) {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -97,7 +97,7 @@ namespace Void.Net
                     $"{nameof(service)}.{nameof(IRemoteServiceInfo.File)}"
                     );
             }
-            var services = await GetServices();
+            var services = await GetServicesAsync();
             if (services.Any(e => e == service.Name)) {
                 throw new InvalidOperationException(
                     $"Service is already installed"
@@ -106,19 +106,19 @@ namespace Void.Net
             await ExecuteAsync($@"SC CREATE ""{service.Name}"" start= auto binpath= ""{service.File}""");
         }
 
-        public virtual async Task UnistallService(string service) {
+        public virtual async Task UnistallServiceAsync(string service) {
             if (string.IsNullOrWhiteSpace(service)) {
                 throw new ArgumentException("Value must not be empty",
                     nameof(service)
                     );
             }
-            var services = await GetServices();
+            var services = await GetServicesAsync();
             if (!services.Any(e => e == service)) {
                 throw new InvalidOperationException(
                     $"Service is not installed"
                     );
             }
-            await StopService(service);
+            await StopServiceAsync(service);
             await ExecuteAsync($@"SC DELETE ""{service}""");
         }
 
@@ -138,7 +138,7 @@ namespace Void.Net
             return ExecuteAsync(command.ToString());
         }
 
-        public virtual async Task<IEnumerable<FilePath>> GetFilesRecursive(FilePath path) {
+        public virtual async Task<IEnumerable<FilePath>> GetFilesRecursiveAsync(FilePath path) {
             var result = await ExecuteAsync($"dir \"{path.ToWindows()}\"/a-d /b /s");
             return result
                 .Split('\n')

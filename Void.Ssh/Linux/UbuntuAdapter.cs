@@ -20,7 +20,7 @@ namespace Void.Net
         }
 
 
-        public virtual async Task<IEnumerable<string>> GetServices() {
+        public virtual async Task<IEnumerable<string>> GetServicesAsync() {
             var result = await ExecuteAsync("systemctl --full --type service --all --no-pager");
             return SYSTEMCTL_SERVICES_PARSER
                 .Matches(result)
@@ -33,19 +33,19 @@ namespace Void.Net
             return ExecuteAsync($"sudo ufw allow {port}/tcp");
         }
 
-        public virtual Task RestartService(string service) {
+        public virtual Task RestartServiceAsync(string service) {
             return ExecuteAsync($"sudo systemctl restart {service}");
         }
 
-        public virtual Task StartService(string service) {
+        public virtual Task StartServiceAsync(string service) {
             return ExecuteAsync($"sudo systemctl start {service}");
         }
 
-        public virtual Task StopService(string service) {
+        public virtual Task StopServiceAsync(string service) {
             return ExecuteAsync($"sudo systemctl stop {service}");
         }
 
-        public async Task<IEnumerable<string>> GetAllUsers() {
+        public async Task<IEnumerable<string>> GetAllUsersAsync() {
             return (await ExecuteAsync("awk -F':' '{ print $1}' /etc/passwd"))
                 .Split('\n')
                 .Select(e => e.Trim())
@@ -54,7 +54,7 @@ namespace Void.Net
                 .ToArray();
         }
 
-        public async Task<IEnumerable<string>> GetSudoUsers() {
+        public async Task<IEnumerable<string>> GetSudoUsersAsync() {
             return (await ExecuteAsync("grep '^sudo:.*$' /etc/group | cut -d: -f4"))
                 .Split('\n')
                 .Select(e => e.Trim())

@@ -18,6 +18,11 @@ namespace Void.Net
         private bool autoconnect;
 
 
+
+        public event EventHandler<EventArgs> Connected;
+        public event EventHandler<EventArgs> Disconnected;
+
+
         public T Client { get; }
 
         public bool IsAutoConnect {
@@ -96,6 +101,9 @@ namespace Void.Net
         }
 
         private void HandleError(object sender, ExceptionEventArgs e) {
+            if (!this.Client.IsConnected) {
+                this.Disconnected?.Invoke(this, new EventArgs());
+            }
             TryConnect();
         }
 
@@ -107,6 +115,7 @@ namespace Void.Net
                 this.reconnecting = true;
             }
             try {
+                var disconnected = !this.Client.IsConnected;
                 while (!this.Client.IsConnected && this.IsAutoConnect) {
                     try {
                         Reconnect();
@@ -118,6 +127,9 @@ namespace Void.Net
                         }
                         await Task.Delay(this.ConnectionInterval);
                     }
+                }
+                if (disconnected && this.Client.IsConnected) {
+                    this.Connected?.Invoke(this, new EventArgs());
                 }
             }
             catch { }

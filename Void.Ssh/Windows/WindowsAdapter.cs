@@ -14,6 +14,7 @@ namespace Void.Net
     public class WindowsAdapter : SshAdapter
     {
         private static readonly Regex SHA_PARSER = new Regex(@"\w{32,}");
+        private static readonly Regex HASH_LIST_PARSER = new Regex(@"^(\S+)\s+hash\s+of\s+(?<FILE>[^\r\n]+):\s*(?<HASH>\S{12,})");
 
 
 
@@ -130,6 +131,14 @@ namespace Void.Net
             return GetShaAsync(path, "SHA512");
         }
 
+        public virtual Task<IDictionary<FilePath, string>> GetSha256RecursiveAsync(FilePath path) {
+            return GetHashRecursiveAsync(path, "SHA256");
+        }
+
+        public virtual Task<IDictionary<FilePath, string>> GetSha512RecursiveAsync(FilePath path) {
+            return GetHashRecursiveAsync(path, "SHA512");
+        }
+
         public virtual Task OpenInTcpPortAsync(int port) {
             var command = new StringBuilder();
             command.Append($@"netsh advfirewall firewall add rule").Append(" ");
@@ -165,6 +174,21 @@ namespace Void.Net
                     );
             }
             return match.Value;
+        }
+
+        private async Task<IDictionary<FilePath, string>> GetHashRecursiveAsync(FilePath path, string hash) {
+            if (path == null) {
+                throw new ArgumentNullException(nameof(path));
+            }
+            await ExecuteAsync($@"cd ""{path.ToWindows()}""");
+            var result = await ExecuteAsync($@"for /R %F in (*) do @certutil -hashfile ""%F"" {hash}");
+            return HASH_LIST_PARSER
+                .Matches(result)
+                .Cast<Match>()
+                .ToDictionary(
+                    e => new FilePath(e.Groups["FILE"].Value), 
+                    e => e.Groups["HASH"].Value.Trim()
+                    );
         }
     }
 }

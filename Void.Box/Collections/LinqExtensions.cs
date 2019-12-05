@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Void.Collections
 {
@@ -70,7 +71,11 @@ namespace Void.Collections
         }
 
         public static IEnumerable<T> Circle<T>(this IEnumerable<T> collection) {
-            while (true) {
+            return collection.Circle<T>(CancellationToken.None);
+        }
+
+        public static IEnumerable<T> Circle<T>(this IEnumerable<T> collection, CancellationToken token) {
+            while (!token.IsCancellationRequested) {
                 foreach (var item in collection) {
                     yield return item;
                 }

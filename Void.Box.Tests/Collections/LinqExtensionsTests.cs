@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,36 +124,24 @@ namespace Void.Collections
 
         [Test]
         public void Circle() {
-            //using var cancel = new CancellationTokenSource();
+            using var cancel = new CancellationTokenSource();
             var array = GetRandomUniqIntArray(5);
+            var limit = array.Length * 10;
+            var counter = 0;
+            foreach (var item in array.Circle(cancel.Token)) {
+                var index = counter % array.Length;
+                Assert.AreEqual(array[index], item);
+                if (counter == limit) {
+                    cancel.Cancel();
+                }
+                counter++;
+            }
         }
 
-        ///// <summary>
-        ///// Close the enumeration on itself until canceled.
-        ///// </summary>
-        ///// <returns>Endless enumeration.</returns>
-        //public static IEnumerable<T> Circle<T>(this IEnumerable<T> collection, CancellationToken token) {
-        //    while (!token.IsCancellationRequested) {
-        //        foreach (var item in collection) {
-        //            yield return item;
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gets the number of elements contained in the enumeration.
-        ///// </summary>
-        //public static int Count(this IEnumerable items) {
-        //    if (items is ICollection collection) {
-        //        return collection.Count;
-        //    }
-        //    var count = 0;
-        //    if (items != null) {
-        //        foreach (var item in items) {
-        //            count++;
-        //        }
-        //    }
-        //    return count;
-        //}
+        [Test]
+        public void Count() {
+            var array = GetRandomUniqIntArray(5);
+            Assert.AreEqual(array.Length, ((IEnumerable)array).Count());
+        }
     }
 }

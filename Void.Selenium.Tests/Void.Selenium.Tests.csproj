@@ -7,11 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FixedWebPointerTests.cs" />
+    <Compile Remove="WebPageTests.cs" />
+    <Compile Remove="WebRobotTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Template.html" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FixedWebPointerTests.cs" />
+    <None Include="WebPageTests.cs" />
+    <None Include="WebRobotTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

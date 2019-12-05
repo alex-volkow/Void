@@ -8,10 +8,17 @@ namespace Void.Collections
 {
     public static class LinqExtensions
     {
+        /// <summary>
+        /// Create new Queue<T> using the enumeration.
+        /// </summary>
         public static Queue<T> ToQueue<T>(this IEnumerable<T> collection) {
             return new Queue<T>(collection);
         }
 
+        /// <summary>
+        /// Determines the index of a specific item in the enumeration.
+        /// </summary>
+        /// <returns>The index of item if found in the enumeration; otherwise, -1.</returns>
         public static int IndexOf<T>(this IEnumerable<T> collection, T item) {
             var index = 0;
             if (collection is IList<T> list) {

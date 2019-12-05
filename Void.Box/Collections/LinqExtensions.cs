@@ -34,17 +34,23 @@ namespace Void.Collections
         }
 
         public static T Next<T>(this IEnumerable<T> collection, T item) {
-            var index = collection.IndexOf(item);
-            if (index < 0) {
-                throw new ArgumentException(
-                    "Collection does not contain element"
-                    );
+            var found = false;
+            foreach (var element in collection) {
+                if (found) {
+                    return element;
+                }
+                if (item.Equals(element)) {
+                    found = true;
+                }
             }
-            return collection.ElementAt(index + 1);
+            throw new ArgumentException(found
+                ? "The element is the last"
+                : "Collection does not contain element"
+                );
         }
 
         public static T NextObject<T>(this IEnumerable<T> collection, T item) where T : class {
-            return collection.Contains(item) ? collection.Next(item) : default(T);
+            return collection.Contains(item) ? collection.Next(item) : default;
         }
 
         public static T? NextValue<T>(this IEnumerable<T> collection, T item) where T : struct {

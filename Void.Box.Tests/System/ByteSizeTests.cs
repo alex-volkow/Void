@@ -1,62 +1,63 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Xunit;
 
 namespace Void
 {
+    [Parallelizable]
     public class ByteSizeTests
     {
-        [Fact]
+        [Test]
         public void LongConverting() {
-            Assert.Equal(333, new ByteSize(333).Value);
+            Assert.AreEqual(333, new ByteSize(333).Value);
         }
 
-        [Fact]
+        [Test]
         public void DoubleConverting() {
-            Assert.Equal(333 * 1024 * 1024, new ByteSize(333, ByteUnit.Mega).Value);
+            Assert.AreEqual(333 * 1024 * 1024, new ByteSize(333, ByteUnit.Mega).Value);
         }
 
-        [Fact]
+        [Test]
         public void BytesParsing() {
-            Assert.Equal(22, ByteSize.Parse("22 bytes").Value);
+            Assert.AreEqual(22, ByteSize.Parse("22 bytes").Value);
         }
 
-        [Fact]
+        [Test]
         public void KiloBytesDotParsing() {
-            Assert.Equal((decimal)33.3 * 1024, ByteSize.Parse("33.3 KB").Value);
+            Assert.AreEqual((decimal)33.3 * 1024, ByteSize.Parse("33.3 KB").Value);
         }
 
-        [Fact]
+        [Test]
         public void MegaBytesCommaParsing() {
-            Assert.Equal((decimal)0.7 * 1024 * 1024, ByteSize.Parse(".7 MB").Value);
+            Assert.AreEqual((decimal)0.7 * 1024 * 1024, ByteSize.Parse(".7 MB").Value);
         }
 
-        [Fact]
+        [Test]
         public void GigaBytesCommaParsing() {
-            Assert.Equal((decimal)2 * 1024 * 1024  *1024, ByteSize.Parse("2. GB").Value);
+            Assert.AreEqual((decimal)2 * 1024 * 1024  *1024, ByteSize.Parse("2. GB").Value);
         }
 
-        [Fact]
+        [Test]
         public void TeraBytesCommaParsing() {
-            Assert.Equal((decimal)43.43 * 1024 * 1024 * 1024 * 1024, ByteSize.Parse("43,43TB").Value);
+            Assert.AreEqual((decimal)43.43 * 1024 * 1024 * 1024 * 1024, ByteSize.Parse("43,43TB").Value);
         }
 
-        [Fact]
+        [Test]
         public void FailPasingMiltiplePunctuation() {
             Assert.Throws<FormatException>(() => {
                 ByteSize.Parse("123.123, bytes");
             });
         }
 
-        [Fact]
+        [Test]
         public void FailPasingUnit() {
             Assert.Throws<FormatException>(() => {
                 ByteSize.Parse("123 PPB");
             });
         }
 
-        [Fact]
+        [Test]
         public void ToLongString() {
             var pool = new int[] {
                 146, 47, 107520, 30100, 262566, 69120, 10228, 224, 64512, 4500, 20480, 4520, 16248,

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xunit;
 
 namespace Void.IO
 {
+    [Parallelizable]
     public class FilePathTests
     {
         private static readonly IReadOnlyList<string> VALID_PATHS = new string[] {
@@ -99,70 +100,70 @@ namespace Void.IO
 
 
 
-        [Fact]
+        [Test]
         public void CreateSuccess() {
             foreach (var path in VALID_PATHS) {
                 new FilePath(path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CreateInvalidFormat() {
             foreach (var path in INVALID_PATHS) {
-                Assert.ThrowsAny<Exception>(() => new FilePath(path));
+                Assert.Throws<Exception>(() => new FilePath(path));
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckAbsolutePaths() {
             foreach (var path in ABSOLUTE_PATHS) {
                 Assert.True(new FilePath(path).IsAbsolute, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckNotAbsolutePaths() {
             foreach (var path in RELATIVE_PATHS) {
                 Assert.False(new FilePath(path).IsAbsolute, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckRelativePaths() {
             foreach (var path in RELATIVE_PATHS) {
                 Assert.False(new FilePath(path).IsAbsolute, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckUnixPaths() {
             foreach (var path in UNIX_PATHS) {
                 Assert.True(new FilePath(path).IsUnix, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckWindowsPaths() {
             foreach (var path in WINDOWS_PATHS) {
                 Assert.True(new FilePath(path).IsWindows, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckNotUnixPaths() {
             foreach (var path in WINDOWS_PATHS.Where(e => e.Contains("\\") || e.Contains("/"))) {
                 Assert.False(new FilePath(path).IsUnix, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckNotWindowsPaths() {
             foreach (var path in UNIX_PATHS.Where(e => e.Contains("\\") || e.Contains("/"))) {
                 Assert.False(new FilePath(path).IsWindows, path);
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckNames() {
             foreach (var name in NAMES) {
                 var path = new FilePath(name.Key);
@@ -170,7 +171,7 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void CheckParents() {
             foreach (var name in PARENTS) {
                 var path = new FilePath(name.Key);
@@ -180,7 +181,7 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void WindowsToUnix() {
             for (var i = 0; i < WINDOWS_PATHS.Count; i++) {
                 var path = new FilePath(WINDOWS_PATHS[i]).ToUnix();
@@ -188,7 +189,7 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void UnixToWindows() {
             for (var i = 0; i < UNIX_PATHS.Count; i++) {
                 var path = new FilePath(UNIX_PATHS[i]).ToWindows();
@@ -196,7 +197,7 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void EqualsString() {
             foreach (var path in VALID_PATHS) {
                 var file = new FilePath(path);
@@ -204,7 +205,7 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void NotEqualsString() {
             foreach (var path in VALID_PATHS) {
                 var file = new FilePath(path);
@@ -212,10 +213,10 @@ namespace Void.IO
             }
         }
 
-        [Fact]
+        [Test]
         public void Combine() {
-            Assert.Equal("/home/user", new FilePath("/home") + new FilePath("user"));
-            Assert.Equal("C:\\home\\user", "C:" + new FilePath("home") + new FilePath("user"));
+            Assert.AreEqual("/home/user", new FilePath("/home") + new FilePath("user"));
+            Assert.AreEqual("C:\\home\\user", "C:" + new FilePath("home") + new FilePath("user"));
         }
     }
 }

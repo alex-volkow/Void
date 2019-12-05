@@ -1,16 +1,17 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Xunit;
 
 namespace Void.Reflection
 {
 #pragma warning disable 0649
+    [Parallelizable]
     public class TypeExtensionsTests
     {
-        [Fact]
+        [Test]
         public void IsTest() {
             Assert.True(typeof(object).Is<object>());
             Assert.True(typeof(Item).Is<object>());
@@ -34,7 +35,7 @@ namespace Void.Reflection
             Assert.True(typeof(List<IItem>).Is(typeof(List<>)));
         }
 
-        [Fact]
+        [Test]
         public void GetAllFields() {
             var item1 = new Item();
             var item2 = new ChildItem();
@@ -48,12 +49,12 @@ namespace Void.Reflection
             var fields3 = item3.GetType()
                 .GetAllFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Equal(2, fields1.Length);
-            Assert.Equal(5, fields2.Length);
-            Assert.Equal(8, fields3.Length);
+            Assert.AreEqual(2, fields1.Length);
+            Assert.AreEqual(5, fields2.Length);
+            Assert.AreEqual(8, fields3.Length);
         }
 
-        [Fact]
+        [Test]
         public void GetTopFields() {
             var item1 = new Item();
             var item2 = new ChildItem();
@@ -67,12 +68,12 @@ namespace Void.Reflection
             var fields3 = item3.GetType()
                 .GetTopFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Equal(2, fields1.Length);
-            Assert.Equal(4, fields2.Length);
-            Assert.Equal(5, fields3.Length);
+            Assert.AreEqual(2, fields1.Length);
+            Assert.AreEqual(4, fields2.Length);
+            Assert.AreEqual(5, fields3.Length);
         }
 
-        [Fact]
+        [Test]
         public void GetAllProperties() {
             var item1 = new Item();
             var item2 = new ChildItem();
@@ -86,12 +87,12 @@ namespace Void.Reflection
             var itemProperties3 = item3.GetType()
                 .GetAllProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Equal(2, itemProperties1.Length);
-            Assert.Equal(5, itemProperties2.Length);
-            Assert.Equal(7, itemProperties3.Length);
+            Assert.AreEqual(2, itemProperties1.Length);
+            Assert.AreEqual(5, itemProperties2.Length);
+            Assert.AreEqual(7, itemProperties3.Length);
         }
 
-        [Fact]
+        [Test]
         public void GetTopProperties() {
             var item1 = new Item();
             var item2 = new ChildItem();
@@ -105,9 +106,9 @@ namespace Void.Reflection
             var itemProperties3 = item3.GetType()
                 .GetTopProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .ToArray();
-            Assert.Equal(2, itemProperties1.Length);
-            Assert.Equal(3, itemProperties2.Length);
-            Assert.Equal(3, itemProperties3.Length);
+            Assert.AreEqual(2, itemProperties1.Length);
+            Assert.AreEqual(3, itemProperties2.Length);
+            Assert.AreEqual(3, itemProperties3.Length);
         }
 
         private class Item : IItem

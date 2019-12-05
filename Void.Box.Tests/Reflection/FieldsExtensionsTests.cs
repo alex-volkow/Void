@@ -1,12 +1,13 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Xunit;
 
 namespace Void.Reflection
 {
+    [Parallelizable]
     public class FieldsExtensionsTests
     {
         private class Item
@@ -18,34 +19,34 @@ namespace Void.Reflection
             int GetNumer() => this.number;
         }
 
-        [Fact]
+        [Test]
         public void CheckAutoField() {
             var fields = typeof(Item)
                 .GetAllFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .ToArray();
-            Assert.Equal(2, fields.Length);
+            Assert.AreEqual(2, fields.Length);
             var autofield = fields.First(e => e.Name.Contains(nameof(Item.Text)));
             Assert.True(autofield.IsAuto());
         }
 
-        [Fact]
+        [Test]
         public void CheckNonAutoField() {
             var fields = typeof(Item)
                 .GetAllFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .ToArray();
-            Assert.Equal(2, fields.Length);
+            Assert.AreEqual(2, fields.Length);
             var standardField = fields.First(e => !e.Name.Contains(nameof(Item.Text)));
             Assert.False(standardField.IsAuto());
         }
 
-        [Fact]
+        [Test]
         public void GetAutoPropertyName() {
             var fields = typeof(Item)
                 .GetAllFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .ToArray();
-            Assert.Equal(2, fields.Length);
+            Assert.AreEqual(2, fields.Length);
             var autofield = fields.First(e => e.Name.Contains(nameof(Item.Text)));
-            Assert.Equal(nameof(Item.Text), autofield.GetAutoPropertyName());
+            Assert.AreEqual(nameof(Item.Text), autofield.GetAutoPropertyName());
         }
     }
 }

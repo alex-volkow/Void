@@ -22,7 +22,7 @@ namespace Void.Collections
 
 
         public void Enqueue(T item) {
-            this.Enqueue(item, default(int));
+            this.Enqueue(item, default);
         }
 
         public virtual void Enqueue(T item, int priority) {
@@ -36,6 +36,16 @@ namespace Void.Collections
             this.queue.AddLast(
                 entry
                 );
+        }
+
+        public int PriorityOf(T item) {
+            var match = GetNodes().FirstOrDefault(e => object.Equals(e.Value, item));
+            if (match == null) {
+                throw new ArgumentException(
+                    $"Queue does not contain element"
+                    );
+            }
+            return match.Priority;
         }
 
         public virtual T Dequeue() {
@@ -64,6 +74,14 @@ namespace Void.Collections
             if (this.Count > 0) {
                 for (var node = this.queue.First; node != null; node = node.Next) {
                     yield return node.Value.Value;
+                }
+            }
+        }
+
+        private IEnumerable<Entry<T>> GetNodes() {
+            if (this.Count > 0) {
+                for (var node = this.queue.First; node != null; node = node.Next) {
+                    yield return node.Value;
                 }
             }
         }

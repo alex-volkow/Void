@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace Void.Collections
 {
+    /// <summary>
+    /// Provides additional Linq extension methods.
+    /// </summary>
     public static class LinqExtensions
     {
         /// <summary>
@@ -34,6 +37,11 @@ namespace Void.Collections
             return -1;
         }
 
+        /// <summary>
+        /// Return next element after the specified.
+        /// </summary>
+        /// <exception cref="ArgumentException">No matches found or the specified element is the last.</exception>
+        /// <returns>Next element.</returns>
         public static T Next<T>(this IEnumerable<T> collection, T item) {
             var found = false;
             foreach (var element in collection) {
@@ -50,14 +58,24 @@ namespace Void.Collections
                 );
         }
 
+        /// <summary>
+        /// Return next object item from the specified element from enumeration or null.
+        /// </summary>
         public static T NextObject<T>(this IEnumerable<T> collection, T item) where T : class {
             return collection.Contains(item) ? collection.Next(item) : default;
         }
 
+        /// <summary>
+        /// Return next value item from the specified element from enumeration or null.
+        /// </summary>
         public static T? NextValue<T>(this IEnumerable<T> collection, T item) where T : struct {
             return collection.Contains(item) ? collection.Next(item) : default(T?);
         }
 
+        /// <summary>
+        /// Shuffle items randomly.
+        /// </summary>
+        /// <returns>Shuffled collection.</returns>
         public static IReadOnlyList<T> Shuffle<T>(this IEnumerable<T> collection) {
             var list = collection.ToList();
             int count = list.Count;
@@ -70,10 +88,10 @@ namespace Void.Collections
             return list;
         }
 
-        public static IEnumerable<T> Circle<T>(this IEnumerable<T> collection) {
-            return collection.Circle<T>(CancellationToken.None);
-        }
-
+        /// <summary>
+        /// Close the enumeration on itself until canceled.
+        /// </summary>
+        /// <returns>Endless enumeration.</returns>
         public static IEnumerable<T> Circle<T>(this IEnumerable<T> collection, CancellationToken token) {
             while (!token.IsCancellationRequested) {
                 foreach (var item in collection) {
@@ -82,6 +100,9 @@ namespace Void.Collections
             }
         }
 
+        /// <summary>
+        /// Gets the number of elements contained in the enumeration.
+        /// </summary>
         public static int Count(this IEnumerable items) {
             if (items is ICollection collection) {
                 return collection.Count;

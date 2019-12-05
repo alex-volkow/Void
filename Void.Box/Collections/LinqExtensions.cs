@@ -14,6 +14,9 @@ namespace Void.Collections
 
         public static int IndexOf<T>(this IEnumerable<T> collection, T item) {
             var index = 0;
+            if (collection is IList<T> list) {
+                return list.IndexOf(item);
+            }
             foreach (var element in collection) {
                 if (item.Equals(element)) {
                     return index;

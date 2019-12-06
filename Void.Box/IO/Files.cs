@@ -12,20 +12,14 @@ namespace Void.IO
 {
     public static class Files
     {
-        //private static readonly Lazy<FileInfo> application = new Lazy<FileInfo>(() => new FileInfo(Process
-        //               .GetCurrentProcess()
-        //               .MainModule
-        //               .FileName
-        //               ));
-
-        private static readonly Lazy<FileInfo> application = new Lazy<FileInfo>(() => new FileInfo(Assembly
+        private static readonly Lazy<FileInfo> entryPoint = new Lazy<FileInfo>(() => new FileInfo(Assembly
             .GetEntryAssembly().Location
             ));
 
 
-        public static FileInfo Application {
+        public static FileInfo EntryPoint {
             get {
-                return application.Value;
+                return entryPoint.Value;
             }
         }
 
@@ -50,71 +44,14 @@ namespace Void.IO
             return path1 == path2;
         }
 
-        public static byte[] ReadBytes(string path) {
-            using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-                return stream.ToArray();
-            }
-        }
-
-        public static string ReadText(string path, Encoding encoding) {
-            return encoding.GetString(ReadBytes(path));
-        }
-
-        public static string ReadText(string path) {
-            return ReadText(path, Encoding.UTF8);
-        }
-
-        public static async Task<byte[]> ReadBytesAsync(string path) {
-            using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-                return await stream.ToArrayAsync();
-            }
-        }
-
-        public static async Task<string> ReadTextAsync(string path, Encoding encoding) {
-            var bytes = await ReadBytesAsync(path);
-            return encoding.GetString(bytes);
-        }
-
-        public static Task<string> ReadTextAsync(string path) {
-            return ReadTextAsync(path, Encoding.UTF8);
-        }
-
-        public static async Task WriteBytesAsync(string path, byte[] bytes) {
-            using (var stream = File.Open(path, FileMode.Create, FileAccess.Write)) {
-                await stream.WriteAsync(bytes, 0, bytes.Length);
-            }
-        }
-
-        public static async Task AppendBytesAsync(string path, byte[] bytes) {
-            using (var stream = File.Open(path, FileMode.Append, FileAccess.Write)) {
-                await stream.WriteAsync(bytes, 0, bytes.Length);
-            }
-        }
-
-        public static Task WriteTextAsync(string path, string text) {
-            return WriteTextAsync(path, text, Encoding.UTF8);
-        }
-
-        public static Task WriteTextAsync(string path, string text, Encoding encoding) {
-            return WriteBytesAsync(path, encoding.GetBytes(text));
-        }
-
-        public static Task AppendText(string path, string text) {
-            return AppendText(path, text, Encoding.UTF8);
-        }
-
-        public static Task AppendText(string path, string text, Encoding encoding) {
-            return AppendBytesAsync(path, encoding.GetBytes(text));
-        }
-
         public static string AsAbsolute(string path) {
             return Files.IsRelative(path)
-                ? Files.Application.Directory.Combine(path)
+                ? Files.EntryPoint.Directory.Combine(path)
                 : path;
         }
 
         public static bool IsRelative(string path) {
-            var uri = default(Uri);
+            Uri uri;
             try {
                 uri = new Uri(path, UriKind.RelativeOrAbsolute);
             }
@@ -128,7 +65,7 @@ namespace Void.IO
 
         public static string CombineRelative(params string[] pathes) {
             var components = new List<string>(pathes.Length + 1) {
-                Application.DirectoryName
+                EntryPoint.DirectoryName
             };
             components.AddRange(pathes);
             return Combine(components.ToArray());
@@ -217,25 +154,6 @@ namespace Void.IO
             return false;
         }
 
-        public static async Task CopyFileAsync(string from, string to) {
-            using (var source = File.Open(from, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var target = File.Create(to)) {
-                await source.CopyToAsync(target);
-            }
-        }
-
-        public static void CopyTo(this Stream input, Stream output) {
-            input.CopyTo(output, 8 * 1024);
-        }
-
-        public static void CopyTo(this Stream input, Stream output, int bufferSize) {
-            var buffer = new byte[bufferSize];
-            var length = default(int);
-            while ((length = input.Read(buffer, 0, buffer.Length)) > 0) {
-                output.Write(buffer, 0, length);
-            }
-        }
-
         public static bool IsDirectory(string path) {
             return (File.Exists(path) || Directory.Exists(path))
                 && File.GetAttributes(path).HasFlag(FileAttributes.Directory);
@@ -244,12 +162,6 @@ namespace Void.IO
         public static bool IsFile(string path) {
             return (File.Exists(path) || Directory.Exists(path))
                 && !File.GetAttributes(path).HasFlag(FileAttributes.Directory);
-        }
-
-        public static void AppendAllBytes(string path, byte[] bytes) {
-            using (var stream = new FileStream(path, FileMode.Append)) {
-                stream.Write(bytes, 0, bytes.Length);
-            }
         }
     }
 }

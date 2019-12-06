@@ -9,8 +9,13 @@ namespace Void.Diagnostics
 {
     public static class ProcessExtensions
     {
-        public static async Task WaitForExitAsync(this Process process,
-            CancellationToken cancellationToken = default(CancellationToken)
+        /// <summary>
+        /// Wait for exit associated process with cancellation token.
+        /// </summary>
+        /// <exception cref="OperationCanceledException">Operation has been canceled.</exception>
+        public static async Task WaitForExitAsync(
+            this Process process,
+            CancellationToken cancellationToken = default
             ) {
             var pointer = new TaskCompletionSource<bool>();
             void ProcessExited(object sender, EventArgs e) => Task.Run(() => pointer.TrySetResult(true));

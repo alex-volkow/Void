@@ -19,38 +19,20 @@ namespace Void.IO
             .ToArray();
 
 
+        private readonly Lazy<FilePath> parent;
+        private readonly Lazy<string> name;
         private readonly string path;
 
 
         /// <summary>
         /// Get parent file.
         /// </summary>
-        public FilePath Parent {
-            get {
-                var parts = (IEnumerable<string>)this.path
-                    .TrimEnd(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
-                    .Replace(UNIX_SEPARATOR, $"\n{UNIX_SEPARATOR}\n")
-                    .Replace(WINDOWS_SEPARATOR, $"\n{WINDOWS_SEPARATOR}\n")
-                    .Split('\n');
-                if (parts.Count() == 1) {
-                    return null;
-                }
-                parts = parts.Take(parts.Count() - 1);
-                return new FilePath(string.Join(string.Empty, parts));
-            }
-        }
+        public FilePath Parent => this.parent.Value;
 
         /// <summary>
         /// Get file name.
         /// </summary>
-        public string Name {
-            get {
-                return this.path
-                    .Trim(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
-                    .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
-                    .Last();
-            }
-        }
+        public string Name => this.name.Value;
 
         /// <summary>
         /// Determine if the path is absolute.
@@ -87,6 +69,8 @@ namespace Void.IO
                         );
                 }
             }
+            this.parent = new Lazy<FilePath>(GetParent);
+            this.name = new Lazy<string>(GetName);
             this.path = path;
         }
 
@@ -253,6 +237,26 @@ namespace Void.IO
         /// <inheritdoc/>
         public override int GetHashCode() {
             return this.path.GetHashCode();
+        }
+
+        private FilePath GetParent() {
+            var parts = (IEnumerable<string>)this.path
+                    .TrimEnd(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                    .Replace(UNIX_SEPARATOR, $"\n{UNIX_SEPARATOR}\n")
+                    .Replace(WINDOWS_SEPARATOR, $"\n{WINDOWS_SEPARATOR}\n")
+                    .Split('\n');
+            if (parts.Count() == 1) {
+                return null;
+            }
+            parts = parts.Take(parts.Count() - 1);
+            return new FilePath(string.Join(string.Empty, parts));
+        }
+
+        private string GetName() {
+            return this.path
+                .Trim(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
+                .Last();
         }
     }
 }

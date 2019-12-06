@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Void.IO
 {
+    /// <summary>
+    /// Represents universal filesystem path.
+    /// </summary>
     public sealed class FilePath : IEquatable<FilePath>, IComparable<FilePath>, IEquatable<string>, IComparable<string>, ICloneable
     {
         private static readonly string WINDOWS_SEPARATOR = "\\";
@@ -19,7 +22,9 @@ namespace Void.IO
         private readonly string path;
 
 
-
+        /// <summary>
+        /// Get parent file.
+        /// </summary>
         public FilePath Parent {
             get {
                 var parts = (IEnumerable<string>)this.path
@@ -35,6 +40,9 @@ namespace Void.IO
             }
         }
 
+        /// <summary>
+        /// Get file name.
+        /// </summary>
         public string Name {
             get {
                 return this.path
@@ -44,16 +52,32 @@ namespace Void.IO
             }
         }
 
+        /// <summary>
+        /// Determine if the path is absolute.
+        /// </summary>
         public bool IsAbsolute => !path.StartsWith(WINDOWS_SEPARATOR) && Path.IsPathRooted(this.path);
-
+        
+        /// <summary>
+        /// Determine if the path has Unix format.
+        /// </summary>
         public bool IsUnix => !this.path.Contains(WINDOWS_SEPARATOR);
-
+        
+        /// <summary>
+        /// Determine if the path has Windows format.
+        /// </summary>
         public bool IsWindows => !this.path.Contains(UNIX_SEPARATOR);
 
         private static bool IsWindowsSystem => Path.DirectorySeparatorChar == WINDOWS_SEPARATOR[0];
 
 
-
+        /// <summary>
+        /// Initialize a new instance by absolute or relative path.
+        /// </summary>
+        /// <exception cref="ArgumentException">Invalid path.</exception>
+        /// <exception cref="ArgumentNullException">Path is null.</exception>
+        /// <exception cref="System.Security.SecurityException">No required permissions.</exception>
+        /// <exception cref="NotSupportedException">Path contains a colon (":").</exception>
+        /// <exception cref="PathTooLongException">Path has too long length.</exception>
         public FilePath(string path) {
             Path.GetFullPath(path);
             foreach (var c in INVALID_CHARS) {
@@ -74,10 +98,17 @@ namespace Void.IO
 
         public static FilePath operator +(FilePath left, FilePath right) => Combine(left, right);
 
+
+        /// <summary>
+        /// Combine multiple instance to one.
+        /// </summary>
         public static FilePath Combine(params FilePath[] paths) {
             return Combine((IEnumerable<FilePath>)paths);
         }
 
+        /// <summary>
+        /// Combine multiple instance to one.
+        /// </summary>
         public static FilePath Combine(IEnumerable<FilePath> paths) {
             if (paths == null) {
                 throw new ArgumentNullException(nameof(paths));
@@ -104,10 +135,18 @@ namespace Void.IO
                 : Combine(paths.Select(e => e.ToUnix()));
         }
 
+        /// <summary>
+        /// Create a new instance normalized to current filesystem.
+        /// </summary>
+        /// <returns>New normalizaed instance.</returns>
         public FilePath Normalize() {
             return IsWindowsSystem ? ToWindows() : ToUnix();
         }
 
+        /// <summary>
+        /// Cast current path to Unix format.
+        /// </summary>
+        /// <returns>New instance in Unix format.</returns>
         public FilePath ToUnix() {
             if (this.IsUnix) {
                 return this;
@@ -122,6 +161,10 @@ namespace Void.IO
             return new FilePath(path);
         }
 
+        /// <summary>
+        /// Cast current path to Windows format.
+        /// </summary>
+        /// <returns>New instance in Windows format.</returns>
         public FilePath ToWindows() {
             if (this.IsWindows) {
                 return this;
@@ -139,22 +182,27 @@ namespace Void.IO
             return new FilePath(path);
         }
 
+        /// <inheritdoc/>
         public override string ToString() {
             return this.path;
         }
 
+        /// <inheritdoc/>
         public object Clone() {
             return new FilePath(this.path);
         }
 
+        /// <inheritdoc/>
         public int CompareTo(string other) {
             return this.path.CompareTo(other);
         }
 
+        /// <inheritdoc/>
         public int CompareTo(FilePath other) {
             return CompareTo(other?.path);
         }
 
+        /// <inheritdoc/>
         public bool Equals(string other) {
             if (other == null) {
                 return false;
@@ -186,10 +234,12 @@ namespace Void.IO
             return true;
         }
 
+        /// <inheritdoc/>
         public bool Equals(FilePath other) {
             return Equals(other?.ToString());
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj) {
             if (obj is string text) {
                 return Equals(text);
@@ -200,6 +250,7 @@ namespace Void.IO
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode() {
             return this.path.GetHashCode();
         }

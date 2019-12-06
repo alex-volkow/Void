@@ -7,9 +7,9 @@
     <Company />
     <Description>The library extends the base framework (IO, Reflection, Collections, Net and etc.)</Description>
     <Product>Void.Framework</Product>
-    <AssemblyVersion>1.3.2.0</AssemblyVersion>
-    <FileVersion>1.3.2.0</FileVersion>
-    <Version>1.3.2</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
 </Project>

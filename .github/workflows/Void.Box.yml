@@ -1,7 +1,11 @@
-name: .NET Core
+name: Publish Nuget
 
-on: [push]
-
+#on: [push]
+on:
+  push:
+    branches:
+      - master
+        - 
 jobs:
   build:
 
@@ -9,9 +13,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+      
     - name: Setup .NET Core
       uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 3.0.100
-    - name: Publish
-      run: dotnet publish --configuration Release
+        dotnet-version: 3.0.100    
+        # source-url: https://nuget.pkg.github.com/<owner>/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.VOID_BOX_NUGET_KEY}}
+    
+    - name: Build the solution
+      run: dotnet build --configuration Release
+      
+    - name: Create the package
+      run: dotnet pack --configuration Release Void.Box
+      
+    - name: Publish the package to GPR
+      run: dotnet nuget push Void.Box/bin/Release/*.nupkg -SkipDuplicate -k ${{secrets.VOID_BOX_NUGET_KEY}} -s https://api.nuget.org/v3/index.json

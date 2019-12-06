@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Void.IO
 {
+    /// <summary>
+    /// Represents auto removable temp directory.
+    /// </summary>
     public sealed class TempDirectory : IDisposable
     {
         public DirectoryInfo Value { get; }

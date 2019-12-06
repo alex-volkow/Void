@@ -5,13 +5,16 @@ using System.Text;
 
 namespace Void.IO
 {
+    /// <summary>
+    /// Represents auto removable temp file.
+    /// </summary>
     public sealed class TempFile : IDisposable
     {
         public FileInfo Info { get; }
 
 
 
-        public TempFile() : this(System.IO.Path.GetTempFileName()) { }
+        public TempFile() : this(Path.GetTempFileName()) { }
 
         public TempFile(string path) : this(new FileInfo(path)) { }
 

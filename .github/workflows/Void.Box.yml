@@ -32,4 +32,4 @@ jobs:
       run: dotnet pack --configuration Release Void.Box
       
     - name: Publish the package to GPR
-      run: dotnet nuget push Void.Box/bin/Release/*.nupkg -SkipDuplicate -k ${{secrets.VOID_BOX_NUGET_KEY}} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push Void.Box/bin/Release/*.nupkg -k ${{secrets.VOID_BOX_NUGET_KEY}} -s https://api.nuget.org/v3/index.json

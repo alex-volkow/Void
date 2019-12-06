@@ -161,11 +161,29 @@ namespace Void.IO
             }
             var thisParts = this.path
                 .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
-                .Where(e => !string.IsNullOrEmpty(e));
+                .Where(e => !string.IsNullOrEmpty(e))
+                .ToArray();
             var otherParts = other
                 .Split(UNIX_SEPARATOR[0], WINDOWS_SEPARATOR[0])
-                .Where(e => !string.IsNullOrEmpty(e));
-            return thisParts.Count() == otherParts.Count() && thisParts.SequenceEqual(otherParts);
+                .Where(e => !string.IsNullOrEmpty(e))
+                .ToArray();
+            if (thisParts.Length != otherParts.Length) {
+                return false;
+            }
+            for (var i = 0; i < thisParts.Length; i++) {
+                if (i == 0 && thisParts[i]?.Length == 1 && otherParts[i]?.Length == 1) {
+                    if (!string.Equals(thisParts[i], otherParts[i], StringComparison.OrdinalIgnoreCase)) {
+                        return false;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                if (!string.Equals(thisParts[i], otherParts[i])) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public bool Equals(FilePath other) {

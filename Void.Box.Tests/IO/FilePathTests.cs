@@ -110,7 +110,7 @@ namespace Void.IO
         [Test]
         public void CreateInvalidFormat() {
             foreach (var path in INVALID_PATHS) {
-                Assert.Throws<Exception>(() => new FilePath(path));
+                Assert.That(() => new FilePath(path), Throws.Exception);
             }
         }
 
@@ -185,7 +185,7 @@ namespace Void.IO
         public void WindowsToUnix() {
             for (var i = 0; i < WINDOWS_PATHS.Count; i++) {
                 var path = new FilePath(WINDOWS_PATHS[i]).ToUnix();
-                Assert.True(path == WINDOWS_TO_UNIX_PATHS[i], $"{path} != {WINDOWS_TO_UNIX_PATHS[i]}");
+                Assert.True(path.Equals(WINDOWS_TO_UNIX_PATHS[i]), $"{path} != {WINDOWS_TO_UNIX_PATHS[i]}");
             }
         }
 

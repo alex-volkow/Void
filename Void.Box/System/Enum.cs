@@ -23,10 +23,6 @@ namespace Void
                 .GetCustomAttributes<A>()
                 .ToArray();
         }
-
-        private static A GetAttribute<A>(Enum value) where A : Attribute {
-            return GetAttributes<A>(value).FirstOrDefault();
-        }
     }
 
     public class Enum<T> where T : struct

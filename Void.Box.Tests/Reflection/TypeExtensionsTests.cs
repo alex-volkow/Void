@@ -128,7 +128,9 @@ namespace Void.Reflection
 
         private class ChildItem : Item
         {
-            //private readonly double f;
+#pragma warning disable IDE0051 // Remove unused private members
+            private readonly double f;
+#pragma warning restore IDE0051 // Remove unused private members
             public object obj;
             protected override string Value => "2";
 

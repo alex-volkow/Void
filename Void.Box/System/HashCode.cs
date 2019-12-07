@@ -14,7 +14,7 @@ namespace Void
 
         public static int Create(params object[] args) {
             if (args == null) {
-                return default(int);
+                return default;
             }
             var hash = init;
             for (var i = 0; i < args.Length; i++) {
@@ -27,7 +27,7 @@ namespace Void
 
         public static int Create(IEnumerable args) {
             if (args == null) {
-                return default(int);
+                return default;
             }
             var hash = init;
             foreach (var arg in args) {

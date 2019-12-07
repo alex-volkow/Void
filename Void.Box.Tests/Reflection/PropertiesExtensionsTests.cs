@@ -81,7 +81,7 @@ namespace Void.Reflection
             Assert.AreEqual(2, fields.Length);
             var number = fields.First(e => e.Name == nameof(Item.IntValue));
             var instance = new Item();
-            Assert.Throws<Exception>(() => number.SetForce(instance, 4));
+            Assert.That(() => number.SetForce(instance, 4), Throws.Exception);
         }
     }
 }

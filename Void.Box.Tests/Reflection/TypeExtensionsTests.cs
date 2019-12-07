@@ -128,7 +128,7 @@ namespace Void.Reflection
 
         private class ChildItem : Item
         {
-            private readonly double f;
+            //private readonly double f;
             public object obj;
             protected override string Value => "2";
 

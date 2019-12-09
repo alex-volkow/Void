@@ -7,6 +7,7 @@ using Void.IO;
 using Void.Collections;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Void.Diagnostics
 {
@@ -15,6 +16,23 @@ namespace Void.Diagnostics
         private static readonly string SOLUTION_FILE_EXTENSION = "sln";
         private static readonly string PROJECT_FILE_EXTENSION = "csproj";
         private static readonly Regex PROJECT_SELECTOR = new Regex(@"""(?<PATH>[^""]+\.csproj)""");
+
+
+        public static Task<IProjectArtefacts> BuildAsync(string project, 
+            ProjectConfiguration config = ProjectConfiguration.Release, 
+            DirectoryInfo output = default,
+            CancellationToken token = default
+            ) {
+            throw new NotImplementedException();
+        }
+
+        public static Task<IProjectArtefacts> PublishAsync(string project,
+            ProjectConfiguration config = ProjectConfiguration.Release,
+            DirectoryInfo output = default,
+            CancellationToken token = default
+            ) {
+            throw new NotImplementedException();
+        }
 
 
         /// <summary>

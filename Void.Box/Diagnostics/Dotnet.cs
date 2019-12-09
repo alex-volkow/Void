@@ -14,6 +14,33 @@ namespace Void.Diagnostics
         private static readonly string PROJECT_FILE_EXTENSION = "csproj";
 
         /// <summary>
+        /// Find all project files in sub-folders and all parent folders. 
+        /// Uses application entry point directory for start searching.
+        /// </summary>
+        /// <returns>Ordered file collection.</returns>
+        public static IEnumerable<FileInfo> GetProjectsRecursive() {
+            return GetSolutionsRecursive(Files.EntryPoint.Directory);
+        }
+
+        /// <summary>
+        /// Find all project files in sub-folders and all parent folders.
+        /// </summary>
+        /// <param name="location">Start directory.</param>
+        /// <returns>Ordered file collection.</returns>
+        public static IEnumerable<FileInfo> GetProjectsRecursive(DirectoryInfo location) {
+            if (location == null) {
+                throw new ArgumentNullException(nameof(location));
+            }
+            var extension = $"*.{PROJECT_FILE_EXTENSION}";
+            return GetFilesRecursiveUp(location, extension)
+                .Union(GetFilesRecursiveDown(location, extension))
+                .Select(e => e.FullName)
+                .ToHashSet()
+                .OrderBy(e => e)
+                .Select(e => new FileInfo(e));
+        }
+
+        /// <summary>
         /// Find all solution files in sub-folders and all parent folders. 
         /// Uses application entry point directory for start searching.
         /// </summary>

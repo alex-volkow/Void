@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Void.IO;
 using Void.Collections;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Void.Diagnostics
 {
@@ -12,6 +14,50 @@ namespace Void.Diagnostics
     {
         private static readonly string SOLUTION_FILE_EXTENSION = "sln";
         private static readonly string PROJECT_FILE_EXTENSION = "csproj";
+        private static readonly Regex PROJECT_SELECTOR = new Regex(@"""(?<PATH>[^""]+\.csproj)""");
+
+
+        /// <summary>
+        /// Extract all projects from the solution file.
+        /// </summary>
+        /// <param name="solution">Solution file.</param>
+        /// <returns>Ordered file collection.</returns>
+        public static IEnumerable<FileInfo> GetProjectsFromSolution(FileInfo solution) {
+            if (solution == null) {
+                throw new ArgumentNullException(nameof(solution));
+            }
+            using (var stream = File.Open(solution.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var reader = new StreamReader(stream)) {
+                var content = reader.ReadToEnd();
+                return PROJECT_SELECTOR
+                    .Matches(content)
+                    .Cast<Match>()
+                    .Select(e => solution.Combine(e.Groups["PATH"].Value))
+                    .OrderBy(e => e)
+                    .Select(e => new FileInfo(e));
+            }
+        }
+
+        /// <summary>
+        /// Extract all projects from the solution file.
+        /// </summary>
+        /// <param name="solution">Solution file.</param>
+        /// <returns>Ordered file collection.</returns>
+        public static async Task<IEnumerable<FileInfo>> GetProjectsFromSolutionAsync(FileInfo solution) {
+            if (solution == null) {
+                throw new ArgumentNullException(nameof(solution));
+            }
+            using (var stream = File.Open(solution.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var reader = new StreamReader(stream)) {
+                var content = await reader.ReadToEndAsync();
+                return PROJECT_SELECTOR
+                    .Matches(content)
+                    .Cast<Match>()
+                    .Select(e => solution.Combine(e.Groups["PATH"].Value))
+                    .OrderBy(e => e)
+                    .Select(e => new FileInfo(e));
+            }
+        }
 
         /// <summary>
         /// Find all project files in sub-folders and all parent folders. 

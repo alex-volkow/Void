@@ -8,6 +8,7 @@ using Void.Collections;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Void.Diagnostics
 {
@@ -18,20 +19,22 @@ namespace Void.Diagnostics
         private static readonly Regex PROJECT_SELECTOR = new Regex(@"""(?<PATH>[^""]+\.csproj)""");
 
 
-        public static Task<IProjectArtefacts> BuildAsync(string project, 
-            ProjectConfiguration config = ProjectConfiguration.Release, 
-            DirectoryInfo output = default,
+        public static Task<IProjectArtefacts> BuildAsync(
+            string project, 
+            ProjectConfiguration config, 
+            DirectoryInfo output,
             CancellationToken token = default
             ) {
-            throw new NotImplementedException();
+            return CreateArtefactsAsync(project, "build", config, output, token);
         }
 
-        public static Task<IProjectArtefacts> PublishAsync(string project,
-            ProjectConfiguration config = ProjectConfiguration.Release,
-            DirectoryInfo output = default,
+        public static Task<IProjectArtefacts> PublishAsync(
+            string project,
+            ProjectConfiguration config,
+            DirectoryInfo output,
             CancellationToken token = default
             ) {
-            throw new NotImplementedException();
+            return CreateArtefactsAsync(project, "publish", config, output, token);
         }
 
 
@@ -151,6 +154,126 @@ namespace Void.Diagnostics
                 directory = directory.Parent;
             }
             return files;
+        }
+
+        private static FileInfo GetRequiredProject(string name) {
+            if (string.IsNullOrWhiteSpace(name)) {
+                throw new ArgumentException(
+                    $"Project name required"
+                    );
+            }
+            var project = AddProjectExtension(name).Trim('\\', '/', ' ', '\t', '\r', '\n');
+            return GetProjectFromDirectory(project)
+                ?? GetProjectFromDirectory(project, Files.EntryPoint.Directory)
+                ?? GetProjectFromDirectory(project, new DirectoryInfo(Directory.GetCurrentDirectory()))
+                ?? throw new FileNotFoundException("Project file is not found");
+        }
+
+        private static FileInfo GetProjectFromDirectory(string project, DirectoryInfo location = default) {
+            var path = project;
+            if (location != null && Path.IsPathRooted(project)) {
+                path = location.Combine(project);
+            }
+            if (File.Exists(path)) {
+                return new FileInfo(path);
+            }
+            var directory = RemoveProjectExtension(path);
+            if (Directory.Exists(directory)) {
+                var projects = Directory.GetFiles(directory, $"*.{PROJECT_FILE_EXTENSION}");
+                var name = Path.GetFileNameWithoutExtension(path);
+                foreach (var file in projects) {
+                    var filename = Path.GetFileNameWithoutExtension(file);
+                    if (filename == name) {
+                        return new FileInfo(file);
+                    }
+                }
+                if (projects.Length == 1) {
+                    return new FileInfo(projects.First());
+                }
+            }
+            return null;
+        }
+
+        private static string AddProjectExtension(string name) {
+            return !name.EndsWith($".{PROJECT_FILE_EXTENSION}", StringComparison.OrdinalIgnoreCase)
+                ? $"{name}.{PROJECT_FILE_EXTENSION}"
+                : name;
+        }
+
+        private static string RemoveProjectExtension(string path) {
+            return path.Replace($".{PROJECT_FILE_EXTENSION}", string.Empty);
+        }
+
+        //private static FileInfo GetProjectByFileName(string name) {
+        //    return File.Exists(name) ? new FileInfo(name) : null;
+        //}
+
+        //private static FileInfo GetProjectFromDirectory(string name, DirectoryInfo directory) {
+        //    var path = directory.Combine(name);
+        //    return File.Exists(path) ? new FileInfo(path) : null;
+        //}
+
+        //private static FileInfo GetProjectFromProjectDirectory(string name, DirectoryInfo directory) {
+        //    var folder = Path.GetFileNameWithoutExtension(name);
+        //    //var path = directory.Combine(folder, );
+        //}
+
+        private static async Task<IProjectArtefacts> CreateArtefactsAsync(
+            string project,
+            string command,
+            ProjectConfiguration config,
+            DirectoryInfo output,
+            CancellationToken token
+            ) {
+            if (output == null) {
+                throw new ArgumentNullException(nameof(output));
+            }
+            var projectFile = GetRequiredProject(project);
+            var arguments = new StringBuilder();
+            arguments.Append(command).Append(" ");
+            arguments.Append("--configuration").Append(" ").Append(config);
+            arguments.Append(" \"").Append(output.FullName).Append("\"");
+            using (var process = new Process()) {
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = arguments.ToString();
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.WorkingDirectory = projectFile.DirectoryName;
+                process.Start();
+                var outputReader = process.StandardOutput.ReadToEndAsync();
+                var errorReader = process.StandardError.ReadToEndAsync();
+                using (token.Register(process.Kill)) {
+                    await process.WaitForExitAsync(token);
+                }
+                var outputMessage = await outputReader;
+                var errorMessage = await errorReader;
+                if (process.ExitCode != default) {
+                    var message = new StringBuilder();
+                    message.Append("Process have been completed with ");
+                    message.Append(process.ExitCode);
+                    message.Append(" code.");
+                    if (!string.IsNullOrWhiteSpace(errorMessage)) {
+                        message.AppendLine();
+                        message.Append(errorMessage.Trim());
+                        throw new InvalidOperationException(
+                            message.ToString()
+                            );
+                    }
+                    if (!string.IsNullOrWhiteSpace(outputMessage)) {
+                        message.AppendLine();
+                        message.Append(outputMessage.Trim());
+                        throw new InvalidOperationException(
+                            message.ToString()
+                            );
+                    }
+                    throw new InvalidOperationException(
+                        message.ToString()
+                        );
+                }
+                return new ProjectArtefacts(projectFile, output);
+            }
         }
     }
 }

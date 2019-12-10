@@ -19,6 +19,13 @@ namespace Void.Diagnostics
         private static readonly Regex PROJECT_SELECTOR = new Regex(@"""(?<PATH>[^""]+\.csproj)""");
 
 
+        /// <summary>
+        /// Build the project to the output directory.
+        /// </summary>
+        /// <param name="project">Name or path.</param>
+        /// <param name="config">Artefacts configuration.</param>
+        /// <param name="output">Artefacts directory.</param>
+        /// <param name="token">Indicates the task is canceled.</param>
         public static Task<IProjectArtefacts> BuildAsync(
             string project, 
             ProjectConfiguration config, 
@@ -28,6 +35,13 @@ namespace Void.Diagnostics
             return CreateArtefactsAsync(project, "build", config, output, token);
         }
 
+        /// <summary>
+        /// Publish the project to the output directory.
+        /// </summary>
+        /// <param name="project">Name or path.</param>
+        /// <param name="config">Artefacts configuration.</param>
+        /// <param name="output">Artefacts directory.</param>
+        /// <param name="token">Indicates the task is canceled.</param>
         public static Task<IProjectArtefacts> PublishAsync(
             string project,
             ProjectConfiguration config,
@@ -203,20 +217,6 @@ namespace Void.Diagnostics
         private static string RemoveProjectExtension(string path) {
             return path.Replace($".{PROJECT_FILE_EXTENSION}", string.Empty);
         }
-
-        //private static FileInfo GetProjectByFileName(string name) {
-        //    return File.Exists(name) ? new FileInfo(name) : null;
-        //}
-
-        //private static FileInfo GetProjectFromDirectory(string name, DirectoryInfo directory) {
-        //    var path = directory.Combine(name);
-        //    return File.Exists(path) ? new FileInfo(path) : null;
-        //}
-
-        //private static FileInfo GetProjectFromProjectDirectory(string name, DirectoryInfo directory) {
-        //    var folder = Path.GetFileNameWithoutExtension(name);
-        //    //var path = directory.Combine(folder, );
-        //}
 
         private static async Task<IProjectArtefacts> CreateArtefactsAsync(
             string project,

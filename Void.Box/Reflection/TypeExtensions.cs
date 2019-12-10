@@ -158,6 +158,38 @@ namespace Void.Reflection
             return properties;
         }
 
+        /// <summary>
+        /// Receive top methods (static, instance, public and non public) from class hierarchy
+        /// </summary>
+        public static IReadOnlyList<MethodInfo> GetTopMethods(this Type type) {
+            return type.GetTopMethods(
+                BindingFlags.Static |
+                BindingFlags.Public |
+                BindingFlags.Instance |
+                BindingFlags.NonPublic
+                );
+        }
+
+        /// <summary>
+        /// Receive top methods from class hierarchy.
+        /// </summary>
+        public static IReadOnlyList<MethodInfo> GetTopMethods(this Type type, BindingFlags bindings) {
+            var methods = new List<MethodInfo>();
+            while (type != null) {
+                foreach (var method in type.GetMethods(bindings)) {
+                    if (!methods.Any(
+                        item => item.Name == method.Name &&
+                        item.ReturnType == method.ReturnType &&
+                        Enumerable.SequenceEqual(item.GetParameters(), method.GetParameters()))
+                        ) {
+                        methods.Add(method);
+                    }
+                }
+                type = type.BaseType;
+            }
+            return methods;
+        }
+
 
         /// <summary>
         /// Receive top fields from class hierarchy.

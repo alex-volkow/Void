@@ -88,7 +88,7 @@ namespace Void.Diagnostics
                 return PROJECT_SELECTOR
                     .Matches(content)
                     .Cast<Match>()
-                    .Select(e => solution.Combine(e.Groups["PATH"].Value))
+                    .Select(e => solution.Directory.Combine(e.Groups["PATH"].Value))
                     .OrderBy(e => e)
                     .Select(e => new FileInfo(e));
             }
@@ -100,7 +100,7 @@ namespace Void.Diagnostics
         /// </summary>
         /// <returns>Ordered file collection.</returns>
         public static IEnumerable<FileInfo> GetProjectsRecursive() {
-            return GetSolutionsRecursive(Files.EntryPoint.Directory);
+            return GetProjectsRecursive(Files.EntryPoint.Directory);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Void.Diagnostics
         private static List<FileInfo> GetFilesRecursiveDown(DirectoryInfo location, string extension) {
             var files = location.GetFiles(extension).ToList();
             foreach (var directory in location.GetDirectories()) {
-                files.AddRange(GetFilesRecursiveDown(location, extension));
+                files.AddRange(GetFilesRecursiveDown(directory, extension));
             }
             return files;
         }
@@ -231,8 +231,8 @@ namespace Void.Diagnostics
             var projectFile = GetRequiredProject(project);
             var arguments = new StringBuilder();
             arguments.Append(command).Append(" ");
-            arguments.Append("--configuration").Append(" ").Append(config);
-            arguments.Append(" \"").Append(output.FullName).Append("\"");
+            arguments.Append("--configuration").Append(" ").Append(config).Append(" ");
+            arguments.Append("--output").Append(" \"").Append(output.FullName).Append("\"");
             using (var process = new Process()) {
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;

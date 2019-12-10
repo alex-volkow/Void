@@ -98,6 +98,12 @@ namespace Void.IO
             return file;
         }
 
+        public static string ToAbsoluteEntryPoint(string path) {
+            return Files.IsRelative(path)
+                ? Files.EntryPoint.Directory.Combine(path)
+                : path;
+        }
+
         public static bool IsValid(string path) {
             if (!string.IsNullOrEmpty(path)) {
                 path = Regex.Replace(path, "(^([a-zA-Z]:)?[\\\\/]?)|([\\\\/]$)", string.Empty);

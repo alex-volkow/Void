@@ -8,6 +8,13 @@ namespace Void.Net
 {
     public static class UriExtensions
     {
+        public static bool HasRoot(this Uri uri, Uri other) {
+            return uri != null && other != null
+                && string.Equals(uri.Scheme, other.Scheme, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(uri.Host, other.Host, StringComparison.OrdinalIgnoreCase)
+                && uri.Port == other.Port;
+        }
+
         public static UriBuilder Combine(this Uri uri, string path) {
             return uri.Combine(path, null);
         }

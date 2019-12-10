@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Void
 {
+    /// <summary>
+    /// Represents one line semaphore.
+    /// </summary>
     public sealed class Locker : IDisposable
     {
         private readonly SemaphoreSlim sync;

@@ -1,13 +1,13 @@
-name: Publish Nuget
+name: Void.Box - Publish Nuget
 
 #on: [push]
 on:
   push:
     branches:
-      - master
+      - void_box_pack
   pull_request:
     branches:
-      - master
+      - void_box_pack
 
 jobs:
   build:

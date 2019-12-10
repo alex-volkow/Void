@@ -22,6 +22,24 @@ namespace Void.IO
             }
         }
 
+        public static async Task<string> GetSHA256Async(this IEntryReader entry) {
+            using (var stream = entry.Read()) {
+                return await stream.GetSHA256Async();
+            }
+        }
+
+        public static string GetSHA512(this IEntryReader entry) {
+            using (var stream = entry.Read()) {
+                return stream.GetSHA512();
+            }
+        }
+
+        public static async Task<string> GetSHA512Async(this IEntryReader entry) {
+            using (var stream = entry.Read()) {
+                return await stream.GetSHA512Async();
+            }
+        }
+
         public static async Task<IEntryPack<FileEntry>> CopyToAsync(this IEntryPack<IEntryReader> entries, DirectoryInfo destination) {
             var pack = new EntryMap<FileEntry>();
             foreach (var entry in entries) {

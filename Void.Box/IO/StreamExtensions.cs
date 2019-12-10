@@ -76,15 +76,15 @@ namespace Void.IO
             return stream.GetHash(SHA512Managed.Create());
         }
 
-        public static Task<string> GetMD5(this Stream stream, CancellationToken token = default) {
+        public static Task<string> GetMD5Async(this Stream stream, CancellationToken token = default) {
             return stream.GetHashAsync(MD5.Create(), token);
         }
 
-        public static Task<string> GetSHA256(this Stream stream, CancellationToken token = default) {
+        public static Task<string> GetSHA256Async(this Stream stream, CancellationToken token = default) {
             return stream.GetHashAsync(SHA256Managed.Create(), token);
         }
 
-        public static Task<string> GetSHA512(this Stream stream, CancellationToken token = default) {
+        public static Task<string> GetSHA512Async(this Stream stream, CancellationToken token = default) {
             return stream.GetHashAsync(SHA512Managed.Create(), token);
         }
 

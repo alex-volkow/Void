@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Void.Diagnostics
 {
@@ -18,6 +19,25 @@ namespace Void.Diagnostics
         private static readonly string PROJECT_FILE_EXTENSION = "csproj";
         private static readonly Regex PROJECT_SELECTOR = new Regex(@"""(?<PATH>[^""]+\.csproj)""");
 
+
+        /// <summary>
+        /// Get version of the entry point assembly.
+        /// </summary>
+        public static string EntryPointVersion => Assembly
+            .GetEntryAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+
+
+        /// <summary>
+        /// Get existing *.exe file for the type assembly ot null.
+        /// </summary>
+        /// <returns></returns>
+        public static FileInfo GetExecutable(Type type) {
+            var dll = new FileInfo(type.Assembly.Location);
+            var exe = dll.Directory.Combine($"{Path.GetFileNameWithoutExtension(dll.FullName)}.exe");
+            return File.Exists(exe) ? new FileInfo(exe) : null;
+        }
 
         /// <summary>
         /// Build the project to the output directory.

@@ -14,9 +14,7 @@ namespace Void.Diagnostics
         FileInfo EntryPoint { get; }
         DirectoryInfo Location { get; }
 
-        Process Start(params string[] arguments);
-        Process Start(IEnumerable<string> arguments);
-        Process Start(ProcessStartInfo settings);
+        ProcessStartInfo GetStartInfo();
         IEnumerable<FileInfo> GetFiles();
         IEnumerable<IEntryReader> GetEntries();
         IEnumerable<FileInfo> GetExecutableFiles();

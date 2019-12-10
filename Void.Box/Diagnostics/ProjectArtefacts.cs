@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Void.IO;
 
@@ -9,47 +10,80 @@ namespace Void.Diagnostics
 {
     class ProjectArtefacts : IProjectArtefacts
     {
-        public FileInfo Project => throw new NotImplementedException();
+        private static readonly string RUNTIME_CONFIG_EXTENSION = "runtimeconfig.json";
+        private static readonly string EXECUTABLE_FILE_EXTENSION = "exe";
 
-        public FileInfo EntryPoint => throw new NotImplementedException();
+        private readonly Lazy<FileInfo> entryPoint;
 
-        public DirectoryInfo Location => throw new NotImplementedException();
+
+        public FileInfo Project { get; }
+
+        public FileInfo EntryPoint => this.entryPoint.Value;
+
+        public DirectoryInfo Location { get; }
+
 
 
         public ProjectArtefacts(FileInfo project, DirectoryInfo location) {
+            this.Location = location ?? throw new ArgumentNullException(nameof(location));
+            this.Project = project ?? throw new ArgumentNullException(nameof(project));
+            this.entryPoint = new Lazy<FileInfo>(GetEntryPoint);
+        }
 
+
+
+        public ProcessStartInfo GetStartInfo() {
+            if (this.EntryPoint == null) {
+                throw new InvalidOperationException(
+                    $"Artefacts have no entry point"
+                    );
+            }
+            var settings = new ProcessStartInfo {
+                WorkingDirectory = this.EntryPoint.DirectoryName
+            };
+            if (this.EntryPoint.Extension == $".{EXECUTABLE_FILE_EXTENSION}") {
+                settings.FileName = this.EntryPoint.FullName;
+            }
+            else {
+                settings.FileName = "dotnet";
+                settings.Arguments = $"\"{this.EntryPoint.FullName}\"";
+            }
+            return settings;
         }
 
         public void Delete() {
-            throw new NotImplementedException();
+            this.Location.DeleteWithContent();
         }
 
         public void Dispose() {
-            throw new NotImplementedException();
+            Delete();
         }
 
         public IEnumerable<IEntryReader> GetEntries() {
-            throw new NotImplementedException();
+            return this.Location
+                .GetContent()
+                .Select(e => new FileEntry(this.Location, e));
         }
 
         public IEnumerable<FileInfo> GetExecutableFiles() {
-            throw new NotImplementedException();
+            return GetFiles().Where(e => e.Extension.TrimStart('.') == EXECUTABLE_FILE_EXTENSION);
         }
 
         public IEnumerable<FileInfo> GetFiles() {
-            throw new NotImplementedException();
+            return this.Location.GetContent();
         }
 
-        public Process Start(params string[] arguments) {
-            throw new NotImplementedException();
-        }
-
-        public Process Start(IEnumerable<string> arguments) {
-            throw new NotImplementedException();
-        }
-
-        public Process Start(ProcessStartInfo settings) {
-            throw new NotImplementedException();
+        private FileInfo GetEntryPoint() {
+            foreach (var file in this.Location.GetFiles()) {
+                if (file.Name.EndsWith(RUNTIME_CONFIG_EXTENSION)) {
+                    var path = file.FullName.Replace(RUNTIME_CONFIG_EXTENSION, EXECUTABLE_FILE_EXTENSION);
+                    var executable = new FileInfo(path);
+                    if (executable.Exists) {
+                        return executable;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

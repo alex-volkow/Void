@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Void.Json.Tests", "Void.Jso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Void.Ssh", "Void.Ssh\Void.Ssh.csproj", "{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Void.Test.Printer", "Void.Test.Printer\Void.Test.Printer.csproj", "{2D77874A-B833-4EC0-998F-32D04D433E94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4C86EE9-2109-40A0-A596-C6DE0E96B3B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D77874A-B833-4EC0-998F-32D04D433E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D77874A-B833-4EC0-998F-32D04D433E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D77874A-B833-4EC0-998F-32D04D433E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D77874A-B833-4EC0-998F-32D04D433E94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CD7A5975-A949-40C1-BC0A-F071268DC636} = {739D441A-9068-4CB5-822D-CE809EFE1122}
 		{415E0279-A7CB-446B-8789-9FE98133A40F} = {739D441A-9068-4CB5-822D-CE809EFE1122}
+		{2D77874A-B833-4EC0-998F-32D04D433E94} = {739D441A-9068-4CB5-822D-CE809EFE1122}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {417383D7-71F3-45A0-BDC7-D60F48FF8B86}

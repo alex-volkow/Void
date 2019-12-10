@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,12 +6,12 @@
     <Company />
     <Product>Void.Framework</Product>
     <Description>Extends the Newtonsoft.Json library</Description>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Void.Box" Version="1.2.1" />
+    <PackageReference Include="Void.Box" Version="1.6.0" />
   </ItemGroup>
 
 </Project>

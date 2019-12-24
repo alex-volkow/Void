@@ -87,7 +87,7 @@ namespace Void.Diagnostics
                 return PROJECT_SELECTOR
                     .Matches(content)
                     .Cast<Match>()
-                    .Select(e => solution.Combine(e.Groups["PATH"].Value))
+                    .Select(e => solution.Directory.Combine(e.Groups["PATH"].Value))
                     .OrderBy(e => e)
                     .Select(e => new FileInfo(e));
             }

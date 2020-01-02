@@ -166,6 +166,33 @@ namespace Void.IO
             return new FilePath(path);
         }
 
+        public bool Contains(FilePath path) {
+            if (path == null) {
+                throw new ArgumentNullException(nameof(path));
+            }
+            if (path.path.Length > this.path.Length) {
+                return false;
+            }
+            var currentNames = this.Split();
+            var otherNames = path.Split();
+            if (otherNames.Length > currentNames.Length) {
+                return false;
+            }
+            for (var i = 0; i < otherNames.Length; i++) {
+                if (otherNames[i] != currentNames[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public string[] Split() {
+            return this.path.Split(
+                new char[] { '\\', '/' }, 
+                StringSplitOptions.RemoveEmptyEntries
+                );
+        }
+
         /// <inheritdoc/>
         public override string ToString() {
             return this.path;

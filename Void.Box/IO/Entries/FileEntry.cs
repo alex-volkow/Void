@@ -11,9 +11,8 @@ namespace Void.IO
     {
         public FileInfo File { get; }
 
-        public string Name => System.IO.Path.GetFileName(this.Path);
 
-        public string Path { get; }
+        public FilePath Path { get; }
 
         public long Length => this.File.Length;
 

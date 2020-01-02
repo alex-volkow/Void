@@ -12,10 +12,8 @@ namespace Void.IO
         private byte[] bytes;
 
 
-
-        public string Name => System.IO.Path.GetFileName(this.Path);
-
-        public string Path { get; }
+        
+        public FilePath Path { get; }
 
         public long Length => this.bytes.Length;
 

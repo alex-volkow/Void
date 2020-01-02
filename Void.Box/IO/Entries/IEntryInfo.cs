@@ -8,8 +8,7 @@ namespace Void.IO
 {
     public interface IEntryInfo
     {
-        string Name { get; }
-        string Path { get; }
+        FilePath Path { get; }
         long Length { get; }
     }
 }

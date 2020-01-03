@@ -6,7 +6,7 @@
     <Company />
     <Product>Void.Framework</Product>
     <Description>Extends the Newtonsoft.Json library</Description>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

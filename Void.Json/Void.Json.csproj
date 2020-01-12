@@ -6,12 +6,12 @@
     <Company />
     <Product>Void.Framework</Product>
     <Description>Extends the Newtonsoft.Json library</Description>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Void.Box" Version="1.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Void.Box" Version="1.6.6" />
   </ItemGroup>
 
 </Project>

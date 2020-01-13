@@ -15,7 +15,8 @@ namespace Void
 
         public decimal this[TimeUnit unit] {
             get {
-                throw new NotImplementedException();
+                var attribute = unit.GetAttribute();
+                return this.nanoseconds / attribute.Factor;
             }
         }
 
@@ -134,7 +135,7 @@ namespace Void
         private (decimal, TimeUnit, string) Round() {
             foreach (var unit in Enum<TimeUnit>.Values.OrderByDescending(e => (int)e)) {
                 var attribute = unit.GetAttribute();
-                if (Math.Abs(this.nanoseconds) > attribute.Factor) {
+                if (Math.Abs(this.nanoseconds) >= attribute.Factor) {
                     return (this.nanoseconds / attribute.Factor, unit, attribute.Abbreviation);
                 }
             }

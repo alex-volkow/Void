@@ -36,13 +36,13 @@ namespace Void
 
 
 
-        public TimeInterval Parse(string text) {
+        public static TimeInterval Parse(string text) {
             return TryParse(text) ?? throw new FormatException(
                 "Invalid string format"
                 );
         }
 
-        public TimeInterval? TryParse(string text) {
+        public static TimeInterval? TryParse(string text) {
             if (string.IsNullOrWhiteSpace(text)) {
                 return default;
             }
@@ -73,7 +73,7 @@ namespace Void
             return default;
         }
 
-        public bool TryParse(string text, out TimeInterval value) {
+        public static bool TryParse(string text, out TimeInterval value) {
             var result = TryParse(text);
             value = result ?? default;
             return result.HasValue;

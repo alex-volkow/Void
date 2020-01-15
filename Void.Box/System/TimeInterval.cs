@@ -48,7 +48,7 @@ namespace Void
             }
             var number = new List<char>(text.Length);
             var abbreviation = new List<char>(text.Length);
-            var isLetter = true;
+            var isLetter = false;
             foreach (var c in text) {
                 if (!isLetter && char.IsLetter(c)) {
                     isLetter = true;

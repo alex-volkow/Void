@@ -73,5 +73,11 @@ namespace Void
             Array.Reverse(chars);
             return new string(chars);
         }
+
+        public static IEnumerable<string> SplitLines(this string source, bool removeEmptyLines = true) {
+            var option = removeEmptyLines ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None;
+            return source?.Split(new char[] { '\r', '\n' }, option)
+                ?? throw new ArgumentNullException();
+        }
     }
 }

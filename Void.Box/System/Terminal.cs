@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Void
@@ -49,6 +50,13 @@ namespace Void
         //            .ToArray();
         //    }
         //}
+
+        public static IConsoleSpinner CreateSpinner(bool clockwise = true, TimeSpan interval = default) {
+            return new ConsoleSpinner { 
+                Interval = interval == default ? TimeSpan.FromMilliseconds(250) : interval,
+                Clockwise = clockwise
+            };
+        }
 
         public static string ReadPassword() {
             return ReadPassword(null);

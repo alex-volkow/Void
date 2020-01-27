@@ -58,6 +58,10 @@ namespace Void
             };
         }
 
+        public static IConsoleProgressBar CreateProgressBar(int size = 10) {
+            return new ConsoleProgressBar(size);
+        }
+
         public static string ReadPassword() {
             return ReadPassword(null);
         }

@@ -41,7 +41,9 @@ namespace Void
         }
 
         private void Rotate() {
-            this.counter++;
+            unchecked {
+                this.counter++;
+            }
             var reverse = this.Clockwise ? 0 : STATES.Length;
             Console.Write(STATES[Math.Abs(reverse - counter % STATES.Length)]);
             Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);

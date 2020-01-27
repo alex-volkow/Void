@@ -51,6 +51,13 @@ namespace Void
         //    }
         //}
 
+        public static void ClearLine() {
+            var currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, currentLineCursor);
+        }
+
         public static IConsoleSpinner CreateSpinner(bool clockwise = true, TimeSpan interval = default) {
             return new ConsoleSpinner { 
                 Interval = interval == default ? TimeSpan.FromMilliseconds(250) : interval,

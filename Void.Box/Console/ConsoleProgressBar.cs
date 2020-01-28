@@ -34,6 +34,7 @@ namespace Void
 			set {
 				lock (this.locker) {
 					this.progress = Math.Max(0, Math.Min(1, value));
+					Animate();
 				}
 			}
 		}
@@ -114,6 +115,7 @@ namespace Void
 				if (!this.disposed) {
 					this.disposed = true;
 					this.timer.Dispose();
+					this.timer.Elapsed -= Animate;
 				}
 			}
 		}
@@ -123,6 +125,10 @@ namespace Void
 		}
 
 		private void Animate(object sender, ElapsedEventArgs e) {
+			Animate();
+		}
+
+		private void Animate() {
 			lock (this.locker) {
 				if (!this.disposed) {
 					unchecked {

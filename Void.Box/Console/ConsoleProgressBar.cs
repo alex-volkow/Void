@@ -103,6 +103,7 @@ namespace Void
 					);
 			}
 			this.Size = size;
+			this.textValue = string.Empty;
 			this.digitFormat = DEFAULT_DIGIT_FORMAT;
 			this.timer = new Timer(DEFAULT_SPINNER_INTERVAL.TotalMilliseconds);
 			this.timer.Elapsed += Animate;
@@ -156,12 +157,12 @@ namespace Void
 
 		private void Refresh(string text) {
 			var commonLength = 0;
-			var minLength = Math.Min(this.textValue?.Length ?? 0, text.Length);
+			var minLength = Math.Min(this.textValue.Length, text.Length);
 			while (commonLength < minLength && text[commonLength] == this.textValue[commonLength]) {
 				commonLength++;
 			}
 			var overlap = new StringBuilder();
-			if (this.textValue?.Length > 0) {
+			if (this.textValue.Length > 0) {
 				overlap.Append('\b', this.textValue.Length - commonLength);
 			}
 			overlap.Append(text.Substring(commonLength));

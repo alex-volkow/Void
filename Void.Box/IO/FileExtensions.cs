@@ -147,10 +147,19 @@ namespace Void.IO
         public static bool TryDeleteWithContent(this DirectoryInfo directory) {
             if (directory != null && Directory.Exists(directory.FullName)) {
                 foreach (var file in directory.GetFiles()) {
-                    try { file.Delete(); } catch { }
+                    try { 
+                        file.Delete(); 
+                    } 
+                    catch {
+                        try {
+                            File.SetAttributes(file.FullName, FileAttributes.Normal);
+                            File.Delete(file.FullName);
+                        }
+                        catch { }
+                    }
                 }
                 foreach (var folder in directory.GetDirectories()) {
-                    folder.DeleteWithContent();
+                    folder.TryDeleteWithContent();
                 }
                 try { directory.Delete(); } catch { }
                 return true;

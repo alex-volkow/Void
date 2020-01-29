@@ -148,7 +148,7 @@ namespace Void
 						text.Append(' ');
 						var reverse = this.IsSpinnerClockwise ? 0 : SPINNER_STATES.Length;
 						var index = Math.Abs(reverse - this.spinnerCounter % SPINNER_STATES.Length);
-						text.Append(SPINNER_STATES[index]);
+						text.Append(SPINNER_STATES[index % SPINNER_STATES.Length]);
 					}
 					Refresh(text.ToString());
 				}

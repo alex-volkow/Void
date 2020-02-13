@@ -10,7 +10,7 @@ namespace Void
             if (timestamp == DateTime.MinValue || timestamp == DateTime.MaxValue) { 
                 return timestamp; 
             }
-            var interval = new TimeInterval(1, unit);
+            var interval = new TimeInterval(1, (TimeUnit)((int)unit + 1));
             return timestamp.AddTicks(-(timestamp.Ticks % interval.ToTicks()));
         }
     }

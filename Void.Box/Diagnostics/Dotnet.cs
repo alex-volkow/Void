@@ -33,9 +33,9 @@ namespace Void.Diagnostics
         /// Get existing *.exe file for the type assembly ot null.
         /// </summary>
         /// <returns></returns>
-        public static FileInfo GetExecutable(Type type) {
+        public static FileInfo GetEntryPoint(Type type) {
             var dll = new FileInfo(type.Assembly.Location);
-            var exe = dll.Directory.Combine($"{Path.GetFileNameWithoutExtension(dll.FullName)}.exe");
+            var exe = dll.Directory.Combine($"{Path.GetFileNameWithoutExtension(dll.FullName)}.dll");
             return File.Exists(exe) ? new FileInfo(exe) : null;
         }
 

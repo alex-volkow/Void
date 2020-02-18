@@ -16,10 +16,20 @@ namespace Void.IO
             .GetEntryAssembly().Location
             ));
 
+        private static readonly Lazy<FileInfo> executable = new Lazy<FileInfo>(() => {
+            return new FileInfo(Process.GetCurrentProcess().MainModule.FileName);
+        });
+
 
         public static FileInfo EntryPoint {
             get {
                 return entryPoint.Value;
+            }
+        }
+
+        public static FileInfo Executable {
+            get {
+                return executable.Value;
             }
         }
 

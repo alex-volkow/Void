@@ -12,9 +12,10 @@ namespace Void
             }
             var i = builder.Length - 1;
             while (i >= 0) {
-                if (!char.IsWhiteSpace(builder[--i])) {
+                if (!char.IsWhiteSpace(builder[i])) {
                     break;
                 }
+                i--;
             }
             if (i < builder.Length - 1) {
                 builder.Length = i + 1;
@@ -28,9 +29,10 @@ namespace Void
             }
             var i = builder.Length - 1;
             while (i >= 0) {
-                if (builder[--i] != c) {
+                if (builder[i] != c) {
                     break;
                 }
+                i--;
             }
             if (i < builder.Length - 1) {
                 builder.Length = i + 1;

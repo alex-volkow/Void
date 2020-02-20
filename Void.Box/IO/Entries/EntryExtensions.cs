@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Void.IO
@@ -40,14 +41,18 @@ namespace Void.IO
             }
         }
 
-        public static async Task<IEntryPack<FileEntry>> CopyToAsync(this IEntryPack<IEntryReader> entries, DirectoryInfo destination) {
+        public static async Task<IEntryPack<FileEntry>> CopyToAsync(
+            this IEntryPack<IEntryReader> entries, 
+            DirectoryInfo destination, 
+            CancellationToken token = default
+            ) {
             var pack = new EntryMap<FileEntry>();
             foreach (var entry in entries) {
                 var file = new FileInfo(destination.Combine(entry.Value.Path));
                 file.InitializeDirectory();
                 using (var source = entry.Value.Read())
                 using (var target = file.OpenWrite()) {
-                    await source.CopyToAsync(target);
+                    await source.CopyToAsync(target, 81920, token);
                     var path = file.GetRelativeName(destination);
                     pack.Add(new FileEntry(path, file));
                 }

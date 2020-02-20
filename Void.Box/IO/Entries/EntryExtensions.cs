@@ -11,32 +11,32 @@ namespace Void.IO
     public static class EntryExtensions
     {
         public static async Task<string> ReadStringAsync(this IEntryReader entry, Encoding encoding) {
-            using (var stream  = entry.Read()) {
+            using (var stream  = entry.Open()) {
                 var bytes = await stream.ToArrayAsync();
                 return encoding.GetString(bytes);
             }
         }
 
         public static string GetSHA256(this IEntryReader entry) {
-            using (var stream = entry.Read()) {
+            using (var stream = entry.Open()) {
                 return stream.GetSHA256();
             }
         }
 
         public static async Task<string> GetSHA256Async(this IEntryReader entry) {
-            using (var stream = entry.Read()) {
+            using (var stream = entry.Open()) {
                 return await stream.GetSHA256Async();
             }
         }
 
         public static string GetSHA512(this IEntryReader entry) {
-            using (var stream = entry.Read()) {
+            using (var stream = entry.Open()) {
                 return stream.GetSHA512();
             }
         }
 
         public static async Task<string> GetSHA512Async(this IEntryReader entry) {
-            using (var stream = entry.Read()) {
+            using (var stream = entry.Open()) {
                 return await stream.GetSHA512Async();
             }
         }
@@ -50,7 +50,7 @@ namespace Void.IO
             foreach (var entry in entries) {
                 var file = new FileInfo(destination.Combine(entry.Value.Path));
                 file.InitializeDirectory();
-                using (var source = entry.Value.Read())
+                using (var source = entry.Value.Open())
                 using (var target = file.OpenWrite()) {
                     await source.CopyToAsync(target, 81920, token);
                     var path = file.GetRelativeName(destination);

@@ -9,6 +9,6 @@ namespace Void.IO
 {
     public interface IEntryReader : IEntryInfo
     {
-        Stream Read();
+        Stream Open();
     }
 }

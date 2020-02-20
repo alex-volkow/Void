@@ -30,7 +30,7 @@ namespace Void.IO
 
 
 
-        public Stream Read() {
+        public Stream Open() {
             return new MemoryStream(this.bytes);
         }
 

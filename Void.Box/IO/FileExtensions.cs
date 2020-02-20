@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Void.IO
@@ -181,10 +182,14 @@ namespace Void.IO
             return false;
         }
 
-        public static async Task CopyToAsync(this FileInfo file, string path) {
+        public static Task CopyToAsync(this FileInfo file, string path) {
+            return file.CopyToAsync(path, default);
+        }
+
+        public static async Task CopyToAsync(this FileInfo file, string path, CancellationToken token) {
             using (var source = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var target = File.Create(path)) {
-                await source.CopyToAsync(target);
+                await source.CopyToAsync(target, 81920, token);
             }
         }
 

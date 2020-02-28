@@ -33,7 +33,7 @@ namespace Void.IO
                 foreach (var item in entries) {
                     var entry = archive.CreateEntry(item.Path, CompressionLevel.Optimal);
                     using (var output = entry.Open())
-                    using (var input = item.Read()) {
+                    using (var input = item.Open()) {
                         input.CopyTo(output);
                     }
                 }
@@ -45,7 +45,7 @@ namespace Void.IO
                 foreach (var item in entries) {
                     var entry = archive.CreateEntry(item.Path, CompressionLevel.Optimal);
                     using (var output = entry.Open())
-                    using (var input = item.Read()) {
+                    using (var input = item.Open()) {
                         await input.CopyToAsync(output);
                     }
                 }

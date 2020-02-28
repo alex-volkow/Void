@@ -39,15 +39,10 @@ namespace Void.Diagnostics
                     );
             }
             var settings = new ProcessStartInfo {
-                WorkingDirectory = this.EntryPoint.DirectoryName
+                WorkingDirectory = this.EntryPoint.DirectoryName,
+                Arguments = $"\"{this.EntryPoint.FullName}\"",
+                FileName = "dotnet",
             };
-            if (this.EntryPoint.Extension == $".{EXECUTABLE_FILE_EXTENSION}") {
-                settings.FileName = this.EntryPoint.FullName;
-            }
-            else {
-                settings.FileName = "dotnet";
-                settings.Arguments = $"\"{this.EntryPoint.FullName}\"";
-            }
             return settings;
         }
 

@@ -33,9 +33,9 @@ namespace Void.Diagnostics
         /// Get existing *.exe file for the type assembly ot null.
         /// </summary>
         /// <returns></returns>
-        public static FileInfo GetExecutable(Type type) {
+        public static FileInfo GetEntryPoint(Type type) {
             var dll = new FileInfo(type.Assembly.Location);
-            var exe = dll.Directory.Combine($"{Path.GetFileNameWithoutExtension(dll.FullName)}.exe");
+            var exe = dll.Directory.Combine($"{Path.GetFileNameWithoutExtension(dll.FullName)}.dll");
             return File.Exists(exe) ? new FileInfo(exe) : null;
         }
 
@@ -166,6 +166,45 @@ namespace Void.Diagnostics
                 .ToHashSet()
                 .OrderBy(e => e)
                 .Select(e => new FileInfo(e));
+        }
+
+
+        public static string GetVersion() {
+            using (var process = new Process()) {
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = "--version";
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.Start();
+                var outputMessage = process.StandardOutput.ReadToEnd();
+                var errorMessage = process.StandardError.ReadToEnd();
+                if (process.ExitCode != default) {
+                    var message = new StringBuilder();
+                    message.Append("Process have been completed with ");
+                    message.Append(process.ExitCode);
+                    message.Append(" code.");
+                    if (!string.IsNullOrWhiteSpace(errorMessage)) {
+                        message.AppendLine();
+                        message.Append(errorMessage.Trim());
+                        throw new InvalidOperationException(
+                            message.ToString()
+                            );
+                    }
+                    if (!string.IsNullOrWhiteSpace(outputMessage)) {
+                        message.AppendLine();
+                        message.Append(outputMessage.Trim());
+                        throw new InvalidOperationException(
+                            message.ToString()
+                            );
+                    }
+                    throw new InvalidOperationException(
+                        message.ToString()
+                        );
+                }
+                return outputMessage.Trim();
+            }
         }
 
         private static HashSet<T> ToHashSet<T>(this IEnumerable<T> collection) {

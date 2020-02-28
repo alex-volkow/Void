@@ -29,7 +29,7 @@ namespace Void.IO
 
 
 
-        public Stream Read() {
+        public Stream Open() {
             return this.File.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 

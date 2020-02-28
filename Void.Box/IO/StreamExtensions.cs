@@ -102,7 +102,7 @@ namespace Void.IO
         public static async Task<string> GetHashStringAsync(this Stream stream, HashAlgorithm algorithm, string format = "x2", CancellationToken token = default) {
             using (algorithm ?? throw new ArgumentNullException(nameof(algorithm))) {
                 var bytes = await stream.ReadToEndAsync(token);
-                var hash = algorithm.ComputeHash(stream);
+                var hash = algorithm.ComputeHash(bytes);
                 var builder = new StringBuilder();
                 foreach (var value in hash) {
                     builder.Append(value.ToString(format));

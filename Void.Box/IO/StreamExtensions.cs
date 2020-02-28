@@ -65,47 +65,47 @@ namespace Void.IO
         }
 
         public static string GetMD5(this Stream stream) {
-            return stream.GetHash(MD5.Create());
+            return stream.GetHashString(MD5.Create());
         }
 
         public static string GetSHA256(this Stream stream) {
-            return stream.GetHash(SHA256Managed.Create());
+            return stream.GetHashString(SHA256Managed.Create());
         }
 
         public static string GetSHA512(this Stream stream) {
-            return stream.GetHash(SHA512Managed.Create());
+            return stream.GetHashString(SHA512Managed.Create());
         }
 
         public static Task<string> GetMD5Async(this Stream stream, CancellationToken token = default) {
-            return stream.GetHashAsync(MD5.Create(), token);
+            return stream.GetHashStringAsync(MD5.Create(), token: token);
         }
 
         public static Task<string> GetSHA256Async(this Stream stream, CancellationToken token = default) {
-            return stream.GetHashAsync(SHA256Managed.Create(), token);
+            return stream.GetHashStringAsync(SHA256Managed.Create(), token: token);
         }
 
         public static Task<string> GetSHA512Async(this Stream stream, CancellationToken token = default) {
-            return stream.GetHashAsync(SHA512Managed.Create(), token);
+            return stream.GetHashStringAsync(SHA512Managed.Create(), token: token);
         }
 
-        private static string GetHash(this Stream stream, HashAlgorithm engine) {
-            using (engine) {
-                var hash = engine.ComputeHash(stream);
+        public static string GetHashString(this Stream stream, HashAlgorithm algorithm, string format = "x2") {
+            using (algorithm) {
+                var hash = algorithm.ComputeHash(stream);
                 var builder = new StringBuilder();
                 foreach (var value in hash) {
-                    builder.Append(value.ToString("x2"));
+                    builder.Append(value.ToString(format));
                 }
                 return builder.ToString();
             }
         }
 
-        private static async Task<string> GetHashAsync(this Stream stream, HashAlgorithm engine, CancellationToken token) {
-            using (engine) {
+        public static async Task<string> GetHashStringAsync(this Stream stream, HashAlgorithm algorithm, string format = "x2", CancellationToken token = default) {
+            using (algorithm ?? throw new ArgumentNullException(nameof(algorithm))) {
                 var bytes = await stream.ReadToEndAsync(token);
-                var hash = engine.ComputeHash(stream);
+                var hash = algorithm.ComputeHash(stream);
                 var builder = new StringBuilder();
                 foreach (var value in hash) {
-                    builder.Append(value.ToString("x2"));
+                    builder.Append(value.ToString(format));
                 }
                 return builder.ToString();
             }

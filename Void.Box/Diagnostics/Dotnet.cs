@@ -292,6 +292,7 @@ namespace Void.Diagnostics
             arguments.Append(command).Append(" ");
             arguments.Append("--configuration").Append(" ").Append(config).Append(" ");
             arguments.Append("--output").Append(" \"").Append(output.FullName).Append("\"");
+            arguments.Append(" /nr:false");
             using (var process = new Process()) {
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;

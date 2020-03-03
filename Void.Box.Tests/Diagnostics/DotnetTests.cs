@@ -62,13 +62,13 @@ namespace Void.Diagnostics
             var projects = await Dotnet.GetProjectsFromSolutionAsync(solution);
             var printerProject = projects.First(e => Path.GetFileNameWithoutExtension(e.Name) == "Void.Test.Printer");
             var artefacts = await Dotnet.PublishAsync(printerProject.FullName, ProjectConfiguration.Release, location.Value);
-            Assert.AreEqual("Void.Test.Printer.exe", artefacts.EntryPoint.Name);
+            Assert.AreEqual("Void.Test.Printer.dll", artefacts.EntryPoint.Name);
             var settings = artefacts.GetStartInfo();
             settings.RedirectStandardOutput = true;
             settings.RedirectStandardError = true;
             settings.UseShellExecute = false;
             settings.CreateNoWindow = true;
-            settings.ArgumentList.Add("pew pew");
+            settings.Arguments += " \"pew pew\"";
             using var process = Process.Start(settings);
             using var cancel = new CancellationTokenSource();
             cancel.CancelAfter(TimeSpan.FromSeconds(5));

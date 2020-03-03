@@ -11,7 +11,7 @@ namespace Void.Diagnostics
     class ProjectArtefacts : IProjectArtefacts
     {
         private static readonly string RUNTIME_CONFIG_EXTENSION = "runtimeconfig.json";
-        private static readonly string EXECUTABLE_FILE_EXTENSION = "exe";
+        private static readonly string EXECUTABLE_FILE_EXTENSION = "dll";
 
         private readonly Lazy<FileInfo> entryPoint;
 
